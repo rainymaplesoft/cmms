@@ -1,0 +1,11 @@
+mat-spinner {
+  margin: 0 10px;
+  /deep/ circle {
+    stroke-width: 20% !important;
+  }
+  &.yellow {
+    /deep/ circle {
+      stroke: #fcf20a !important;
+    }
+  }
+}

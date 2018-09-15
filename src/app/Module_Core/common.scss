@@ -1,0 +1,317 @@
+$gt-ipad: 1025px;
+$lt-xs: 599px;
+$gt-sm: 960px;
+$gt-xs: 600px;
+$gt-md: 1280px;
+$gt-lg: 1920px;
+
+/* general settings */
+
+html {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 100%;
+    overflow-y: hidden;
+    body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+    }
+}
+
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    &:before,
+    &:after {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+}
+
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
+}
+
+input:active,
+textarea:focus,
+select:focus,
+a:active,
+input:focus,
+a:focus,
+div:focus,
+mat-chip,
+img {
+    outline: none;
+    outline-style: none;
+}
+
+input[type=number]:hover::-webkit-inner-spin-button,
+input[type=number]:hover::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    opacity: 0;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    opacity: 0;
+}
+
+input::-ms-clear {
+    display: none;
+}
+
+
+/*remove Safari input rounded corners*/
+
+input:not([type="radio"]):not([type="checkbox"]) {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+
+/*  iPad scrolling patch   */
+
+div,
+.scrollable {
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* put this only to the div that wraps the frame
+div {
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+*/
+
+
+/*       iOS iframe hight/scrolling patch       */
+
+
+/*
+    1.always put iframe inside this div.iframe-wrapper
+    2.set iframe as:
+        <iframe style="border:0;width:100%;height:100%;overflow:auto;" scrolling='no'></iframe>
+*/
+
+.iframe-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding-bottom: 5px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    &.disable-scroll {
+        overflow: hidden;
+    }
+}
+
+.form-control:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.no-shadow {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.toggle-icon {
+    background-size: 100% auto;
+    display: inline-block;
+    margin: auto 0 auto auto;
+    /*color: darkgray;*/
+    -moz-transition: transform .3s ease-in-out;
+    -o-transition: transform .3s ease-in-out;
+    -webkit-transition: -webkit-transform .3s ease-in-out;
+    transition: transform .3s ease-in-out;
+    &.toggled {
+        -moz-transform: rotateZ(180deg);
+        -ms-transform: rotateZ(180deg);
+        -o-transform: rotateZ(180deg);
+        -webkit-transform: rotateZ(180deg);
+        transform: rotateZ(180deg);
+    }
+    i {
+        margin-top: 1px;
+    }
+}
+
+
+/* --- mixin --- */
+
+@mixin display-flex() {
+    display: -webkit-flex;
+    display: flex;
+}
+
+@mixin flex-direction($dir) {
+    -ms-flex-direction: $dir;
+    -webkit-flex-direction: $dir;
+    flex-direction: $dir;
+}
+
+@mixin flex-grow($grow) {
+    -webkit-flex-grow: $grow;
+    flex-grow: $grow;
+}
+
+@mixin align-items($value) {
+    -webkit-align-items: $value;
+    align-items: $value;
+}
+
+@mixin justify-content($value) {
+    -webkit-justify-content: $value;
+    justify-content: $value;
+}
+
+
+/* --- end of mixin --- */
+
+
+/* --- flex --- */
+
+.flex {
+    @include display-flex();
+}
+
+.flex-wrap {
+    -webkit-flex-wrap: wrap;
+    /* Safari 6.1+ */
+    flex-wrap: wrap;
+}
+
+.flex_row {
+    @extend .flex;
+    @include flex-direction(row)
+}
+
+.flex_column {
+    @extend .flex;
+    @include flex-direction(column)
+}
+
+.flex_column_max_height {
+    @extend .flex_column;
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+.flex_column_shrink_center {
+    @extend .flex_column;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.flex_column_all_center {
+    @extend .flex_column_shrink_center;
+    @include justify-content(center);
+}
+
+.flex_row_shrink_center {
+    @extend .flex;
+    @include align-items(center);
+}
+
+.flex_row_all_center {
+    @extend .flex_row_shrink_center;
+    @include justify-content(center);
+}
+
+.flex_grow_max {
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+.flex_1 {
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+.flex_item_right {
+    margin-left: auto;
+}
+
+.flex_item_bottom {
+    margin-top: auto;
+}
+
+.max_height {
+    height: 100%;
+}
+
+.max_width {
+    width: 100%;
+}
+
+
+/* --- end of flex --- */
+
+
+/*  --- animation  --- */
+
+@mixin fadeIn() {
+    /*
+        usage:
+        1.include in the element
+            .some_element {
+                @include fadeIn();
+            }
+        2.add the name and duration in the element with the class that applies the animation
+           .some_element.show {
+                animation-name: fadeIn;
+                animation-duration: .8s;
+            }
+    */
+    @-moz-keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 100;
+        }
+    }
+    @-webkit-keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 100;
+        }
+    }
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 100;
+        }
+    }
+}

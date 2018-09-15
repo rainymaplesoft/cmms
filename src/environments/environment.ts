@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  cmmsFireConfig: {
+    apiKey: 'AIzaSyAsoRw9oA2tl_6-njotntbKfVIAHJdD1Gk',
+    authDomain: 'cmms-e8ecf.firebaseapp.com',
+    databaseURL: 'https://cmms-e8ecf.firebaseio.com',
+    projectId: 'cmms-e8ecf',
+    storageBucket: 'cmms-e8ecf.appspot.com',
+    messagingSenderId: '889180804000'
+  }
 };
 
 /*

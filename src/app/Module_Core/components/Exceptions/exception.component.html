@@ -1,0 +1,11 @@
+<div class="not-found">
+    <div class="middle-box text-center" [@slideInDownAnimation]>
+        <h1>{{errorCode}}</h1>
+        <h2 class="font-bold">{{message}}</h2>
+        <h3 class="font-bold">Please contact administrator for support.</h3>
+        <button mat-raised-button (click)="navigateHome()">
+            <mat-icon>home</mat-icon>
+            <span>Home</span>
+        </button>
+    </div>
+</div>
