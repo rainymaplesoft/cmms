@@ -17,6 +17,6 @@ export class RouteName {
   static EditClient = 'editclient';
   static ManageTerm = 'manageterm';
 
-  static DefaultRoute = RouteName.Landing;
+  static DefaultRoute = RouteName.SignUp;
 }
 export default RouteName;

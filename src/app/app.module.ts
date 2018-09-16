@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import 'hammerjs';
 
-import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AppMaterialModule,
@@ -10,13 +10,15 @@ import {
   NgTranslateModule
 } from './Module_Core';
 import { RouterModule } from '@angular/router';
-import { AppRoutes } from './app.route';
+import { AppRoutes, AppComponents } from './app.route';
 import { ModuleShared } from './Module_Shared/Shared.module';
+import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: AppComponents,
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     // application level modules

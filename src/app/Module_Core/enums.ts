@@ -1,6 +1,10 @@
-
 export interface IKeyValue {
   key: string;
+  value: string;
+}
+
+export interface KeyValue {
+  key: number;
   value: string;
 }
 
@@ -16,7 +20,12 @@ export enum DialogConfirm {
 }
 
 export enum DirectionKey {
-  None = 0, Enter = 13, Left = 37, Up, Right, Down
+  None = 0,
+  Enter = 13,
+  Left = 37,
+  Up,
+  Right,
+  Down
 }
 
 export class ErrorCode {

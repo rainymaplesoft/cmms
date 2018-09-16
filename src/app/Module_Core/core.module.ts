@@ -22,7 +22,8 @@ import {
   SafeHtmlPipe,
   FilterOutPipe,
   FilterPipe,
-  SpinnerComponent
+  SpinnerComponent,
+  ValMsgComponent
 } from './export';
 
 import { CommonModule } from '@angular/common';
@@ -45,7 +46,8 @@ import { PubSubService } from './services/pubsub.service';
     SafeHtmlPipe,
     FilterOutPipe,
     FilterPipe,
-    SpinnerComponent
+    SpinnerComponent,
+    ValMsgComponent
     // TranslatePipe
   ],
   declarations: [
@@ -53,7 +55,8 @@ import { PubSubService } from './services/pubsub.service';
     FilterOutPipe,
     FilterPipe,
     ExceptionComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    ValMsgComponent
   ],
   entryComponents: [],
   providers: [

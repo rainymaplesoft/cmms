@@ -6,14 +6,17 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { PendingChangesGuard } from './authGuard.service';
 import { FireAuthService } from './firebase.auth.service';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   imports: [
     CommonModule,
     AngularFireModule.initializeApp(environment.cmmsFireConfig),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    AngularFirestoreModule.enablePersistence()
   ],
+  exports: [],
   providers: [PendingChangesGuard, FireAuthService],
   declarations: []
 })
