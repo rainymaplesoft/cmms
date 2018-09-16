@@ -1,3 +1,5 @@
+$cellphone_width: 767px;
+
 html {
   font-family: Roboto, Helvetica Neue, sans-serif;
   overflow-y: hidden !important;
@@ -41,33 +43,41 @@ html {
   }
 }
 
-.control {
-  display: flex;
-  align-items: center;
-}
-.form_header {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 7em;
-  padding: 0.5em;
-  background-color: #23419f;
-  color: white;
-  margin-bottom: 1em;
-  .header-content {
-    display: flex;
-    font-size: 3em;
-    padding: 0 10px;
-    .title {
-      font-size: 0.8em;
-      margin-left: 10px;
-    }
-  }
-}
 .reactive-form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  .form_header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 7em;
+    padding: 0.5em;
+    background-color: #23419f;
+    color: white;
+    margin-bottom: 1em;
+    @media (max-width: $cellphone_width) {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+      opacity: 0.98;
+    }
+    .header-content {
+      display: flex;
+      font-size: 3em;
+      padding: 0 10px;
+      .title {
+        font-size: 0.8em;
+        margin-left: 10px;
+      }
+    }
+  }
+  .form_content {
+    @media (max-width: $cellphone_width) {
+      margin-top: 7em;
+    }
+  }
   .form_section {
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
       0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
@@ -76,7 +86,7 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    @media (max-width: 767px) {
+    @media (max-width: $cellphone_width) {
       width: 100%;
       margin-top: 0;
     }
@@ -91,7 +101,7 @@ html {
       min-width: 30em;
       max-width: 30em;
       min-height: 3em;
-      @media (max-width: 767px) {
+      @media (max-width: $cellphone_width) {
         min-width: 21em;
         max-width: 21em;
       }
@@ -151,7 +161,7 @@ html {
   @media (max-width: 1279px) {
     width: 80%;
   }
-  @media (max-width: 767px) {
+  @media (max-width: $cellphone_width) {
     width: 94%;
   }
 }
