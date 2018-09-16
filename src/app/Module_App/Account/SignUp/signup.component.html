@@ -11,7 +11,7 @@
         <div class="control">
           <mat-form-field>
             <input matInput placeholder="Email" formControlName="email" autocomplete="off">
-            <mat-icon matSuffix>email</mat-icon>
+            <mat-icon matSuffix color='primary'>email</mat-icon>
           </mat-form-field>
           <!-- <mat-error *ngIf="email.invalid">mail format is invalid</mat-error> -->
           <val-msg [invalid]='email.invalid && email.dirty'>
@@ -23,7 +23,7 @@
         <div class="control">
           <mat-form-field>
             <input matInput placeholder="Password" formControlName="password" type='password' autocomplete="off">
-            <mat-icon matSuffix>visibility</mat-icon>
+            <mat-icon matSuffix color='accent'>visibility</mat-icon>
           </mat-form-field>
           <val-msg [invalid]='password.invalid && password.touched'>
             Password is required (6-25 characters)
@@ -36,7 +36,7 @@
           <mat-form-field>
             <input matInput placeholder="Confirm Password" formControlName="passwordConfirm" type='password'
               autocomplete="off">
-            <mat-icon matSuffix>visibility</mat-icon>
+            <mat-icon matSuffix color='accent'>visibility</mat-icon>
           </mat-form-field>
           <val-msg [invalid]='passwordConfirm.invalid && passwordConfirm.touched'>
             Password is required (6-25 characters)
@@ -47,7 +47,7 @@
         <div class="control">
           <mat-form-field>
             <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
-            <mat-icon matSuffix>person</mat-icon>
+            <mat-icon matSuffix color='primary'>person</mat-icon>
           </mat-form-field>
           <val-msg [invalid]='firstName.invalid && firstName.touched'>
             First Name is required
@@ -56,7 +56,7 @@
         <div class="control">
           <mat-form-field>
             <input matInput placeholder="Last Name" formControlName="lastName" autocomplete="off">
-            <mat-icon matSuffix>person</mat-icon>
+            <mat-icon matSuffix color='primary'>person</mat-icon>
           </mat-form-field>
           <val-msg [invalid]='lastName.invalid && lastName.touched'>
             Last Name is required
@@ -67,7 +67,7 @@
         <div class="control">
           <mat-form-field>
             <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
-            <mat-icon matSuffix>phone_android</mat-icon>
+            <mat-icon matSuffix color='primary'>phone_android</mat-icon>
           </mat-form-field>
           <val-msg [invalid]='cellPhone.invalid && cellPhone.touched'>
             Phone Number is required
