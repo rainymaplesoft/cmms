@@ -5,20 +5,22 @@ import { ExceptionComponent } from './Module_Core';
 import { AppComponent } from './app.component';
 import { SignUpComponent } from './Module_App/Account/SignUp/signup.component';
 import { LandingComponent } from './Module_App/Landing/landing.component';
+import { HeaderComponent } from './Module_App/Header/header.component';
 // RouteName.DefaultRoute
 export const AppRoutes: Route[] = [
-  { path: '', redirectTo: 'signup', pathMatch: 'full' },
+  { path: '', redirectTo: RouteName.Home, pathMatch: 'full' },
   {
-    path: 'welcome',
+    path: RouteName.Home,
     component: LandingComponent,
     canActivate: []
   },
-  { path: 'signup', component: SignUpComponent },
+  { path: RouteName.SignUp, component: SignUpComponent },
   { path: RouteName.Exception, component: ExceptionComponent, canActivate: [] }
 ];
 
 export const AppComponents: any = [
   AppComponent,
   SignUpComponent,
-  LandingComponent
+  LandingComponent,
+  HeaderComponent
 ];

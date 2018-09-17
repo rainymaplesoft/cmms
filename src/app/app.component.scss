@@ -1,5 +1,11 @@
 $header-master-height: 35px;
 
+#container {
+  width: 100%;
+  clear: both;
+  background-color: #fff;
+}
+
 /* master page */
 
 .master {
@@ -10,7 +16,7 @@ $header-master-height: 35px;
   overflow: scroll;
 }
 
-.root-outlet {
+.main-content {
   display: flex;
   flex-direction: column;
   flex: 1;

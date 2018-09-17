@@ -2,9 +2,7 @@ export class RouteName {
   get default() {
     return '';
   }
-  static Home = '';
-
-  static Landing = 'landing';
+  static Home = 'home';
   static SignIn = 'signin';
   static SignUp = 'signup';
   static Exception = 'Exception';
