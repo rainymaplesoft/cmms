@@ -1,0 +1,34 @@
+<div id="header-info">
+  <div class="inner">
+    <div [@slideUpDownAnimation] id="header-contact" class="dropdown-content" *ngIf='showContact'>
+      <h3 class="header">Contact Us</h3>
+      <div class="fourcol">33, Park Avenue,<br>
+        Peach Street,<br>
+        Pasadena<br>
+        CA, 765892</div>
+      <div class="fourcol"><span>Phone:</span>1-607-897-3333<br>1-607-897-4444</div>
+      <div class="fourcol last"><span>Email:</span><a href="mailto:contact@fitprogym.com">contact@fitprogym.com</a></div>
+    </div>
+    <div [@slideUpDownAnimation] id="header-timings" class="dropdown-content" *ngIf='showTimings'>
+      <h3 class="header">Timings</h3>
+      <div class="text">
+        <div class="fourcol">
+          <span>Monday to Friday</span>
+          6-00 am to 9-00 pm
+        </div>
+
+        <div class="fourcol">
+          <span>Saturday</span>
+          8-00 am to 9-00 pm
+        </div>
+
+        <div class="fourcol last">
+          <span>Sunday</span>
+          8-00 am to 8-00 pm
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </div>
+  <!-- header pull down -->
+</div>

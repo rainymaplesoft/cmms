@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { SignUpComponent } from './Module_App/Account/SignUp/signup.component';
 import { LandingComponent } from './Module_App/Landing/landing.component';
 import { HeaderComponent } from './Module_App/Header/header.component';
+import { HeaderInfoComponent } from './Module_App/HeaderInfo/header-info.component';
 // RouteName.DefaultRoute
 export const AppRoutes: Route[] = [
   { path: '', redirectTo: RouteName.Home, pathMatch: 'full' },
@@ -22,5 +23,6 @@ export const AppComponents: any = [
   AppComponent,
   SignUpComponent,
   LandingComponent,
-  HeaderComponent
+  HeaderComponent,
+  HeaderInfoComponent
 ];

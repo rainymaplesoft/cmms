@@ -5,15 +5,33 @@
         <img [src]="logo" alt="" style="width: 78px;">
       </div>
       <div class="main_menu">
-        <div class='menu_item'>Home</div>
-        <div class='menu_item'>Features</div>
-        <div class='menu_item'>Photos</div>
-        <div class='menu_item'>Gears</div>
+        <div class='menu_item'>
+          <div class="item_wrap">Home</div>
+        </div>
+        <div class='menu_item'>
+          <div class="item_wrap">Features</div>
+        </div>
+        <div class='menu_item'>
+          <div class="item_wrap">Photos</div>
+        </div>
+        <div class='menu_item'>
+          <div class="item_wrap">Gears</div>
+        </div>
       </div>
       <div class="pulldown_menu">
-        <div class='menu_item'>Contact</div>
-        <div class='menu_item'>Timings</div>
+        <div class='menu_item'>
+          <div class="icon_wrap" (click)='onShowContact()'>
+            <mat-icon>location_on</mat-icon>
+          </div>
+        </div>
+        <div class='menu_item'>
+          <div class="icon_wrap" (click)='onShowTimings()'>
+            <mat-icon inline='false'>access_time</mat-icon>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<!-- header -->
+<header-info [showContact]='showContact' [showTimings]='showTimings'></header-info>
