@@ -7,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['landing.component.scss']
 })
 export class LandingComponent implements OnInit {
+  title = 'Welcome to the home page';
+  color = '#3774b2';
+
   constructor() {}
 
   ngOnInit() {}

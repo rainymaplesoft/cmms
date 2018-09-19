@@ -1,18 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { slideUpDownAnimation } from '../../Module_Core';
+import { slideUpDownAnimation, displayChanged } from '../../Module_Core';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'header-info',
   templateUrl: 'header-info.component.html',
-  styles: ['header-info.component.scss'],
-  animations: [slideUpDownAnimation]
+  styleUrls: ['header-info.component.scss'],
+  animations: [slideUpDownAnimation, displayChanged]
 })
 export class HeaderInfoComponent implements OnInit {
   @Input()
-  showContact: boolean;
+  showContact = 'hide';
   @Input()
-  showTimings: boolean;
+  showTimings = 'hide';
 
   constructor() {}
 

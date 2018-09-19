@@ -1,4 +1,6 @@
 import { Component, OnInit, Host } from '@angular/core';
+import { Router } from '@angular/router';
+import RouteName from '../../routename';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -7,18 +9,28 @@ import { Component, OnInit, Host } from '@angular/core';
   styleUrls: ['header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  showContact = false;
-  showTimings = false;
-  constructor() {}
+  showContact = 'hide';
+  showTimings = 'hide';
+
+  r_home = RouteName.Home;
+  r_signup = RouteName.SignUp;
+
+  constructor(private router: Router) {}
 
   onShowContact() {
-    this.showTimings = false;
-    this.showContact = !this.showContact;
+    this.showTimings = 'hide';
+    this.showContact = this.showContact === 'hide' ? 'show' : 'hide';
   }
 
   onShowTimings() {
-    this.showContact = false;
-    this.showTimings = !this.showTimings;
+    this.showContact = 'hide';
+    this.showTimings = this.showTimings === 'hide' ? 'show' : 'hide';
+  }
+
+  nav(route: string) {
+    if (route) {
+      this.router.navigate([route]);
+    }
   }
 
   //#region logo image data

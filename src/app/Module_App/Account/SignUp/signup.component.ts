@@ -43,6 +43,7 @@ export class SignUpComponent extends BaseReactiveFormComponent
     { key: 1, value: 'Male' },
     { key: 2, value: 'Female' }
   ];
+  title = 'Sign Up';
 
   ngOnInit() {
     this.user = {

@@ -6,7 +6,7 @@
       </div>
       <div class="main_menu">
         <div class='menu_item'>
-          <div class="item_wrap">Home</div>
+          <div class="item_wrap" (click)='nav(r_home)'>Home</div>
         </div>
         <div class='menu_item'>
           <div class="item_wrap">Features</div>
@@ -27,6 +27,11 @@
         <div class='menu_item'>
           <div class="icon_wrap" (click)='onShowTimings()'>
             <mat-icon inline='false'>access_time</mat-icon>
+          </div>
+        </div>
+        <div class='menu_item'>
+          <div class="icon_wrap" (click)='nav(r_signup)'>
+            signup
           </div>
         </div>
       </div>

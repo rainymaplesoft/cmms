@@ -1,11 +1,6 @@
+<view-header [title]='title'></view-header>
 <form novalidate class='reactive-form' [formGroup]="__formGroup" *ngIf="__formGroup" (ngSubmit)="onSubmit()">
   <div class="form_section">
-    <div class="form_header">
-      <div class="header-content">
-        <mat-icon inline='true'>account_circle</mat-icon>
-        <div class='title'>Sign Up</div>
-      </div>
-    </div>
     <div class="form_content">
       <div class="flex_row_col">
         <div class="control">

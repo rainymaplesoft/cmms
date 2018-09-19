@@ -1,5 +1,9 @@
 $cellphone_width: 767px;
 
+body {
+  color: #666666;
+}
+
 .main-section {
   // height: calc(100vh - 30px);
   height: 100vh;
@@ -35,6 +39,7 @@ $cellphone_width: 767px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  /*
   .form_header {
     display: flex;
     flex-direction: column;
@@ -61,16 +66,15 @@ $cellphone_width: 767px;
       }
     }
   }
+  */
   .form_content {
-    @media (max-width: $cellphone_width) {
-      margin-top: 7em;
-    }
   }
   .form_section {
+    background-color: #f5f5f5;
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
       0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     margin-top: 2em;
-    padding-bottom: 2em;
+    padding: 2em 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -90,8 +94,9 @@ $cellphone_width: 767px;
       max-width: 30em;
       min-height: 3em;
       @media (max-width: $cellphone_width) {
-        min-width: 21em;
-        max-width: 21em;
+        min-width: 0;
+        max-width: none;
+        width: 100%;
       }
       mat-select {
         min-width: 18em;

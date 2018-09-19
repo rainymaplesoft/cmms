@@ -1,32 +1,52 @@
 <div id="header-info">
   <div class="inner">
-    <div [@slideUpDownAnimation] id="header-contact" class="dropdown-content" *ngIf='showContact'>
-      <h3 class="header">Contact Us</h3>
-      <div class="fourcol">33, Park Avenue,<br>
-        Peach Street,<br>
-        Pasadena<br>
-        CA, 765892</div>
-      <div class="fourcol"><span>Phone:</span>1-607-897-3333<br>1-607-897-4444</div>
-      <div class="fourcol last"><span>Email:</span><a href="mailto:contact@fitprogym.com">contact@fitprogym.com</a></div>
+    <div [@displayChanged]='showContact' id="header-contact" class="dropdown-content">
+      <div class="dropdown-inner">
+        <h3 class="header">Contact & Location</h3>
+        <div class="contact-content flex_row_col_768">
+          <div class="contact-info">
+            <div class="fourcol">12345 Taschereau,<br>
+              Brossard,<br>
+              QC, J1Y 2X2</div>
+            <div class="fourcol"><span>Phone:</span>450-111-2222<br>1-222-333-4444</div>
+            <div class="fourcol last"><span>Email:</span><a href="mailto:abc@daycare.com">contact@fitprogym.com</a></div>
+          </div>
+          <div class="map-info">
+            <div class="mapouter">
+              <div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=870%2C%20chemin%20Saint-Jean%20LaPrairie%2C%20QC&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.crocothemes.net">crocothemes.net</a></div>
+              <style>
+                .mapouter {
+                  text-align: right;
+                  height: 250px;
+                  width: 600px;
+                }
+
+                .gmap_canvas {
+                  overflow: hidden;
+                  background: none !important;
+                  height: 250px;
+                  width: 600px;
+                }
+              </style>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div [@slideUpDownAnimation] id="header-timings" class="dropdown-content" *ngIf='showTimings'>
-      <h3 class="header">Timings</h3>
-      <div class="text">
-        <div class="fourcol">
-          <span>Monday to Friday</span>
-          6-00 am to 9-00 pm
+    <div [@displayChanged]='showTimings' id="header-timings" class="dropdown-content">
+      <div class="dropdown-inner">
+        <h3 class="header">Timings</h3>
+        <div class="timing-content flex_row_col_768">
+          <div class="time-col flex_col">
+            <div class='th'>Thursday</div>
+            <div>8-00 pm to 10-00 pm</div>
+          </div>
+          <div class="time-col">
+            <div class='th'>Sunday</div>
+            <div>3-00 pm to 5-00 pm</div>
+          </div>
         </div>
-
-        <div class="fourcol">
-          <span>Saturday</span>
-          8-00 am to 9-00 pm
-        </div>
-
-        <div class="fourcol last">
-          <span>Sunday</span>
-          8-00 am to 8-00 pm
-        </div>
-        <div class="clear"></div>
       </div>
     </div>
   </div>

@@ -8,7 +8,8 @@ import {
   animate,
   transition,
   style,
-  keyframes
+  keyframes,
+  group
 } from '@angular/animations';
 
 export const visibilityChanged =
@@ -19,6 +20,15 @@ export const visibilityChanged =
     transition('show => hide', animate('600ms')),
     transition('hide => show', animate('300ms'))
   ]);
+
+export const displayChanged =
+         // trigger name for attaching this animation to an element using the [@triggerName] syntax
+         trigger('displayChanged', [
+           state('show', style({ display: 'block', height: '*' })),
+           state('hide', style({ display: 'none', height: 0 })),
+           transition('show => hide', animate('300ms')),
+           transition('hide => show', animate('300ms'))
+         ]);
 
 export const fadeInAnimation =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax
@@ -79,12 +89,12 @@ export const fadeOutAnimation =
 
 export const slideUpDownAnimation = trigger('slideUpDownAnimation', [
   transition(':enter', [
-    style({ height: 0, opacity: 0 }),
-    animate('200ms ease-in', style({ height: '*', opacity: 1 }))
+    style({ height: 0 }),
+    animate('200ms ease-in', style({ height: '*' }))
   ]),
   transition(':leave', [
-    style({ height: '*', opacity: 1 }),
-    animate('200ms ease-out', style({ height: 0, opacity: 0 }))
+    style({ height: '*' }),
+    animate('200ms ease-out', style({ height: 0 }))
   ])
 ]);
 
@@ -166,3 +176,68 @@ export const puffUpAnimation = trigger('puffUpAnimation', [
     )
   ])
 ]);
+
+export const SlideInOutPlusAnimation = [
+  trigger('SlideInOutPlusAnimation', [
+    state(
+      'in',
+      style({
+        'max-height': '500px',
+        opacity: '1',
+        visibility: 'visible'
+      })
+    ),
+    state(
+      'out',
+      style({
+        'max-height': '0px',
+        opacity: '0',
+        visibility: 'hidden'
+      })
+    ),
+    transition('in => out', [
+      group([
+        animate(
+          '400ms ease-in-out',
+          style({
+            opacity: '0'
+          })
+        ),
+        animate(
+          '600ms ease-in-out',
+          style({
+            'max-height': '0px'
+          })
+        ),
+        animate(
+          '700ms ease-in-out',
+          style({
+            visibility: 'hidden'
+          })
+        )
+      ])
+    ]),
+    transition('out => in', [
+      group([
+        animate(
+          '1ms ease-in-out',
+          style({
+            visibility: 'visible'
+          })
+        ),
+        animate(
+          '600ms ease-in-out',
+          style({
+            'max-height': '500px'
+          })
+        ),
+        animate(
+          '800ms ease-in-out',
+          style({
+            opacity: '1'
+          })
+        )
+      ])
+    ])
+  ])
+];
