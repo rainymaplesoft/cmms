@@ -72,7 +72,8 @@ export class SignUpComponent extends BaseReactiveFormComponent
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
-    console.warn('submitted');
+    console.log('submitted');
+    // this.signUp(null);
   }
 
   //#region getters

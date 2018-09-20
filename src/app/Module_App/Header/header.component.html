@@ -1,21 +1,36 @@
 <div class="header-wrap">
   <div id="header" class="sticky">
+    <div id="mobile-menu-toggle">
+      <mat-icon inline='false'>menu</mat-icon>
+    </div>
     <div class="wrap">
       <div class="logo">
         <img [src]="logo" alt="" style="width: 78px;">
       </div>
       <div class="main_menu">
         <div class='menu_item'>
-          <div class="item_wrap" (click)='nav(r_home)'>Home</div>
+          <div class="menu_content" (click)='nav(r_home)'>
+            <mat-icon inline='true'>home</mat-icon>
+            <div class="item_wrap">Home</div>
+          </div>
         </div>
         <div class='menu_item'>
-          <div class="item_wrap">Features</div>
+          <div class="menu_content">
+            <mat-icon inline='true'>settings</mat-icon>
+            <div class="item_wrap">Management</div>
+          </div>
         </div>
         <div class='menu_item'>
-          <div class="item_wrap">Photos</div>
+          <div class="menu_content">
+            <mat-icon inline='true'>photo</mat-icon>
+            <div class="item_wrap">Gallery</div>
+          </div>
         </div>
         <div class='menu_item'>
-          <div class="item_wrap">Gears</div>
+          <div class="menu_content" (click)='nav(r_event)'>
+            <mat-icon inline='true'>event_note</mat-icon>
+            <div class="item_wrap">Events</div>
+          </div>
         </div>
       </div>
       <div class="pulldown_menu">

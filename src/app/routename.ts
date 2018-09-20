@@ -5,6 +5,7 @@ export class RouteName {
   static Home = 'home';
   static SignIn = 'signin';
   static SignUp = 'signup';
+  static Event = 'event';
   static Exception = 'Exception';
 
   static GeoInfo = 'geoinfo';

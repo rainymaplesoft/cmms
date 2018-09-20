@@ -1,5 +1,6 @@
 .header-wrap {
   height: 97px;
+  color: #666666;
   font-weight: 500;
   font-style: normal;
 
@@ -21,33 +22,40 @@
   box-shadow: 0px 1px 5px rgba(100, 100, 100, 0.3);
   .wrap {
     display: flex;
-    flex: 0.9;
-    justify-content: center;
+    flex: 1;
+    max-width: 1000px;
+    justify-content: space-around;
     .logo {
-      flex: 0.1;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
     .main_menu {
       display: flex;
-      flex: 0.7;
+      flex: 1;
       justify-content: flex-end;
       max-width: 600px;
+      @media (max-width: 765.8px) {
+        display: none;
+      }
       .menu_item {
         &:hover {
           background-color: aliceblue;
         }
+        @media (max-width: 959.8px) {
+          mat-icon {
+            display: none;
+          }
+        }
       }
     }
     .pulldown_menu {
-      flex: 0.2;
       display: flex;
       .menu_item {
         padding: 0 3px;
       }
       .icon_wrap {
-        border-right: 1px solid #292929;
+        border-right: 1px solid #666666;
         display: flex;
         padding-right: 5px;
       }
@@ -59,12 +67,19 @@
       font-size: 18px;
       color: #292929;
       letter-spacing: 1px;
-      padding: 0 22px 0;
+      padding: 0 12px 0;
+      .menu_content {
+        display: flex;
+        mat-icon {
+          font-size: 24px;
+        }
+      }
       .item_wrap {
         padding: 5px;
       }
     }
     .item_wrap,
+    .menu_content,
     .icon_wrap {
       cursor: pointer;
       font-size: 16px;
@@ -72,5 +87,29 @@
         color: #b52335;
       }
     }
+    .menu_content :hover {
+      mat-icon {
+        color: #b52335 !important;
+      }
+    }
+  }
+}
+
+#mobile-menu-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 36px;
+  width: 36px;
+  padding: 5px 5px;
+  background: #4e5052;
+  border: none;
+  z-index: 10000;
+  mat-icon {
+    color: white;
+  }
+
+  @media (min-width: 768px) {
+    display: none;
   }
 }

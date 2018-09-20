@@ -8,16 +8,21 @@ import { LandingComponent } from './Module_App/Landing/landing.component';
 import { HeaderComponent } from './Module_App/Header/header.component';
 import { HeaderInfoComponent } from './Module_App/HeaderInfo/header-info.component';
 import { ViewHeaderComponent } from './Module_App/ViewHeader/view-header.component';
+import { EventComponent } from './Module_App/Events/event.component';
+
 // RouteName.DefaultRoute
+/* to avoid any error in production (ng build --prod)
+  1. "path" value must be a string (like 'home'), rather than a const value
+  2. "redirectTo" value must have a slash (like '/home')
+*/
+
 export const AppRoutes: Route[] = [
-  { path: '', redirectTo: RouteName.Home, pathMatch: 'full' },
-  {
-    path: RouteName.Home,
-    component: LandingComponent,
-    canActivate: []
-  },
-  { path: RouteName.SignUp, component: SignUpComponent },
-  { path: RouteName.Exception, component: ExceptionComponent, canActivate: [] }
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: LandingComponent },
+  { path: 'event', component: EventComponent },
+  { path: 'signup', component: SignUpComponent },
+  { path: 'exception', component: ExceptionComponent, canActivate: [] },
+  { path: '**', component: ExceptionComponent }
 ];
 
 export const AppComponents: any = [
@@ -26,5 +31,6 @@ export const AppComponents: any = [
   LandingComponent,
   HeaderComponent,
   HeaderInfoComponent,
-  ViewHeaderComponent
+  ViewHeaderComponent,
+  EventComponent
 ];
