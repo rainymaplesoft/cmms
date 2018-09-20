@@ -34,6 +34,11 @@
       flex: 0.7;
       justify-content: flex-end;
       max-width: 600px;
+      .menu_item {
+        &:hover {
+          background-color: aliceblue;
+        }
+      }
     }
     .pulldown_menu {
       flex: 0.2;
