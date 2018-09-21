@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 
 import RouteName from './routename';
-import { ExceptionComponent } from './Module_Core';
+import { ExceptionComponent, IMenuItem } from './Module_Core';
 import { AppComponent } from './app.component';
 import { SignUpComponent } from './Module_App/Account/SignUp/signup.component';
 import { LandingComponent } from './Module_App/Landing/landing.component';
@@ -22,8 +22,9 @@ export const AppRoutes: Route[] = [
   { path: 'event', component: EventComponent },
   { path: 'signup', component: SignUpComponent },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
-  { path: '**', component: ExceptionComponent }
+  { path: '**', redirectTo: '/home' }
 ];
+// { path: '**', component: ExceptionComponent }
 
 export const AppComponents: any = [
   AppComponent,

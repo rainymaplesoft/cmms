@@ -1,4 +1,10 @@
-<div id="container">
+<mobile-menu [@menuSlideAnimate]='mobileMenuState' [menu]='mobileMenu'></mobile-menu>
+<div id="container" [@containerSlideAnimate]='containerState' (click)='containerClick($event)'>
+  <div class="mobile_menu">
+  </div>
+  <div id="mobile-menu-toggle" (click)='toggleMobileMenu()'>
+    <mat-icon inline='false'>menu</mat-icon>
+  </div>
   <div class="main-header">
     <master-header></master-header>
   </div>

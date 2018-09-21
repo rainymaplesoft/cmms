@@ -6,32 +6,29 @@ import {
   MatButtonModule
 } from '@angular/material';
 import { NgTranslateModule } from './translate.module';
+
+import { CommonModule } from '@angular/common';
+
 import {
+  AnimationModule,
   HttpService,
   StorageService,
   JwtAuthService,
   ToastrService,
   UtilService,
   LayoutService,
-  AnimationModule,
-  DialogModule,
   ValidatorService,
-  ExceptionComponent,
   DialogService,
-  ToggleComponent,
-  SafeHtmlPipe,
-  FilterOutPipe,
-  FilterPipe,
-  SpinnerComponent,
-  ValMsgComponent
-} from './export';
-
-import { CommonModule } from '@angular/common';
-import { PubSubService } from './services/pubsub.service';
+  PubSubService
+} from '.';
+import { DeclarationComponents, ExportComponents } from './core.components';
+import { DialogModule } from './components/dialog/dialog.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     MatIconModule,
     MatButtonModule,
@@ -40,24 +37,8 @@ import { PubSubService } from './services/pubsub.service';
     AnimationModule,
     NgTranslateModule
   ],
-  exports: [
-    ToggleComponent,
-    ExceptionComponent,
-    SafeHtmlPipe,
-    FilterOutPipe,
-    FilterPipe,
-    SpinnerComponent,
-    ValMsgComponent
-    // TranslatePipe
-  ],
-  declarations: [
-    SafeHtmlPipe,
-    FilterOutPipe,
-    FilterPipe,
-    ExceptionComponent,
-    SpinnerComponent,
-    ValMsgComponent
-  ],
+  exports: ExportComponents,
+  declarations: DeclarationComponents,
   entryComponents: [],
   providers: [
     HttpService,

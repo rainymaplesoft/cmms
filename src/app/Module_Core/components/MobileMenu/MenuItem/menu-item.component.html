@@ -1,0 +1,12 @@
+<div class="item-wrap">
+  <div class="item" (click)='onItemClick()'>{{menuItem.menu_text}}
+  </div>
+  <div [@rotateAnimate]='arrowState' class="indicator" *ngIf="menuItem.sub_menu" (click)='onArrowClick()'>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+</div>
+<ul [@pullUpDownAnimate]='subMenuState'>
+  <li class="menu-item" *ngFor="let subMenuItem of menuItem.sub_menu">
+    <menu-item [menuItem]='subMenuItem'></menu-item>
+  </li>
+</ul>

@@ -25,6 +25,9 @@
     flex: 1;
     max-width: 1000px;
     justify-content: space-around;
+    @media (max-width: 959.8px) {
+      flex: 0;
+    }
     .logo {
       display: flex;
       flex-direction: column;
@@ -92,24 +95,5 @@
         color: #b52335 !important;
       }
     }
-  }
-}
-
-#mobile-menu-toggle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 36px;
-  width: 36px;
-  padding: 5px 5px;
-  background: #4e5052;
-  border: none;
-  z-index: 10000;
-  mat-icon {
-    color: white;
-  }
-
-  @media (min-width: 768px) {
-    display: none;
   }
 }

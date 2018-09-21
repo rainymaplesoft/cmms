@@ -5,11 +5,8 @@ import { NgModule } from '@angular/core';
 import 'hammerjs';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  AppMaterialModule,
-  CoreModule,
-  NgTranslateModule
-} from './Module_Core';
+import { AppMaterialModule, NgTranslateModule } from './Module_Core';
+import { CoreModule } from './Module_Core/core.module';
 import { RouterModule } from '@angular/router';
 import { AppRoutes, AppComponents } from './app.route';
 import { ModuleShared } from './Module_Shared/Shared.module';

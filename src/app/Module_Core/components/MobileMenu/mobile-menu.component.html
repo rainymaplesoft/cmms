@@ -1,0 +1,8 @@
+<nav id="mobile-menu" class="menu-container clearfix slide-open">
+  <div class="menu-header">Menu</div>
+  <ul>
+    <li class="menu-item" *ngFor="let menuItem of menu">
+      <menu-item [menuItem]='menuItem'></menu-item>
+    </li>
+  </ul>
+</nav>
