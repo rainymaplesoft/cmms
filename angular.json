@@ -29,9 +29,9 @@
               "src/styles.css",
               "src/assets/third-party/toastr.min.css",
               "src/assets/iconfont/material-icons.css",
+              "src/assets/styles/material-theme.scss",
               "src/app/Module_Core/common.scss",
-              "src/app/Module_Shared/styles/material-theme.scss",
-              "src/app/Module_Shared/styles/app.scss"
+              "src/app/Module_App/_Shared/app.scss"
             ],
             "scripts": [
               "src/assets/third-party/jquery.min.js",

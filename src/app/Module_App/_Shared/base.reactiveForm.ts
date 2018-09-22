@@ -8,8 +8,8 @@ import {
   ToastrService,
   UtilService,
   ErrorCode
-} from '../Module_Core';
-import RouteName from '../routename';
+} from '../../Module_Core';
+import RouteName from '../../routename';
 
 export interface IFormValidation {
   [key: string]: boolean;

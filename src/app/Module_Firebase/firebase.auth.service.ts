@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { auth } from 'firebase';
 import {
   AngularFirestore,
@@ -10,18 +10,8 @@ import {
 import * as firebase from 'firebase';
 import { switchMap } from 'rxjs/operators';
 import { ToastrService } from '../Module_Core/services/toastr.service';
+import { IUser } from '.';
 // import { switchMap } from 'rxjs/operators';
-
-export interface IUser {
-  uid: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  cellPhone: string;
-  firstName: string;
-  lastName: string;
-  gender: number;
-}
 
 @Injectable()
 export class FireAuthService {
@@ -34,16 +24,20 @@ export class FireAuthService {
     private afAuth: AngularFireAuth,
     private toastr: ToastrService
   ) {
-    //// Get auth data, then get firestore user document || null
-    // this.user$ = this.afAuth.authState.pipe(
-    //   switchMap(user => {
-    //     if (user) {
-    //       return this.afs.doc<IUser>(`users/${user.uid}`).valueChanges();
-    //     } else {
-    //       return Observable.of(null);
-    //     }
-    //   })
-    // );
+    this.getCurrentUser();
+  }
+
+  private getCurrentUser() {
+    // Get auth data, then get firestore user document || null
+    this.user$ = this.afAuth.authState.pipe(
+      switchMap(user => {
+        if (user) {
+          return this.afs.doc<IUser>(`users/${user.uid}`).valueChanges();
+        } else {
+          return of(null);
+        }
+      })
+    );
   }
 
   signupWithEmailPassword(
@@ -52,6 +46,9 @@ export class FireAuthService {
   ): Promise<auth.UserCredential> {
     return this.afAuth.auth
       .createUserWithEmailAndPassword(email, password)
+      .then(credential => {
+        this.updateUserData(credential.user);
+      })
       .catch(error => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -63,27 +60,20 @@ export class FireAuthService {
       });
   }
 
-  loginWithGoogle(routeOk: string, routeFaile = '/') {
+  googleSignIn(routeOk = '/', routeFaile = '/') {
     this.afAuth.auth
       .signInWithPopup(new auth.GoogleAuthProvider())
       .then(
-        d => this.router.navigate([routeOk]),
-        e => this.router.navigate([routeFaile])
+        credential => {
+          this.updateUserData(credential.user);
+          this.router.navigate([routeOk]);
+        },
+        error => {
+          console.log('auth error', error);
+          this.router.navigate([routeFaile]);
+        }
       )
       .catch(error => console.log('auth error', error));
-  }
-
-  ///// Login/Signup //////
-
-  googleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    return this.oAuthLogin(provider);
-  }
-
-  private oAuthLogin(provider) {
-    return this.afAuth.auth.signInWithPopup(provider).then(credential => {
-      this.updateUserData(credential.user);
-    });
   }
 
   signOut(route = '/') {
@@ -93,15 +83,16 @@ export class FireAuthService {
 
   private updateUserData(user: any) {
     // Sets user data to firestore on login
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+    const userRef: AngularFirestoreDocument<IUser> = this.afs.doc(
       `users/${user.uid}`
     );
-    const data: any = {
+    const userData: IUser = {
       uid: user.uid,
       email: user.email,
-      // cellPhone: user.cellPhone,
-      password: user.password
+      role: {
+        subscriber: true
+      }
     };
-    return userRef.set(data, { merge: true });
+    return userRef.set(userData, { merge: true });
   }
 }

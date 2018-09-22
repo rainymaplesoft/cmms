@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BaseReactiveFormComponent } from 'src/app/Module_Shared';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   DialogService,
@@ -7,12 +6,12 @@ import {
   ToastrService,
   StorageService,
   UtilService,
-  FireAuthService,
-  IUser,
   KeyValue
 } from '../../../Module_Core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, DateAdapter, NativeDateAdapter } from '@angular/material';
+import { BaseReactiveFormComponent } from '../../_Shared/base.reactiveForm';
+import { FireAuthService, IUser } from '../../../Module_Firebase';
 
 @Component({
   // tslint:disable-next-line:component-selector

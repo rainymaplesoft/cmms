@@ -7,14 +7,8 @@ import {
   TranslatePipe,
   TranslateStore
 } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { AngularFireService } from '../Module_Shared/firebase.service';
-import { Config } from './config.core';
-import {
-  LocalJsonTransLoaderFactory,
-  FbTransLoaderFactory,
-  HttpLoaderFactory
-} from './translation';
+
+import { LocalJsonTransLoaderFactory, HttpLoaderFactory } from './translation';
 
 @NgModule({
   imports: [

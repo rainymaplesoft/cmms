@@ -1,9 +1,11 @@
+/*
 import { TranslateLoader } from '@ngx-translate/core';
-import { AngularFireService } from '../../Module_Shared/firebase.service';
+
 import { Config } from '../config.core';
 import { Observable } from 'rxjs';
 import { KeysToUpperCase } from './util';
 import { map } from 'rxjs/operators';
+import { AngularFireService } from '../../Module_Firebase';
 
 export class FirebaseTransLoader implements TranslateLoader {
   private _client: string;
@@ -24,3 +26,4 @@ export class FirebaseTransLoader implements TranslateLoader {
 export function FbTransLoaderFactory(dbService: AngularFireService) {
   return new FirebaseTransLoader(dbService, 'i18n/eaq/french');
 }
+*/

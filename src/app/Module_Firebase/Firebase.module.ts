@@ -20,4 +20,4 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
   providers: [PendingChangesGuard, FireAuthService],
   declarations: []
 })
-export class ModuleShared {}
+export class ModuleFirebase {}

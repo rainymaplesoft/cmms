@@ -9,8 +9,8 @@ import { AppMaterialModule, NgTranslateModule } from './Module_Core';
 import { CoreModule } from './Module_Core/core.module';
 import { RouterModule } from '@angular/router';
 import { AppRoutes, AppComponents } from './app.route';
-import { ModuleShared } from './Module_Shared/Shared.module';
 import { AppComponent } from './app.component';
+import { ModuleFirebase } from './Module_Firebase';
 
 @NgModule({
   declarations: AppComponents,
@@ -23,7 +23,7 @@ import { AppComponent } from './app.component';
     // application level modules
     AppMaterialModule,
     CoreModule,
-    ModuleShared,
+    ModuleFirebase,
     NgTranslateModule,
     // application feature modules
     RouterModule.forRoot(AppRoutes)
