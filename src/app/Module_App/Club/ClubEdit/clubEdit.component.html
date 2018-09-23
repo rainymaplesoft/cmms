@@ -52,7 +52,7 @@
           <div class="control">
             <mat-form-field>
               <input matInput placeholder="Phone Number" formControlName="phone1" autocomplete="off">
-              <mat-icon matSuffix color='primary'>contact_phone</mat-icon>
+              <mat-icon matSuffix color='primary'>phone</mat-icon>
             </mat-form-field>
             <val-msg [invalid]='phone1.invalid && phone1.touched'>
               Phone number is invalid
@@ -67,7 +67,7 @@
         <div class="flex_row">
           <div class='flex_1'></div>
           <div style="margin-right: 2em;">
-            <button type='submit' mat-stroked-button color="primary" [disabled]="!clubForm.valid">Save</button>
+            <button type='submit' mat-stroked-button color="primary" [disabled]="!clubForm.dirty || !clubForm.valid">Save</button>
           </div>
         </div>
       </div>

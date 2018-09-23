@@ -2,14 +2,27 @@
   <div class='page_content'>
     <div class="club_table">
       <div class='header'>
-        <div class="t_col">Club Name</div>
-        <div class="t_col mobile_hide">Email</div>
-        <div class="t_col control"></div>
+        <div class="t_col flex_3">Club Name</div>
+        <div class="t_col flex_2 mobile_hide">Email</div>
+        <div class="t_col flex_1 mobile_hide">Active</div>
+        <div class="t_col control">
+          <div style="margin-right: 2em;">
+            <button mat-button>
+              <mat-icon matSuffix>add</mat-icon>
+              Add
+            </button>
+          </div>
+        </div>
       </div>
-      <div class='t_row' *ngFor="let club of clubs | async" (click)='onClubClick(club)'>
-        <div class="t_col">{{ club.clubName }}</div>
-        <div class="t_col mobile_hide">{{ club.email }}</div>
-        <div class="t_col control"></div>
+      <div class='t_row' *ngFor="let club of clubs | async" [ngClass]='{selected:checkSelected(club)}' (click)='onClubClick(club)'>
+        <div class="t_col flex_3">{{ club.clubName }}</div>
+        <div class="t_col flex_2 mobile_hide">{{ club.email }}</div>
+        <div class="t_col flex_1 mobile_hide">{{ club.isActive }}</div>
+        <div class="t_col control">
+          <div class="icon">
+            <mat-icon matSuffix>arrow_forward_ios</mat-icon>
+          </div>
+        </div>
       </div>
       <div class="footer">
         <div class="pagination">

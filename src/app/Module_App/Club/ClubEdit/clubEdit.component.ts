@@ -16,6 +16,10 @@ export class ClubEditComponent implements OnInit, OnChanges {
 
   club: Observable<IClub>;
   clubForm: FormGroup;
+  get docPathClub() {
+    return `${CollectionPath.CLUBS}/${this.clubId}`;
+  }
+
   constructor(
     private dbService: FirebaseDataService,
     private fb: FormBuilder
@@ -26,13 +30,36 @@ export class ClubEditComponent implements OnInit, OnChanges {
     if (!this.clubId) {
       return;
     }
+    this.getClubById();
+  }
+
+  onSubmit() {
+    if (this.clubForm.status !== 'VALID') {
+      console.log('form is not valid, cannot save to database');
+      return;
+    }
+    this.saveClub();
+  }
+
+  //#region data functions
+
+  private getClubById() {
     this.club = this.dbService
-      .getDocument<IClub>(`${CollectionPath.CLUBS}/${this.clubId}`)
+      .getDocument<IClub>(this.docPathClub)
       .valueChanges();
     this.buildForm();
   }
 
-  onSubmit() {}
+  private saveClub() {
+    const data = this.clubForm.value;
+    this.dbService
+      .updateDocument<IClub>(this.docPathClub, data)
+      .then((r: boolean) => {
+        this.getClubById();
+      });
+  }
+
+  //#endregion
 
   //#region reactive form and field getters
 

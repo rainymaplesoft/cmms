@@ -19,12 +19,15 @@ body {
   }
 }
 
-// .panel {
-//     margin: 1em;
-//     &.mobile {
-//         margin: 0;
-//     }
-// }
+.page_view {
+  display: flex;
+  justify-content: center;
+  .page_content {
+    max-width: 1000px;
+    flex: 1;
+  }
+}
+
 .section {
   justify-content: flex-start;
   padding: 0 1em 1em 1em;
@@ -139,4 +142,14 @@ mat-select {
 
 mat-form-field {
   width: 100%;
+}
+
+.flex_1 {
+  flex: 1;
+}
+.flex_2 {
+  flex: 2;
+}
+.flex_3 {
+  flex: 3;
 }

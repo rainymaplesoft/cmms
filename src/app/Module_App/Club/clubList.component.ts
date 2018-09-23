@@ -35,4 +35,8 @@ export class ClubListComponent implements OnInit {
   onClubClick(club: IClub) {
     this.selectedClubId = club._id;
   }
+
+  checkSelected(club: IClub) {
+    return this.selectedClubId === club._id;
+  }
 }

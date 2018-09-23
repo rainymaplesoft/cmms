@@ -1,91 +1,95 @@
 <view-header [title]='title'></view-header>
-<form novalidate class='reactive-form' [formGroup]="__formGroup" *ngIf="__formGroup" (ngSubmit)="onSubmit()">
-  <div class="form_section">
-    <div class="form_content">
-      <div class="flex_row_col">
-        <div class="control">
-          <mat-form-field>
-            <input matInput placeholder="Email" formControlName="email" autocomplete="off">
-            <mat-icon matSuffix color='primary'>email</mat-icon>
-          </mat-form-field>
-          <!-- <mat-error *ngIf="email.invalid">mail format is invalid</mat-error> -->
-          <val-msg [invalid]='email.invalid && email.dirty'>
-            Email format is invalid
-          </val-msg>
-        </div>
-      </div>
-      <div class="flex_row_col">
-        <div class="control">
-          <mat-form-field>
-            <input matInput placeholder="Password" formControlName="password" type='password' autocomplete="off">
-            <mat-icon matSuffix color='accent'>visibility</mat-icon>
-          </mat-form-field>
-          <val-msg [invalid]='password.invalid && password.touched'>
-            Password is required (6-25 characters)
-          </val-msg>
-          <val-msg [invalid]='notSamePassword'>
-            The 2 passwords are not the same
-          </val-msg>
-        </div>
-        <div class="control">
-          <mat-form-field>
-            <input matInput placeholder="Confirm Password" formControlName="passwordConfirm" type='password'
-              autocomplete="off">
-            <mat-icon matSuffix color='accent'>visibility</mat-icon>
-          </mat-form-field>
-          <val-msg [invalid]='passwordConfirm.invalid && passwordConfirm.touched'>
-            Password is required (6-25 characters)
-          </val-msg>
-        </div>
-      </div>
-      <div class="flex_row_col">
-        <div class="control">
-          <mat-form-field>
-            <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
-            <mat-icon matSuffix color='primary'>person</mat-icon>
-          </mat-form-field>
-          <val-msg [invalid]='firstName.invalid && firstName.touched'>
-            First Name is required
-          </val-msg>
-        </div>
-        <div class="control">
-          <mat-form-field>
-            <input matInput placeholder="Last Name" formControlName="lastName" autocomplete="off">
-            <mat-icon matSuffix color='primary'>person</mat-icon>
-          </mat-form-field>
-          <val-msg [invalid]='lastName.invalid && lastName.touched'>
-            Last Name is required
-          </val-msg>
-        </div>
-      </div>
-      <div class="flex_row_col">
-        <div class="control">
-          <mat-form-field>
-            <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
-            <mat-icon matSuffix color='primary'>phone_android</mat-icon>
-          </mat-form-field>
-          <val-msg [invalid]='cellPhone.invalid && cellPhone.touched'>
-            Phone Number is required
-          </val-msg>
-        </div>
-        <div class="control" style='align-items: flex-start'>
-          <mat-radio-group style="padding-top:1em;" formControlName="gender">
-            <mat-radio-button style="width: 6em;" *ngFor="let gender of genders" [value]="gender.key">
-              {{gender.value}}
-            </mat-radio-button>
-          </mat-radio-group>
-          <!-- <val-msg [invalid]='gender.invalid'>
+<div class="page_view">
+  <div class='page_content'>
+    <form novalidate class='reactive-form' [formGroup]="__formGroup" *ngIf="__formGroup" (ngSubmit)="onSubmit()">
+      <div class="form_section">
+        <div class="form_content">
+          <div class="flex_row_col">
+            <div class="control">
+              <mat-form-field>
+                <input matInput placeholder="Email" formControlName="email" autocomplete="off">
+                <mat-icon matSuffix color='primary'>email</mat-icon>
+              </mat-form-field>
+              <!-- <mat-error *ngIf="email.invalid">mail format is invalid</mat-error> -->
+              <val-msg [invalid]='email.invalid && email.dirty'>
+                Email format is invalid
+              </val-msg>
+            </div>
+          </div>
+          <div class="flex_row_col">
+            <div class="control">
+              <mat-form-field>
+                <input matInput placeholder="Password" formControlName="password" type='password' autocomplete="off">
+                <mat-icon matSuffix color='accent'>visibility</mat-icon>
+              </mat-form-field>
+              <val-msg [invalid]='password.invalid && password.touched'>
+                Password is required (6-25 characters)
+              </val-msg>
+              <val-msg [invalid]='notSamePassword'>
+                The 2 passwords are not the same
+              </val-msg>
+            </div>
+            <div class="control">
+              <mat-form-field>
+                <input matInput placeholder="Confirm Password" formControlName="passwordConfirm" type='password'
+                  autocomplete="off">
+                <mat-icon matSuffix color='accent'>visibility</mat-icon>
+              </mat-form-field>
+              <val-msg [invalid]='passwordConfirm.invalid && passwordConfirm.touched'>
+                Password is required (6-25 characters)
+              </val-msg>
+            </div>
+          </div>
+          <div class="flex_row_col">
+            <div class="control">
+              <mat-form-field>
+                <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
+                <mat-icon matSuffix color='primary'>person</mat-icon>
+              </mat-form-field>
+              <val-msg [invalid]='firstName.invalid && firstName.touched'>
+                First Name is required
+              </val-msg>
+            </div>
+            <div class="control">
+              <mat-form-field>
+                <input matInput placeholder="Last Name" formControlName="lastName" autocomplete="off">
+                <mat-icon matSuffix color='primary'>person</mat-icon>
+              </mat-form-field>
+              <val-msg [invalid]='lastName.invalid && lastName.touched'>
+                Last Name is required
+              </val-msg>
+            </div>
+          </div>
+          <div class="flex_row_col">
+            <div class="control">
+              <mat-form-field>
+                <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
+                <mat-icon matSuffix color='primary'>phone_android</mat-icon>
+              </mat-form-field>
+              <val-msg [invalid]='cellPhone.invalid && cellPhone.touched'>
+                Phone Number is required
+              </val-msg>
+            </div>
+            <div class="control" style='align-items: flex-start'>
+              <mat-radio-group style="padding-top:1em;" formControlName="gender">
+                <mat-radio-button style="width: 6em;" *ngFor="let gender of genders" [value]="gender.key">
+                  {{gender.value}}
+                </mat-radio-button>
+              </mat-radio-group>
+              <!-- <val-msg [invalid]='gender.invalid'>
             Gender is required
           </val-msg> -->
+            </div>
+          </div>
+          <div class="flex_row">
+            <div class='flex_1'></div>
+            <div style="margin-right: 2em;">
+              <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !__formGroup.valid">Sign
+                Up</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="flex_row">
-        <div class='flex_1'></div>
-        <div style="margin-right: 2em;">
-          <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !__formGroup.valid">Sign
-            Up</button>
-        </div>
-      </div>
-    </div>
+    </form>
   </div>
-</form>
+</div>
