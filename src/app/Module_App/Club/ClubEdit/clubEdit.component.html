@@ -1,5 +1,21 @@
-<div class="club_edit">
-  <form novalidate class='reactive-form' [formGroup]="clubForm" *ngIf="clubForm" (ngSubmit)="onSubmit()">
+<div class="club_edit" *ngIf="clubForm" [ngClass]='{"hide_edit":hideEdit}'>
+  <div class="header">
+    <div class="flex_row">
+      <div class='flex_1 flex_start'>
+        <div class="back_button">
+          <button mat-icon-button color="primary" (click)='backToList()'>
+            <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div style="margin-right: 5px;">
+        <button (click)='onSaveClub()' mat-stroked-button color="primary" [disabled]="!clubForm.dirty || !clubForm.valid">
+          <mat-icon matSuffix color='primary'>done</mat-icon>Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <form novalidate class='reactive-form' [formGroup]="clubForm" (ngSubmit)="onSubmit()">
     <div class="form_section">
       <div class="form_content">
         <div class="flex_row_col">
@@ -64,14 +80,7 @@
             <mat-checkbox class="example-margin" formControlName="isActive">Acitve</mat-checkbox>
           </div>
         </div>
-        <div class="flex_row">
-          <div class='flex_1'></div>
-          <div style="margin-right: 2em;">
-            <button type='submit' mat-stroked-button color="primary" [disabled]="!clubForm.dirty || !clubForm.valid">
-              <mat-icon matSuffix color='primary'>done</mat-icon>Save
-            </button>
-          </div>
-        </div>
+
       </div>
     </div>
   </form>

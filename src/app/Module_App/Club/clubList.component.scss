@@ -71,3 +71,9 @@
 .hideByPage {
   display: none !important;
 }
+
+.hide_list {
+  @media (max-width: 767.8px) {
+    display: none;
+  }
+}

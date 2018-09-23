@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  EventEmitter,
+  Output
+} from '@angular/core';
 import { FirebaseDataService } from '../../../Module_Firebase';
 import { CollectionPath, IClub } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
@@ -15,7 +22,10 @@ import { DocumentReference } from '@angular/fire/firestore';
 export class ClubEditComponent implements OnInit, OnChanges {
   @Input()
   clubId: string;
+  @Output()
+  showList = new EventEmitter<boolean>();
 
+  hideEdit = false;
   club: Observable<IClub>;
   clubForm: FormGroup;
   get docPathClub() {
@@ -27,25 +37,21 @@ export class ClubEditComponent implements OnInit, OnChanges {
     this.buildForm();
   }
 
+  set selectClub(clubId: string) {
+    this.clubId = clubId;
+    this.getClubById();
+  }
+
   constructor(
     private dbService: FirebaseDataService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit() {}
-  ngOnChanges() {
-    if (!this.clubId) {
-      return;
-    }
-    this.getClubById();
-  }
+  ngOnChanges() {}
 
   onSubmit() {
-    if (this.clubForm.status !== 'VALID') {
-      console.log('form is not valid, cannot save to database');
-      return;
-    }
-    this.saveClub();
+    this.onSaveClub();
   }
 
   //#region data functions
@@ -60,7 +66,11 @@ export class ClubEditComponent implements OnInit, OnChanges {
     });
   }
 
-  private saveClub() {
+  onSaveClub() {
+    if (this.clubForm.invalid) {
+      console.log('form is not valid, cannot save to database');
+      return;
+    }
     const data = this.clubForm.value;
     if (this.clubId) {
       this.updateClub(data);
@@ -88,6 +98,10 @@ export class ClubEditComponent implements OnInit, OnChanges {
     });
   }
 
+  backToList() {
+    this.showList.emit(true);
+    this.hideEdit = true;
+  }
   //#endregion
 
   //#region reactive form and field getters
@@ -103,6 +117,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
       phone2: [''],
       isActive: [true, Validators.required]
     });
+    this.hideEdit = false;
   }
 
   get clubName() {

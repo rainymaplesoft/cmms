@@ -3,13 +3,13 @@
 </div>
 <div class="page_view">
   <div class='page_content'>
-    <div class="club_table">
+    <div class="club_table" [ngClass]='{"hide_list":!showClubList}'>
       <div class='header'>
         <div class="t_col flex_3">Club Name</div>
         <div class="t_col flex_2 mobile_hide">Email</div>
         <div class="t_col flex_1 mobile_hide">Active</div>
         <div class="t_col control">
-          <div style="margin-right: 2em;">
+          <div>
             <button mat-button (click)='onAddClubClick()'>
               <mat-icon matSuffix>add</mat-icon>
               Add
@@ -25,7 +25,7 @@
         <div class="t_col control">
           <input type="hidden" name="listLength" value={{i}} #hid>
           <div class="icon">
-            <mat-icon matSuffix>arrow_forward_ios</mat-icon>
+            <mat-icon matSuffix>navigate_next</mat-icon>
           </div>
         </div>
         <ng-container *ngIf="islast">
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="club_edit">
-      <club-edit [clubId]='selectedClubId'></club-edit>
+      <club-edit [clubId]='selectedClubId' (showList)='showList()'></club-edit>
     </div>
   </div>
 </div>

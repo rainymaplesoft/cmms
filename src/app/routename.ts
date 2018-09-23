@@ -24,37 +24,21 @@ export class RouteName {
 export default RouteName;
 
 export const MobileMenu: IMenuItem[] = [
-  {
-    menu_text: 'Home',
-    action: RouteName.Home
-  },
+  { menu_text: 'Home', action: RouteName.Home },
   {
     menu_text: 'Settings',
     action: '',
     sub_menu: [
-      {
-        menu_text: 'Setting-1'
-      },
-      {
-        menu_text: 'Setting-2'
-      }
+      { menu_text: 'Club Settings', action: RouteName.Clubs },
+      { menu_text: 'Member Settings' }
     ]
   },
-  {
-    menu_text: 'Gallery',
-    action: RouteName.SignUp
-  },
+  { menu_text: 'Gallery', action: RouteName.SignUp },
   {
     menu_text: 'Events',
     sub_menu: [
-      {
-        menu_text: 'Event-1',
-        action: RouteName.Event
-      },
-      {
-        menu_text: 'Event-2',
-        action: 'wrong route name!'
-      }
+      { menu_text: 'Event-1', action: RouteName.Event },
+      { menu_text: 'Event-2', action: 'wrong route name!' }
     ]
   }
 ];

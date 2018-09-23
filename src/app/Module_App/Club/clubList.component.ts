@@ -17,6 +17,7 @@ export class ClubListComponent implements OnInit, OnChanges {
   @ViewChild(ClubEditComponent)
   clubEdit: ClubEditComponent;
 
+  showClubList = true;
   clubCount = 0;
   alreadyCounted = false;
   clubs: Observable<any[]>;
@@ -59,11 +60,13 @@ export class ClubListComponent implements OnInit, OnChanges {
 
   onClubClick(club: IClub) {
     this.selectedClubId = club._id;
-    // this.clubCount++;
+    this.clubEdit.selectClub = this.selectedClubId;
+    this.showClubList = false;
   }
 
   onAddClubClick() {
     this.clubEdit.addNewClub = true;
+    this.showClubList = false;
   }
 
   checkSelected(club: IClub) {
@@ -74,6 +77,10 @@ export class ClubListComponent implements OnInit, OnChanges {
 
   onCheckLast(i: number) {
     // this.clubCount = i + 1;
+  }
+
+  showList() {
+    this.showClubList = true;
   }
 
   hideByPage(i: number) {
