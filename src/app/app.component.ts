@@ -50,6 +50,10 @@ export class AppComponent {
       }
       this.toggleMobileMenu();
     });
+    // from MobileMenu
+    this.eventService.on<string>('Event_MobileToggleClicked').subscribe(r => {
+      this.toggleMobileMenu();
+    });
   }
 
   toggleMobileMenu() {

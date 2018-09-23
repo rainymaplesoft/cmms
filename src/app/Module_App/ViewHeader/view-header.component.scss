@@ -1,7 +1,14 @@
 .title-wrap {
   display: flex;
   justify-content: center;
-  height: 90px;
+  height: 70px;
+  @media (max-width: 767.8px) {
+    height: 50px;
+    h2 {
+      font-size: 20px;
+      padding-top: 5px;
+    }
+  }
   .title-content {
     display: flex;
     flex: 1;

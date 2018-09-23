@@ -1,3 +1,6 @@
+<div class="view_header">
+  <view-header [title]='title'></view-header>
+</div>
 <div class="page_view">
   <div class='page_content'>
     <div class="club_table">
@@ -7,26 +10,32 @@
         <div class="t_col flex_1 mobile_hide">Active</div>
         <div class="t_col control">
           <div style="margin-right: 2em;">
-            <button mat-button>
+            <button mat-button (click)='onAddClubClick()'>
               <mat-icon matSuffix>add</mat-icon>
               Add
             </button>
           </div>
         </div>
       </div>
-      <div class='t_row' *ngFor="let club of clubs | async" [ngClass]='{selected:checkSelected(club)}' (click)='onClubClick(club)'>
+      <div class='t_row' *ngFor="let club of clubs | async as clubList; index as i; last as islast trackBy: clubTrack"
+        [ngClass]='{selected:checkSelected(club),hideByPage:hideByPage(i)}' (click)='onClubClick(club)'>
         <div class="t_col flex_3">{{ club.clubName }}</div>
         <div class="t_col flex_2 mobile_hide">{{ club.email }}</div>
         <div class="t_col flex_1 mobile_hide">{{ club.isActive }}</div>
         <div class="t_col control">
+          <input type="hidden" name="listLength" value={{i}} #hid>
           <div class="icon">
             <mat-icon matSuffix>arrow_forward_ios</mat-icon>
           </div>
         </div>
+        <ng-container *ngIf="islast">
+          {{ onCheckLast(i) }}
+        </ng-container>
       </div>
       <div class="footer">
         <div class="pagination">
-          <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
+          <mat-paginator [length]="clubCount" [pageSize]="pager.pageSize" [pageSizeOptions]="pager.pageSizeOptions"
+            (page)="onPageChange($event)"></mat-paginator>
         </div>
       </div>
     </div>

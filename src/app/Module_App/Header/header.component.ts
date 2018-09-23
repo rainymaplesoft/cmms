@@ -1,6 +1,7 @@
 import { Component, OnInit, Host } from '@angular/core';
 import { Router } from '@angular/router';
 import RouteName from '../../routename';
+import { PubSubService } from '../../Module_Core';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -17,7 +18,7 @@ export class HeaderComponent implements OnInit {
   r_event = RouteName.Event;
   r_clubs = RouteName.Clubs;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private eventService: PubSubService) {}
 
   onShowContact() {
     this.showTimings = 'hide';
@@ -34,7 +35,9 @@ export class HeaderComponent implements OnInit {
       this.router.navigate([route]);
     }
   }
-
+  toggleMobileMenu() {
+    this.eventService.pub('Event_MobileToggleClicked');
+  }
   //#region logo image data
   // tslint:disable-next-line:member-ordering
   logo =

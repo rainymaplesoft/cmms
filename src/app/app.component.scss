@@ -27,23 +27,3 @@ $header-master-height: 35px;
   flex-direction: column;
   flex: 1;
 }
-
-#mobile-menu-toggle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 36px;
-  width: 36px;
-  padding: 5px 5px;
-  background: #4e5052;
-  border: none;
-  z-index: 10000;
-  cursor: pointer;
-  mat-icon {
-    color: white;
-  }
-
-  @media (min-width: 768px) {
-    display: none;
-  }
-}

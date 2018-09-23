@@ -3,6 +3,8 @@ import { FirebaseDataService } from '../../../Module_Firebase';
 import { CollectionPath, IClub } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as firebase from 'firebase';
+import { DocumentReference } from '@angular/fire/firestore';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -18,6 +20,11 @@ export class ClubEditComponent implements OnInit, OnChanges {
   clubForm: FormGroup;
   get docPathClub() {
     return `${CollectionPath.CLUBS}/${this.clubId}`;
+  }
+
+  set addNewClub(p: any) {
+    this.clubId = '';
+    this.buildForm();
   }
 
   constructor(
@@ -48,15 +55,37 @@ export class ClubEditComponent implements OnInit, OnChanges {
       .getDocument<IClub>(this.docPathClub)
       .valueChanges();
     this.buildForm();
+    this.club.subscribe(club => {
+      this.clubForm.patchValue(club);
+    });
   }
 
   private saveClub() {
     const data = this.clubForm.value;
+    if (this.clubId) {
+      this.updateClub(data);
+    } else {
+      this.addClub(data);
+    }
+  }
+
+  private updateClub(data: any) {
     this.dbService
       .updateDocument<IClub>(this.docPathClub, data)
       .then((r: boolean) => {
         this.getClubById();
       });
+  }
+
+  private addClub(data: any) {
+    const newClub$ = this.dbService.addDocument(
+      `${CollectionPath.CLUBS}`,
+      data
+    );
+    newClub$.then((club: DocumentReference) => {
+      this.clubId = club.id;
+      this.getClubById();
+    });
   }
 
   //#endregion
@@ -73,9 +102,6 @@ export class ClubEditComponent implements OnInit, OnChanges {
       phone1: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       phone2: [''],
       isActive: [true, Validators.required]
-    });
-    this.club.subscribe(club => {
-      this.clubForm.patchValue(club);
     });
   }
 
