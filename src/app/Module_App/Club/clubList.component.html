@@ -1,0 +1,24 @@
+<div class="page_view">
+  <div class='page_content'>
+    <div class="club_table">
+      <div class='header'>
+        <div class="t_col">Club Name</div>
+        <div class="t_col mobile_hide">Email</div>
+        <div class="t_col control"></div>
+      </div>
+      <div class='t_row' *ngFor="let club of clubs | async" (click)='onClubClick(club)'>
+        <div class="t_col">{{ club.clubName }}</div>
+        <div class="t_col mobile_hide">{{ club.email }}</div>
+        <div class="t_col control"></div>
+      </div>
+      <div class="footer">
+        <div class="pagination">
+          <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)"></mat-paginator>
+        </div>
+      </div>
+    </div>
+    <div class="club_edit">
+      <club-edit [clubId]='selectedClubId'></club-edit>
+    </div>
+  </div>
+</div>

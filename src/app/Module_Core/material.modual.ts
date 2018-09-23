@@ -20,7 +20,8 @@ import {
   MatSnackBarModule,
   MatAutocompleteModule,
   MatNativeDateModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 @NgModule({
@@ -43,9 +44,9 @@ import {
     MatSnackBarModule,
     MatAutocompleteModule,
     MatRippleModule,
-    MatProgressSpinnerModule,
     MatExpansionModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatPaginatorModule
   ],
   exports: [
     MatButtonModule,
@@ -68,7 +69,7 @@ import {
     MatRippleModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
-    MatProgressSpinnerModule
+    MatPaginatorModule
   ],
   declarations: [],
   providers: [{ provide: LOCALE_ID, useValue: 'en-GB' }]

@@ -7,6 +7,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { PendingChangesGuard } from './authGuard.service';
 import { FireAuthService } from './firebase.auth.service';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { FirebaseDataService } from './firebase.data.service';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     AngularFirestoreModule.enablePersistence()
   ],
   exports: [],
-  providers: [PendingChangesGuard, FireAuthService],
+  providers: [PendingChangesGuard, FireAuthService, FirebaseDataService],
   declarations: []
 })
 export class ModuleFirebase {}

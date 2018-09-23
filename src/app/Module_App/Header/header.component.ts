@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   r_home = RouteName.Home;
   r_signup = RouteName.SignUp;
   r_event = RouteName.Event;
+  r_clubs = RouteName.Clubs;
 
   constructor(private router: Router) {}
 

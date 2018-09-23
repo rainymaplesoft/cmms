@@ -8,6 +8,7 @@ export class RouteName {
   static SignIn = 'signin';
   static SignUp = 'signup';
   static Event = 'event';
+  static Clubs = 'clubs';
   static Exception = 'Exception';
 
   static GeoInfo = 'geoinfo';

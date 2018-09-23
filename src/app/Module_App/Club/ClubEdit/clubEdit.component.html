@@ -1,0 +1,76 @@
+<div class="club_edit">
+  <form novalidate class='reactive-form' [formGroup]="clubForm" *ngIf="clubForm" (ngSubmit)="onSubmit()">
+    <div class="form_section">
+      <div class="form_content">
+        <div class="flex_row_col">
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Club Name" formControlName="clubName" autocomplete="off">
+              <mat-icon matSuffix color='primary'>description</mat-icon>
+            </mat-form-field>
+            <val-msg [invalid]='clubName.invalid && clubName.touched'>
+              Club Name is required
+            </val-msg>
+          </div>
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Code(4 Capital letters)" formControlName="clubCode" autocomplete="off">
+              <mat-icon matSuffix color='primary'>vpn_key</mat-icon>
+            </mat-form-field>
+            <val-msg [invalid]='clubCode.invalid && clubCode.touched'>
+              Code format is invalid
+            </val-msg>
+          </div>
+        </div>
+        <div class="flex_row_col">
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Contact Name" formControlName="contactName" autocomplete="off">
+              <mat-icon matSuffix color='primary'>person</mat-icon>
+            </mat-form-field>
+            <val-msg [invalid]='contactName.invalid && contactName.touched'>
+              Contact Name is required
+            </val-msg>
+          </div>
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Address" formControlName="address" autocomplete="off">
+              <mat-icon matSuffix color='primary'>location_on</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="flex_row_col">
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Email" formControlName="email" autocomplete="off">
+              <mat-icon matSuffix color='primary'>email</mat-icon>
+            </mat-form-field>
+            <val-msg [invalid]='email.invalid && email.touched'>
+              Email format is invalid
+            </val-msg>
+          </div>
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Phone Number" formControlName="phone1" autocomplete="off">
+              <mat-icon matSuffix color='primary'>contact_phone</mat-icon>
+            </mat-form-field>
+            <val-msg [invalid]='phone1.invalid && phone1.touched'>
+              Phone number is invalid
+            </val-msg>
+          </div>
+        </div>
+        <div class="flex_row_col">
+          <div class="control checkbox">
+            <mat-checkbox class="example-margin" formControlName="isActive">Acitve</mat-checkbox>
+          </div>
+        </div>
+        <div class="flex_row">
+          <div class='flex_1'></div>
+          <div style="margin-right: 2em;">
+            <button type='submit' mat-stroked-button color="primary" [disabled]="!clubForm.valid">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -36,37 +36,10 @@ body {
 }
 
 .reactive-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /*
-  .form_header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 7em;
-    padding: 0.5em;
-    background-color: #23419f;
-    color: white;
-    margin-bottom: 1em;
-    @media (max-width: $cellphone_width) {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 10;
-      opacity: 0.98;
-    }
-    .header-content {
-      display: flex;
-      font-size: 3em;
-      padding: 0 10px;
-      .title {
-        font-size: 0.8em;
-        margin-left: 10px;
-      }
-    }
-  }
-  */
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+
   .form_content {
   }
   .form_section {

@@ -53,7 +53,8 @@ export class SignUpComponent extends BaseReactiveFormComponent
       cellPhone: '',
       firstName: '',
       lastName: '',
-      gender: 1
+      gender: 1,
+      role: { subscriber: true }
     };
     this.buildForm(this.user);
   }

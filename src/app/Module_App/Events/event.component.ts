@@ -6,35 +6,30 @@ import {
   transition,
   animate
 } from '@angular/animations';
-
-const pullUpDownAnimate =
-  // trigger name for attaching this animation to an element using the [@triggerName] syntax
-  trigger('pullUpDownAnimate', [
-    state('show', style({ opacity: 1 })),
-    state('hide', style({ opacity: 0 })),
-    transition('show => hide', animate('600ms')),
-    transition('hide => show', animate('300ms'))
-  ]);
-
-const rotateAnimate =
-  // trigger name for attaching this animation to an element using the [@triggerName] syntax
-  trigger('rotateAnimate', [
-    state('right', style({ transform: 'rotate(90deg)' })),
-    state('down', style({ transform: 'rotate(0)' })),
-    transition('right => down', animate('600ms')),
-    transition('down => right', animate('300ms'))
-  ]);
+import { FirebaseDataService, IClub, IUser } from '../../Module_Firebase';
+import { Observable } from 'rxjs';
+import { CollectionPath } from '../../Module_Firebase/models';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'event',
   templateUrl: 'event.component.html',
-  styleUrls: ['event.component.scss'],
-  animations: [pullUpDownAnimate, rotateAnimate]
+  styleUrls: ['event.component.scss']
 })
 export class EventComponent implements OnInit {
   indicator_state;
-  constructor() {}
+  clubs: Observable<any[]>;
+  constructor(private dbService: FirebaseDataService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getAllClubs();
+  }
+
+  getAllClubs() {
+    this.clubs = this.dbService.getCollection<IClub>(CollectionPath.CLUBS);
+  }
+
+  onClick(club: any) {
+    const aa = club;
+  }
 }

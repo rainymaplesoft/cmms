@@ -9,6 +9,7 @@ import { HeaderComponent } from './Module_App/Header/header.component';
 import { HeaderInfoComponent } from './Module_App/HeaderInfo/header-info.component';
 import { ViewHeaderComponent } from './Module_App/ViewHeader/view-header.component';
 import { EventComponent } from './Module_App/Events/event.component';
+import { ClubListComponent, ClubEditComponent } from './Module_App/Club';
 
 // RouteName.DefaultRoute
 /* to avoid any error in production (ng build --prod)
@@ -20,6 +21,7 @@ export const AppRoutes: Route[] = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: LandingComponent },
   { path: 'event', component: EventComponent },
+  { path: 'clubs', component: ClubListComponent, canActivate: [] },
   { path: 'signup', component: SignUpComponent },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
   { path: '**', redirectTo: '/home' }
@@ -33,5 +35,7 @@ export const AppComponents: any = [
   HeaderComponent,
   HeaderInfoComponent,
   ViewHeaderComponent,
-  EventComponent
+  EventComponent,
+  ClubListComponent,
+  ClubEditComponent
 ];
