@@ -12,6 +12,24 @@ import {
   group
 } from '@angular/animations';
 
+export const pullUpDownAnimate =
+  // trigger name for attaching this animation to an element using the [@triggerName] syntax
+  trigger('pullUpDownAnimate', [
+    state('show', style({ height: '*', display: 'block', opacity: 1 })),
+    state('hide', style({ height: 0, display: 'none', overflow: 'hidden' })),
+    transition('show => hide', animate('200ms')),
+    transition('hide => show', animate('200ms'))
+  ]);
+
+export const rotateAnimate =
+  // trigger name for attaching this animation to an element using the [@triggerName] syntax
+  trigger('rotateAnimate', [
+    state('right', style({ transform: 'rotate(0)' })),
+    state('down', style({ transform: 'rotate(90deg)' })),
+    transition('right => down', animate('200ms')),
+    transition('down => right', animate('200ms'))
+  ]);
+
 export const visibilityChanged =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax
   trigger('visibilityChanged', [
@@ -22,13 +40,13 @@ export const visibilityChanged =
   ]);
 
 export const displayChanged =
-         // trigger name for attaching this animation to an element using the [@triggerName] syntax
-         trigger('displayChanged', [
-           state('show', style({ display: 'block', height: '*' })),
-           state('hide', style({ display: 'none', height: 0 })),
-           transition('show => hide', animate('300ms')),
-           transition('hide => show', animate('300ms'))
-         ]);
+  // trigger name for attaching this animation to an element using the [@triggerName] syntax
+  trigger('displayChanged', [
+    state('show', style({ display: 'block', height: '*' })),
+    state('hide', style({ display: 'none', height: 0 })),
+    transition('show => hide', animate('300ms')),
+    transition('hide => show', animate('300ms'))
+  ]);
 
 export const fadeInAnimation =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax

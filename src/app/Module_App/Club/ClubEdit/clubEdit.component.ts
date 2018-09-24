@@ -14,6 +14,8 @@ import * as firebase from 'firebase';
 import { DocumentReference } from '@angular/fire/firestore';
 import { ToastrService } from '../../../Module_Core';
 import { ClubValidator } from '../club.validator';
+import { toBase64String } from '../../../../../node_modules/@angular/compiler/src/output/source_map';
+import { tap } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -28,6 +30,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
   showList = new EventEmitter<boolean>();
 
   hideEdit = false;
+  disableCode = false;
   club: Observable<IClub>;
   clubForm: FormGroup;
   get docPathClub() {
@@ -62,10 +65,18 @@ export class ClubEditComponent implements OnInit, OnChanges {
   private getClubById() {
     this.club = this.dbService
       .getDocument<IClub>(this.docPathClub)
-      .valueChanges();
+      .valueChanges()
+      .pipe(
+        tap((club: IClub) => {
+          this.disableCode = club && club.clubCode.length === 4;
+        })
+      );
     this.buildForm();
     this.club.subscribe(club => {
       this.clubForm.patchValue(club);
+      if (this.disableCode) {
+        this.clubCode.disable();
+      }
     });
   }
 
@@ -80,21 +91,6 @@ export class ClubEditComponent implements OnInit, OnChanges {
     } else {
       this.addClub(data);
     }
-    // const allClubs = this.dbService
-    //   .getCollection<IClub>(CollectionPath.CLUBS)
-    //   .subscribe((clubs: IClub[]) => {
-    //     const clubWithSameCode = clubs.find(
-    //       c => c._id !== this.clubId && c.clubCode === data.clubCode
-    //     );
-    //     if (clubWithSameCode) {
-    //       this.toastr.warning(
-    //         `The Code [${data.clubCode}] already exists, please verify!!`
-    //       );
-    //       return;
-    //     }
-
-    //     return;
-    //   });
   }
 
   private updateClub(data: any) {

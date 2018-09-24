@@ -20,6 +20,16 @@
     border-bottom-style: solid;
     border-bottom-color: rgba(0, 0, 0, 0.12);
   }
+  .header {
+    background-color: gainsboro;
+    .indicator {
+      cursor: pointer;
+      font-size: 25px;
+      mat-icon {
+        color: brown;
+      }
+    }
+  }
   .t_row {
     cursor: pointer;
     &.selected {

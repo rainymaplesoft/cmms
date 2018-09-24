@@ -1,17 +1,18 @@
 import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { PageEvent } from '@angular/material';
-
 import { Observable } from 'rxjs';
-import { FirebaseDataService, IClub } from '../../Module_Firebase';
+import { tap } from 'rxjs/operators';
 
+import { FirebaseDataService, IClub } from '../../Module_Firebase';
 import { CollectionPath } from '../../Module_Firebase/models';
 import { ClubEditComponent } from './ClubEdit';
-import { tap } from 'rxjs/operators';
+import { rotateAnimate, pullUpDownAnimate } from '../../Module_Core';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'club-list',
   templateUrl: 'clubList.component.html',
-  styleUrls: ['clubList.component.scss']
+  styleUrls: ['clubList.component.scss'],
+  animations: [rotateAnimate, pullUpDownAnimate]
 })
 export class ClubListComponent implements OnInit, OnChanges {
   @ViewChild(ClubEditComponent)
@@ -23,16 +24,18 @@ export class ClubListComponent implements OnInit, OnChanges {
   clubs: Observable<any[]>;
   title = 'Club Settings';
   selectedClubId = '';
+  arrowState = 'right'; // right/down
+  tableContentState = 'show'; // hide/show
 
   get pageLength() {
     return this.clubCount;
   }
 
-  pager = {
-    length: 10,
+  pageConfig = {
+    length: 0,
     pageSize: 5,
     pageIndex: 0,
-    pageSizeOptions: [5, 10]
+    pageSizeOptions: [5, 10, 20]
   };
 
   constructor(private dbService: FirebaseDataService) {}
@@ -48,14 +51,14 @@ export class ClubListComponent implements OnInit, OnChanges {
       .getCollection<IClub>(CollectionPath.CLUBS, [], ['clubName', 'asc'])
       .pipe(
         tap((item: any[]) => {
-          this.clubCount = item.length;
+          this.pageConfig.length = item.length;
         })
       );
   }
 
   onPageChange($event: PageEvent) {
-    this.pager.pageIndex = $event.pageIndex;
-    this.pager.pageSize = $event.pageSize;
+    this.pageConfig.pageIndex = $event.pageIndex;
+    this.pageConfig.pageSize = $event.pageSize;
   }
 
   onClubClick(club: IClub) {
@@ -69,15 +72,16 @@ export class ClubListComponent implements OnInit, OnChanges {
     this.showClubList = false;
   }
 
+  onArrowClick() {
+    this.arrowState = this.arrowState === 'right' ? 'down' : 'right';
+    this.tableContentState = this.arrowState === 'down' ? 'hide' : 'show';
+  }
+
   checkSelected(club: IClub) {
     return this.selectedClubId === club._id;
   }
 
   clubTrack = (index, item) => {};
-
-  onCheckLast(i: number) {
-    // this.clubCount = i + 1;
-  }
 
   showList() {
     this.showClubList = true;
@@ -85,10 +89,10 @@ export class ClubListComponent implements OnInit, OnChanges {
 
   hideByPage(i: number) {
     const index = i + 1;
-    const pageNumber = this.pager.pageIndex + 1;
+    const pageNumber = this.pageConfig.pageIndex + 1;
     const hide =
-      index > this.pager.pageSize * pageNumber ||
-      index <= this.pager.pageSize * (pageNumber - 1);
+      index > this.pageConfig.pageSize * pageNumber ||
+      index <= this.pageConfig.pageSize * (pageNumber - 1);
     return hide;
   }
 }

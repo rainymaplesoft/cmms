@@ -12,32 +12,39 @@
         <div class="t_col control">
           <div>
             <button mat-button (click)='onAddClubClick()'>
-              <mat-icon matSuffix>add</mat-icon>
-              Add
+              <mat-icon matSuffix>add</mat-icon>Add
             </button>
           </div>
-        </div>
-      </div>
-      <div class='t_row' *ngFor="let club of clubs | async as clubList; index as i; last as islast trackBy: clubTrack"
-        [ngClass]='{selected:checkSelected(club),hideByPage:hideByPage(i)}' (click)='onClubClick(club)'>
-        <div class="t_col flex_3">{{ club.clubName }}</div>
-        <div class="t_col flex_2 mobile_hide">{{ club.email }}</div>
-        <div class="t_col flex_1 mobile_hide">{{ club.clubCode }}</div>
-        <div class="t_col flex_1 mobile_hide">{{ club.isActive }}</div>
-        <div class="t_col control">
-          <input type="hidden" name="listLength" value={{i}} #hid>
-          <div class="icon">
-            <mat-icon matSuffix>navigate_next</mat-icon>
+          <div class="indicator">
+            <div [@rotateAnimate]='arrowState' (click)='onArrowClick()'>
+              <mat-icon inline='true'>keyboard_arrow_right</mat-icon>
+            </div>
           </div>
         </div>
-        <ng-container *ngIf="islast">
-          {{ onCheckLast(i) }}
-        </ng-container>
       </div>
-      <div class="footer">
-        <div class="pagination">
-          <mat-paginator [length]="clubCount" [pageSize]="pager.pageSize" [pageSizeOptions]="pager.pageSizeOptions"
-            (page)="onPageChange($event)"></mat-paginator>
+      <div class="table_content" [@pullUpDownAnimate]='tableContentState'>
+        <div class='t_row' *ngFor="let club of clubs | async as clubList; index as i; last as islast trackBy: clubTrack"
+          [ngClass]='{selected:checkSelected(club),hideByPage:hideByPage(i)}' (click)='onClubClick(club)'>
+          <div class="t_col flex_3">{{ club.clubName }}</div>
+          <div class="t_col flex_2 mobile_hide">{{ club.email }}</div>
+          <div class="t_col flex_1 mobile_hide">{{ club.clubCode }}</div>
+          <div class="t_col flex_1 mobile_hide">
+            <div class="checkbox" *ngIf="club.isActive">
+              <mat-icon inline='true'>done</mat-icon>
+            </div>
+          </div>
+          <div class="t_col control">
+            <input type="hidden" name="listLength" value={{i}} #hid>
+            <div class="icon">
+              <mat-icon matSuffix>navigate_next</mat-icon>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="pagination">
+            <mat-paginator [length]="pageConfig.length" [pageSize]="pageConfig.pageSize" [pageSizeOptions]="pageConfig.pageSizeOptions"
+              (page)="onPageChange($event)"></mat-paginator>
+          </div>
         </div>
       </div>
     </div>
