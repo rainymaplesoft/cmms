@@ -12,6 +12,8 @@ import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as firebase from 'firebase';
 import { DocumentReference } from '@angular/fire/firestore';
+import { ToastrService } from '../../../Module_Core';
+import { ClubValidator } from '../club.validator';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -44,6 +46,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
 
   constructor(
     private dbService: FirebaseDataService,
+    private toastr: ToastrService,
     private fb: FormBuilder
   ) {}
 
@@ -71,12 +74,27 @@ export class ClubEditComponent implements OnInit, OnChanges {
       console.log('form is not valid, cannot save to database');
       return;
     }
-    const data = this.clubForm.value;
+    const data: IClub = this.clubForm.value;
     if (this.clubId) {
       this.updateClub(data);
     } else {
       this.addClub(data);
     }
+    // const allClubs = this.dbService
+    //   .getCollection<IClub>(CollectionPath.CLUBS)
+    //   .subscribe((clubs: IClub[]) => {
+    //     const clubWithSameCode = clubs.find(
+    //       c => c._id !== this.clubId && c.clubCode === data.clubCode
+    //     );
+    //     if (clubWithSameCode) {
+    //       this.toastr.warning(
+    //         `The Code [${data.clubCode}] already exists, please verify!!`
+    //       );
+    //       return;
+    //     }
+
+    //     return;
+    //   });
   }
 
   private updateClub(data: any) {
@@ -109,7 +127,11 @@ export class ClubEditComponent implements OnInit, OnChanges {
   private buildForm() {
     this.clubForm = this.fb.group({
       clubName: ['', Validators.required],
-      clubCode: ['', [Validators.required, Validators.pattern('^[A-Z]{4}$')]],
+      clubCode: [
+        '',
+        [Validators.pattern('^[A-Z]{4}$')],
+        [ClubValidator.clubCode(this.dbService.afs, this.clubId)]
+      ],
       email: ['', Validators.required],
       contactName: ['', Validators.required],
       address: [''],

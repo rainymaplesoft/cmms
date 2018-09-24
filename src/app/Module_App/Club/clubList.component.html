@@ -7,6 +7,7 @@
       <div class='header'>
         <div class="t_col flex_3">Club Name</div>
         <div class="t_col flex_2 mobile_hide">Email</div>
+        <div class="t_col flex_1 mobile_hide">Code</div>
         <div class="t_col flex_1 mobile_hide">Active</div>
         <div class="t_col control">
           <div>
@@ -21,6 +22,7 @@
         [ngClass]='{selected:checkSelected(club),hideByPage:hideByPage(i)}' (click)='onClubClick(club)'>
         <div class="t_col flex_3">{{ club.clubName }}</div>
         <div class="t_col flex_2 mobile_hide">{{ club.email }}</div>
+        <div class="t_col flex_1 mobile_hide">{{ club.clubCode }}</div>
         <div class="t_col flex_1 mobile_hide">{{ club.isActive }}</div>
         <div class="t_col control">
           <input type="hidden" name="listLength" value={{i}} #hid>

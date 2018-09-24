@@ -1,17 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { KeyValue } from '../../../Module_Core';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import {
-  DialogService,
-  HttpService,
-  ToastrService,
-  StorageService,
-  UtilService,
-  KeyValue
-} from '../../../Module_Core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialog, DateAdapter, NativeDateAdapter } from '@angular/material';
-import { BaseReactiveFormComponent } from '../../_Shared/base.reactiveForm';
-import { FireAuthService, IUser } from '../../../Module_Firebase';
+  FireAuthService,
+  IUser,
+  FirebaseDataService
+} from '../../../Module_Firebase';
+import { Observable } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -19,25 +15,16 @@ import { FireAuthService, IUser } from '../../../Module_Firebase';
   templateUrl: 'signup.component.html',
   styleUrls: ['signup.component.scss']
 })
-export class SignUpComponent extends BaseReactiveFormComponent
-  implements OnInit {
+export class SignUpComponent implements OnInit {
   constructor(
-    router: Router,
-    route: ActivatedRoute,
-    dialog: DialogService,
-    util: UtilService,
-    dataService: HttpService,
-    fb: FormBuilder,
-    toastr: ToastrService,
+    private dbService: FirebaseDataService,
+    private fb: FormBuilder,
     private auth: FireAuthService,
-    private popup: MatDialog,
-    private storeServie: StorageService,
-    dateAdapter: DateAdapter<NativeDateAdapter>
-  ) {
-    super(router, route, dialog, dataService, fb, toastr, util);
-  }
+    router: Router
+  ) {}
 
-  user: IUser;
+  user: Observable<IUser>;
+  signupForm: FormGroup;
   genders: KeyValue[] = [
     { key: 1, value: 'Male' },
     { key: 2, value: 'Female' }
@@ -45,22 +32,11 @@ export class SignUpComponent extends BaseReactiveFormComponent
   title = 'Sign Up';
 
   ngOnInit() {
-    this.user = {
-      uid: '',
-      email: '',
-      password: '',
-      passwordConfirm: '',
-      cellPhone: '',
-      firstName: '',
-      lastName: '',
-      gender: 1,
-      role: { subscriber: true }
-    };
-    this.buildForm(this.user);
+    this.buildForm();
   }
 
   signUp(p: any) {
-    const userInfo = <IUser>this.__formGroup.value;
+    const userInfo = <IUser>this.signupForm.value;
     if (!userInfo.email || !userInfo.password) {
       return;
     }
@@ -68,6 +44,7 @@ export class SignUpComponent extends BaseReactiveFormComponent
       .signupWithEmailPassword(userInfo.email, userInfo.password)
       .then(v => console.log(v), e => console.log(e));
     const aa = 1;
+    // todo: navigate to club
   }
 
   onSubmit() {
@@ -76,32 +53,51 @@ export class SignUpComponent extends BaseReactiveFormComponent
     // this.signUp(null);
   }
 
-  //#region getters
+  //#region reactive form and field getters
+
+  private buildForm() {
+    this.signupForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [Validators.minLength(6), Validators.maxLength(25), Validators.required]
+      ],
+      passwordConfirm: [
+        '',
+        [Validators.minLength(6), Validators.maxLength(25), Validators.required]
+      ],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      cellPhone: ['', [Validators.required]],
+      gender: 1
+    });
+  }
+
   get email() {
-    return this.__formGroup.get('email');
+    return this.signupForm.get('email');
   }
   get password() {
-    return this.__formGroup.get('password');
+    return this.signupForm.get('password');
   }
 
   get passwordConfirm() {
-    return this.__formGroup.get('passwordConfirm');
+    return this.signupForm.get('passwordConfirm');
   }
 
   get firstName() {
-    return this.__formGroup.get('firstName');
+    return this.signupForm.get('firstName');
   }
 
   get lastName() {
-    return this.__formGroup.get('lastName');
+    return this.signupForm.get('lastName');
   }
 
   get cellPhone() {
-    return this.__formGroup.get('cellPhone');
+    return this.signupForm.get('cellPhone');
   }
 
   get gender() {
-    return this.__formGroup.get('gender');
+    return this.signupForm.get('gender');
   }
   get notSamePassword() {
     return (
@@ -112,58 +108,6 @@ export class SignUpComponent extends BaseReactiveFormComponent
       this.password.value !== this.passwordConfirm.value
     );
   }
-  //#endregion
 
-  /* build form and validations */
-  buildForm(c: IUser) {
-    this.__formConfig = {
-      uid: { value: c.uid },
-      email: {
-        value: c.email,
-        validations: [Validators.required, Validators.email],
-        message: 'Email format is invalid'
-      },
-      password: {
-        value: c.password,
-        validations: [
-          // Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
-          Validators.minLength(6),
-          Validators.maxLength(25),
-          Validators.required
-        ],
-        message: 'Password is required with length between 6-25 characters'
-      },
-      passwordConfirm: {
-        value: c.passwordConfirm,
-        validations: [
-          // Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$'),
-          Validators.minLength(6),
-          Validators.maxLength(25),
-          Validators.required
-        ],
-        message: 'Password is required with length between 6-25 characters'
-      },
-      firstName: {
-        value: c.firstName,
-        validations: [Validators.required],
-        message: 'First Name is required'
-      },
-      lastName: {
-        value: c.firstName,
-        validations: [Validators.required],
-        message: 'Last Name is required'
-      },
-      cellPhone: {
-        value: c.cellPhone,
-        validations: [Validators.required],
-        message: 'Last Name is required'
-      },
-      gender: {
-        value: c.gender,
-        validations: [Validators.required, Validators.min(1)],
-        message: 'Please select gender'
-      }
-    };
-    this.__buildFormGroup();
-  }
+  //#endregion
 }

@@ -1,32 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IKeyValue } from '../Module_Core/enums';
-import { AngularFireDatabase } from '@angular/fire/database';
 import {
   AngularFirestore,
-  AngularFirestoreDocument,
   Action,
   DocumentSnapshotDoesNotExist,
   DocumentSnapshotExists
 } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { IClub } from './models';
-import { map, catchError, take } from 'rxjs/operators';
-// import { AngularFirestore } from '@angular/fire/firestore';
-import { ToastrService } from '../Module_Core/services/toastr.service';
 import * as firebase from 'firebase';
-export interface ClubwithId extends IClub {
-  clubId: string;
-}
+import { AngularFireAuth } from '@angular/fire/auth';
+import { map, catchError, take } from 'rxjs/operators';
+import { IClub } from './models';
+import { ToastrService } from '../Module_Core/services/toastr.service';
+
 @Injectable()
 export class FirebaseDataService {
+  afs: AngularFirestore;
   constructor(
     private db: AngularFirestore,
     private afAuth: AngularFireAuth,
     private toastr: ToastrService
-  ) {}
-
-  // private clubs: Observable<any[]>;
+  ) {
+    this.afs = this.db;
+  }
 
   // T must contain property "_id:string"
   getCollection<T>(
@@ -87,18 +82,24 @@ export class FirebaseDataService {
     ref: string,
     data
   ): Promise<firebase.firestore.DocumentReference> {
-    const timestamp = this.timestamp;
     return this.db.collection(ref).add({
       ...data,
-      updatedAt: timestamp,
-      createdAt: timestamp
+      updatedAt: this.timestamp,
+      createdAt: this.timestamp
     });
   }
 
-  updateDocument<T>(docPath: string, data: T): Promise<boolean> {
+  updateDocument<T>(docPath: string, data): Promise<boolean> {
     const doc = this.db.doc<T>(docPath);
     return doc
-      .update(data)
+      .update({ ...data, updatedAt: this.timestamp })
+      .then(i => this.actionSucceeded(), i => this.actionFailed());
+  }
+
+  delete<T>(ref: string): Promise<boolean> {
+    return this.db
+      .doc(ref)
+      .delete()
       .then(i => this.actionSucceeded(), i => this.actionFailed());
   }
 
@@ -123,13 +124,6 @@ export class FirebaseDataService {
           : this.set(ref, data);
       }
     );
-  }
-
-  delete<T>(ref: string): Promise<boolean> {
-    return this.db
-      .doc(ref)
-      .delete()
-      .then(i => this.actionSucceeded(), i => this.actionFailed());
   }
 
   /// Firebase Server Timestamp

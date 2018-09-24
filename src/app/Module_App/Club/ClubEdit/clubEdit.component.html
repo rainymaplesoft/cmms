@@ -33,8 +33,8 @@
               <input matInput placeholder="Code(4 Capital letters)" formControlName="clubCode" autocomplete="off">
               <mat-icon matSuffix color='primary'>vpn_key</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='clubCode.invalid && clubCode.touched'>
-              Code format is invalid
+            <val-msg [invalid]='clubCode.invalid && clubCode.dirty'>
+              Code format is invalid or Code is taken
             </val-msg>
           </div>
         </div>
