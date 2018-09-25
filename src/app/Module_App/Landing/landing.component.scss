@@ -11,3 +11,13 @@ ngb-carousel {
   display: flex;
   justify-content: center;
 }
+.club-entry {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  .club-select {
+    @media (max-width: 800px) {
+      width: 100%;
+    }
+  }
+}

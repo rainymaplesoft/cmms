@@ -30,13 +30,16 @@ export const rotateAnimate =
     transition('down => right', animate('200ms'))
   ]);
 
-export const visibilityChanged =
+export const hoverScaleAnimation =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax
-  trigger('visibilityChanged', [
-    state('show', style({ opacity: 1 })),
-    state('hide', style({ opacity: 0 })),
-    transition('show => hide', animate('600ms')),
-    transition('hide => show', animate('300ms'))
+  trigger('hoverScaleAnimation', [
+    state(
+      'mouseenter',
+      style({ transform: 'scale(1.05, 1.05)', opacity: 0.6 })
+    ),
+    state('mouseleave', style({ transform: 'scale(1, 1)', opacity: 1 })),
+    transition('mouseenter => mouseleave', animate('200ms')),
+    transition('mouseleave => mouseenter', animate('200ms'))
   ]);
 
 export const displayChanged =

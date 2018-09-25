@@ -1,7 +1,22 @@
-.img-wrap {
-  .img {
-    width: 340px;
-    height: 200px;
-    background-size: cover;
+.entry-snippet {
+  width: 390px;
+  padding: 10px 15px;
+  position: relative;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+  .img-wrap {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s ease;
+    background: rgba(254, 209, 54, 0.9);
+    img {
+      height: 250px;
+      @media (max-width: 800px) {
+        width: 100%;
+        height: auto;
+      }
+    }
   }
 }
