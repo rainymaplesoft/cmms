@@ -3,32 +3,40 @@
     <div id="mobile-menu-toggle" (click)='toggleMobileMenu()'>
       <mat-icon inline='false'>menu</mat-icon>
     </div>
-    <div class="wrap">
+    <div class="header-content">
       <div class="logo">
-        <img [src]="logo" alt="" style="width: 78px;">
+        Club Name here
+        <!-- <img [src]="logo" alt="" style="width: 78px;"> -->
       </div>
       <div class="main_menu">
-        <div class='menu_item'>
-          <div class="menu_content" (click)='nav(r_home)'>
-            <mat-icon inline='true'>home</mat-icon>
+        <div class='menu_item selected' (click)='nav(r_home)'>
+          <div class="menu_content">
+            <i class="material-icons">home</i>
+          </div>
+          <div class="menu_content">
             <div class="item_wrap">Home</div>
           </div>
         </div>
         <div class='menu_item'>
           <div class="menu_content">
-            <mat-icon inline='true'>settings</mat-icon>
+            <i class="material-icons">settings</i>
+          </div>
+          <div class="menu_content">
             <div class="item_wrap">Management</div>
           </div>
         </div>
         <div class='menu_item'>
           <div class="menu_content">
-            <mat-icon inline='true'>photo</mat-icon>
+            <i class="material-icons">photo</i>
+          </div>
+          <div class="menu_content">
             <div class="item_wrap">Gallery</div>
           </div>
         </div>
         <div class='menu_item'>
           <div class="menu_content" (click)='nav(r_clubs)'>
-            <mat-icon inline='true'>event_note</mat-icon>
+            <i class="material-icons">event_note</i></div>
+          <div class="menu_content">
             <div class="item_wrap">Events</div>
           </div>
         </div>

@@ -1,5 +1,4 @@
 .header-wrap {
-  height: 97px;
   color: #666666;
   font-weight: 500;
   font-style: normal;
@@ -30,8 +29,8 @@
 #header.sticky {
   position: fixed;
   top: 0;
-  background-color: white;
-  height: 97px;
+  background-color: rgb(55, 116, 178);
+  height: 60px;
   z-index: 5;
   width: 100%;
   display: flex;
@@ -40,19 +39,28 @@
   -webkit-box-shadow: 0px 1px 5px rgba(100, 100, 100, 0.3);
   -moz-box-shadow: 0px 1px 5px rgba(100, 100, 100, 0.3);
   box-shadow: 0px 1px 5px rgba(100, 100, 100, 0.3);
-  .wrap {
+  .header-content {
     display: flex;
     flex: 1;
+    height: 100%;
+    max-width: 890px;
     max-width: 1000px;
     justify-content: space-around;
     @media (max-width: 959.8px) {
       flex: 0;
     }
-
+    @media screen and (min-width: 1236px) {
+      max-width: 1190px;
+    }
     .logo {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      min-width: 200px;
+      color: #fed136;
+      font-family: Kaushan Script, Helvetica Neue, Helvetica, Arial, cursive;
+      font-size: 1.75em;
+      transition: all 0.3s;
     }
     .main_menu {
       display: flex;
@@ -60,11 +68,24 @@
       justify-content: flex-end;
       max-width: 600px;
       @media (max-width: 765.8px) {
+        .menu_item .item_wrap {
+          display: none !important;
+        }
+        .material-icons {
+          font-size: 24px !important;
+        }
+      }
+      @media (max-width: 600px) {
         display: none;
       }
       .menu_item {
+        color: #c7d1d8;
+        &.selected {
+          color: #adf5db;
+        }
         &:hover {
-          background-color: aliceblue;
+          background-color: #2a679c;
+          color: wheat;
         }
         @media (max-width: 959.8px) {
           mat-icon {
@@ -94,12 +115,15 @@
       padding: 0 12px 0;
       .menu_content {
         display: flex;
-        mat-icon {
-          font-size: 24px;
+        justify-content: center;
+        font-size: 18px;
+        .material-icons {
+          font-size: 28px;
         }
       }
       .item_wrap {
-        padding: 5px;
+        padding: 0 5px;
+        font-size: 13px;
       }
     }
     .item_wrap,
@@ -107,14 +131,6 @@
     .icon_wrap {
       cursor: pointer;
       font-size: 16px;
-      &:hover {
-        color: #b52335;
-      }
-    }
-    .menu_content :hover {
-      mat-icon {
-        color: #b52335 !important;
-      }
     }
   }
 }

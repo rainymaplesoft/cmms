@@ -24,10 +24,14 @@ body {
 .page_view {
   display: flex;
   justify-content: center;
+  margin-top: 60px;
   .page_content {
     max-width: 1000px;
     flex: 1;
-    padding: 10px;
+    padding: 5px 10px;
+    @media screen and (min-width: 1236px) {
+      max-width: 1190px;
+    }
   }
 }
 

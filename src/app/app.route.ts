@@ -10,6 +10,7 @@ import { HeaderInfoComponent } from './Module_App/HeaderInfo/header-info.compone
 import { ViewHeaderComponent } from './Module_App/ViewHeader/view-header.component';
 import { EventComponent } from './Module_App/Events/event.component';
 import { ClubListComponent, ClubEditComponent } from './Module_App/Club';
+import { ClubSelectComponent } from './Module_App/Landing';
 
 // RouteName.DefaultRoute
 /* to avoid any error in production (ng build --prod)
@@ -37,5 +38,6 @@ export const AppComponents: any = [
   ViewHeaderComponent,
   EventComponent,
   ClubListComponent,
-  ClubEditComponent
+  ClubEditComponent,
+  ClubSelectComponent
 ];
