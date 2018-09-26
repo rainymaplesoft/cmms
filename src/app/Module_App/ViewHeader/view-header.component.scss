@@ -1,9 +1,9 @@
 .title-wrap {
   display: flex;
   justify-content: center;
-  height: 70px;
+  height: 50px;
   @media (max-width: 767.8px) {
-    height: 50px;
+    height: 40px;
     h2 {
       font-size: 20px;
       padding-top: 5px;
@@ -12,7 +12,7 @@
   .title-content {
     display: flex;
     flex: 1;
-    max-width: 1000px;
+    max-width: 1190px;
     .title-area {
       display: flex;
       flex-direction: column;

@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit {
   showContact = 'hide';
   showTimings = 'hide';
 
+  r_selected = RouteName.Home;
   r_home = RouteName.Home;
   r_signup = RouteName.SignUp;
   r_event = RouteName.Event;
@@ -32,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   nav(route: string) {
     if (route) {
+      this.r_selected = route;
       this.router.navigate([route]);
     }
   }

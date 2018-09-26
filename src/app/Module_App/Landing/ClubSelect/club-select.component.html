@@ -1,17 +1,14 @@
 <div class="entry-snippet">
-
   <div class="img-wrap">
-    <!-- <div class="img" [ngStyle]="{'background-image': imgUrl}"></div> -->
     <img [src]="clubImage" [@hoverScaleAnimation]='hoverState' (mouseenter)='setMouseState("mouseenter")' (mouseleave)='setMouseState("mouseleave")' />
-    <div class="image-overlay"></div>
-
-    <div class="type-info">
-      <div class="post-title">
-        <div class="button transparent">View Details</div>
-      </div>
+    <div class="image-overlay" [ngStyle]="{display: showImgOverlay}" (mouseenter)='setMouseState("mouseenter")'
+      (mouseleave)='setMouseState("mouseleave")'>SELECT</div>
+  </div>
+  <div class="club-info">
+    <div class="club-title">
+      {{club.clubName}}
     </div>
   </div>
-  <!-- .img-wrap -->
-
-
 </div>
+
+<!-- club-select -->

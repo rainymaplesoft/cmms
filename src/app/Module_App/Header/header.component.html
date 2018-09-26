@@ -9,7 +9,7 @@
         <!-- <img [src]="logo" alt="" style="width: 78px;"> -->
       </div>
       <div class="main_menu">
-        <div class='menu_item selected' (click)='nav(r_home)'>
+        <div class='menu_item' [ngClass]="{selected: r_home===r_selected}" (click)='nav(r_home)'>
           <div class="menu_content">
             <i class="material-icons">home</i>
           </div>
@@ -17,12 +17,12 @@
             <div class="item_wrap">Home</div>
           </div>
         </div>
-        <div class='menu_item'>
+        <div class='menu_item' [ngClass]="{selected: r_clubs===r_selected}" (click)='nav(r_clubs)'>
           <div class="menu_content">
             <i class="material-icons">settings</i>
           </div>
           <div class="menu_content">
-            <div class="item_wrap">Management</div>
+            <div class="item_wrap">Settings</div>
           </div>
         </div>
         <div class='menu_item'>
@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class='menu_item'>
-          <div class="menu_content" (click)='nav(r_clubs)'>
+          <div class="menu_content">
             <i class="material-icons">event_note</i></div>
           <div class="menu_content">
             <div class="item_wrap">Events</div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { hoverScaleAnimation } from '../../../Module_Core';
+import { IClub } from '../../../Module_Firebase/models';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -10,17 +11,19 @@ import { hoverScaleAnimation } from '../../../Module_Core';
 })
 export class ClubSelectComponent implements OnInit {
   @Input()
-  clubImage: string;
+  club: IClub;
 
-  imgUrl: string;
+  clubImage: string;
+  showImgOverlay = 'none';
   hoverState = 'mouseleave'; // mouseleave/moseenter
   constructor() {}
 
   ngOnInit() {
-    this.imgUrl = `url(${this.clubImage})`;
+    this.clubImage = `assets/img/club/club_entry_${this.club.clubCode}.jpg`;
   }
 
   setMouseState(p: string) {
     this.hoverState = p;
+    this.showImgOverlay = p === 'mouseenter' ? 'block' : 'none';
   }
 }

@@ -29,7 +29,7 @@
 #header.sticky {
   position: fixed;
   top: 0;
-  background-color: rgb(55, 116, 178);
+  background-color: #343a40 !important;
   height: 60px;
   z-index: 5;
   width: 100%;
@@ -98,11 +98,17 @@
       display: flex;
       .menu_item {
         padding: 0 3px;
-      }
-      .icon_wrap {
-        border-right: 1px solid #666666;
-        display: flex;
-        padding-right: 5px;
+        color: #dfe7b5;
+        .icon_wrap {
+          border-right: 1px solid #dfe7b5;
+          display: flex;
+          padding-right: 5px;
+        }
+        &:last-child {
+          .icon_wrap {
+            border-right: none;
+          }
+        }
       }
     }
     .menu_item {
