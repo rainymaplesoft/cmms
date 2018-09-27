@@ -23,6 +23,11 @@ export class FirebaseDataService {
     this.afs = this.db;
   }
 
+  getSimpleCollection<T>(collectionPath: string) {
+    const collection = this.db.collection<T>(collectionPath).valueChanges();
+    return collection;
+  }
+
   // T must contain property "_id:string"
   getCollection<T>(
     collectionPath: string,

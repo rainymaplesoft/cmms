@@ -21,6 +21,15 @@ export const pullUpDownAnimate =
     transition('hide => show', animate('200ms'))
   ]);
 
+export const pullLeftRightAnimate =
+  // trigger name for attaching this animation to an element using the [@triggerName] syntax
+  trigger('pullLeftRightAnimate', [
+    state('show', style({ width: '*', display: 'block', opacity: 1 })),
+    state('hide', style({ width: 0, display: 'none', overflow: 'hidden' })),
+    transition('show => hide', animate('300ms')),
+    transition('hide => show', animate('300ms'))
+  ]);
+
 export const rotateAnimate =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax
   trigger('rotateAnimate', [

@@ -8,46 +8,57 @@ import {
   AngularFirestoreDocument
 } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
+import { IUser, CollectionPath, IClub } from './models';
 import { ToastrService } from '../Module_Core/services/toastr.service';
-import { IUser } from '.';
-// import { switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class FireAuthService {
-  // user$: Observable<firebase.User>;
+  private firebaseUser: firebase.User;
+  private loginClubId: string;
+  private _authState: Observable<firebase.User>;
 
-  user$: Observable<IUser>;
   constructor(
     private router: Router,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
     private toastr: ToastrService
   ) {
-    this.getCurrentUser();
+    this.afAuth.authState.subscribe(user => {
+      this.firebaseUser = user;
+    });
   }
 
-  private getCurrentUser() {
+  get authState() {
+    return this.afAuth.authState;
+  }
+  // Returns true if user is logged in
+  get isAuthenticated(): boolean {
+    return this.firebaseUser !== null;
+  }
+
+  getCurrentUser(loginClubId: string): Observable<IUser> {
     // Get auth data, then get firestore user document || null
-    this.user$ = this.afAuth.authState.pipe(
-      switchMap(user => {
-        if (user) {
-          return this.afs.doc<IUser>(`users/${user.uid}`).valueChanges();
-        } else {
-          return of(null);
-        }
-      })
+    if (!loginClubId || !this.isAuthenticated) {
+      return of(null);
+    }
+    const docPath = this.getDocPathUser(
+      this.loginClubId,
+      this.firebaseUser.uid
     );
+    return this.afs.doc<IUser>(docPath).valueChanges();
   }
 
   signupWithEmailPassword(
-    email: string,
-    password: string
+    clubId: string,
+    userInfo: IUser
   ): Promise<auth.UserCredential> {
     return this.afAuth.auth
-      .createUserWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
       .then(credential => {
-        this.updateUserData(credential.user);
+        userInfo._id = credential.user.uid;
+        this.updateUserData(clubId, userInfo);
+        this.loginClubId = clubId;
       })
       .catch(error => {
         const errorCode = error.code;
@@ -60,12 +71,55 @@ export class FireAuthService {
       });
   }
 
-  googleSignIn(routeOk = '/', routeFaile = '/') {
+  signOut(route = '/') {
+    this.afAuth.auth.signOut();
+    this.loginClubId = '';
+    this.router.navigate([route]);
+  }
+
+  login(clubId: string, email: string, password: string) {
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
+      credential => {
+        const docPath = this.getDocPathUser(clubId, credential.user.uid);
+        const userRef: Observable<IUser> = this.afs
+          .doc<IUser>(docPath)
+          .valueChanges()
+          .pipe(take(1));
+        return userRef;
+      },
+      e => {
+        return of(null);
+      }
+    );
+  }
+
+  private updateUserData(clubId: string, userInfo: IUser) {
+    // Sets user data to firestore on login
+    const docPath = this.getDocPathUser(clubId, userInfo._id);
+    const userRef: AngularFirestoreDocument<IUser> = this.afs.doc(docPath);
+    userInfo.role = {
+      subscriber: true
+    };
+    return userRef.set(userInfo, { merge: true });
+  }
+
+  getDocPathClub(clubId: string) {
+    return `${CollectionPath.CLUBS}/${clubId}`;
+  }
+
+  getDocPathUser(clubId: string, userId: string) {
+    return `${CollectionPath.CLUBS}/${clubId}/${
+      CollectionPath.USERS
+    }/${userId}`;
+  }
+
+  /*
+  googleSignIn(clubId: string, routeOk = '/', routeFaile = '/') {
     this.afAuth.auth
       .signInWithPopup(new auth.GoogleAuthProvider())
       .then(
         credential => {
-          this.updateUserData(credential.user);
+          this.updateUserData(clubId, credential.user);
           this.router.navigate([routeOk]);
         },
         error => {
@@ -75,24 +129,5 @@ export class FireAuthService {
       )
       .catch(error => console.log('auth error', error));
   }
-
-  signOut(route = '/') {
-    this.afAuth.auth.signOut();
-    this.router.navigate([route]);
-  }
-
-  private updateUserData(user: any) {
-    // Sets user data to firestore on login
-    const userRef: AngularFirestoreDocument<IUser> = this.afs.doc(
-      `users/${user.uid}`
-    );
-    const userData: IUser = {
-      uid: user.uid,
-      email: user.email,
-      role: {
-        subscriber: true
-      }
-    };
-    return userRef.set(userData, { merge: true });
-  }
+*/
 }

@@ -5,23 +5,22 @@
       <div class="club-img" [ngStyle]="{'background-image': clubImage}">
         <!-- <img [src]="clubImage" /> -->
       </div>
-      <div class="signup-form">
+      <div [ngClass]='{hide_sign:showLogin}' class="signup-form" *ngIf='club'>
         <form novalidate class='reactive-form' [formGroup]="signupForm" *ngIf="signupForm" (ngSubmit)="onSubmit()">
           <div class="form_section">
             <div class="form_content">
-              <div class="flex_row_col">
+              <div class="row_col">
                 <div class="control">
                   <mat-form-field>
                     <input matInput placeholder="Email" formControlName="email" autocomplete="off">
                     <mat-icon matSuffix color='primary'>email</mat-icon>
                   </mat-form-field>
-                  <!-- <mat-error *ngIf="email.invalid">mail format is invalid</mat-error> -->
                   <val-msg [invalid]='email.invalid && email.dirty'>
                     Email format is invalid
                   </val-msg>
                 </div>
               </div>
-              <div class="flex_row_col">
+              <div class="row_col">
                 <div class="control">
                   <mat-form-field>
                     <input matInput placeholder="Password" formControlName="password" type='password' autocomplete="off">
@@ -45,7 +44,7 @@
                   </val-msg>
                 </div>
               </div>
-              <div class="flex_row_col">
+              <div class="row_col">
                 <div class="control">
                   <mat-form-field>
                     <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
@@ -65,7 +64,7 @@
                   </val-msg>
                 </div>
               </div>
-              <div class="flex_row_col">
+              <div class="row_col">
                 <div class="control">
                   <mat-form-field>
                     <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
@@ -81,19 +80,51 @@
                       {{gender.value}}
                     </mat-radio-button>
                   </mat-radio-group>
-                  <!-- <val-msg [invalid]='gender.invalid'>
-            Gender is required
-          </val-msg> -->
                 </div>
               </div>
               <div class="flex_row sign-section">
-                <!-- <div class='flex_1'></div> -->
                 <div class='sign-button'>
                   <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !signupForm.valid">Sign
                     Up</button>
                 </div>
-                <div class="alternative">
+                <div class="alternative" (click)='toggleSign()'>
                   <div class='prompt'>Or I already have account</div>
+                  <div class="icon">
+                    <i class="material-icons">forward</i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div [ngClass]='{hide_sign:!showLogin}' class="login-form" *ngIf='club'>
+        <form novalidate class='reactive-form'>
+          <div class="form_section">
+            <div class="form_content">
+              <div class="flex_row">
+                <div class="control">
+                  <mat-form-field>
+                    <input matInput placeholder="Email" [(ngModel)]="loginInfo.email" name='login_email' autocomplete="off">
+                    <mat-icon matSuffix color='primary'>email</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="flex_row">
+                <div class="control">
+                  <mat-form-field>
+                    <input matInput placeholder="Password" [(ngModel)]="loginInfo.password" name='login_password'
+                      autocomplete="off">
+                    <mat-icon matSuffix color='accent'>visibility</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="sign-section">
+                <div class='sign-button'>
+                  <button mat-stroked-button color="primary" (click)='onLogin()' [disabled]="!loginInfo.email || !loginInfo.password">Sign
+                    In</button>
+                </div>
+                <div class="alternative" (click)='toggleSign()'>
+                  <div class='prompt'>Or I want to sign up</div>
                   <div class="icon">
                     <i class="material-icons">forward</i></div>
                 </div>

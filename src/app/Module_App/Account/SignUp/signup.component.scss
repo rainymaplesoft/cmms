@@ -1,11 +1,29 @@
 .reactive-form {
-  .form-section {
-    padding: 10px !important;
+  .form_section {
+    padding-left: 10px;
+    .row_col {
+      display: flex;
+      flex-direction: row;
+    }
+    @media (max-width: 570px) {
+      .row_col {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    .control {
+      max-width: 17em !important;
+      min-width: auto;
+      @media (max-width: 570px) {
+        width: 90%;
+        max-width: none !important;
+      }
+    }
   }
-  .control {
-    max-width: 17em !important;
-    min-width: auto;
-  }
+}
+
+.hide_sign {
+  display: none !important;
 }
 
 .table-container {
@@ -14,28 +32,51 @@
   width: 100%;
   margin: 0 auto;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
-}
-.club-img {
-  display: table-cell;
-  width: auto;
-  // background: url(../../assets/img/badminton_club1.jpg);
-  background-size: cover;
-}
-.signup-form {
-  display: table-cell;
-  width: 560px;
-  background-color: #ffffff;
-  color: #505e6c;
+  .club-img {
+    display: table-cell;
+    width: auto;
+    background-size: cover;
+  }
+  .signup-form,
+  .login-form {
+    display: table-cell;
+    width: 560px;
+    background-color: #ffffff;
+    color: #505e6c;
+  }
+  .login-form {
+    width: 400px;
+    .form_section {
+      padding-left: 0;
+      .flex_row {
+        padding: 0 2em;
+        .control {
+          max-width: 20em !important;
+          min-width: auto;
+        }
+      }
+    }
+  }
 }
 
 .sign-section {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  margin-top: 1.5em;
   .sign-button {
-    margin: 0 2em;
+    display: flex;
+    justify-content: center;
+    margin: 0 2em 0 1.5em;
+    button {
+      width: 100%;
+      max-width: 21em !important;
+    }
   }
   .alternative {
     display: flex;
-    padding-top: 4px;
+    justify-content: center;
+    padding: 2em 0 0em 0;
     cursor: pointer;
     .prompt {
       margin: 0 1em;
