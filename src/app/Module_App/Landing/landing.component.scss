@@ -12,6 +12,13 @@ ngb-carousel {
   justify-content: center;
 }
 
+.img-wrap {
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
 .club-prompt {
   .title-1 {
     font-size: 40px;
@@ -20,6 +27,9 @@ ngb-carousel {
     color: darkcyan;
     text-align: center;
     text-transform: uppercase;
+    @media (max-width: 800px) {
+      font-size: 28px;
+    }
   }
   .title-2 {
     font-size: 16px;

@@ -1,5 +1,5 @@
 <div class="entry-snippet">
-  <div class="img-wrap">
+  <div class="img-wrap" (click)='nav()'>
     <img [src]="clubImage" [@hoverScaleAnimation]='hoverState' (mouseenter)='setMouseState("mouseenter")' (mouseleave)='setMouseState("mouseleave")' />
     <div class="image-overlay" [ngStyle]="{display: showImgOverlay}" (mouseenter)='setMouseState("mouseenter")'
       (mouseleave)='setMouseState("mouseleave")'>SELECT</div>

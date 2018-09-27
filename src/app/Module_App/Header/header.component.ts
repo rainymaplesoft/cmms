@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
   r_signup = RouteName.SignUp;
   r_event = RouteName.Event;
   r_clubs = RouteName.Clubs;
+  loginBadge = '?';
 
   constructor(private router: Router, private eventService: PubSubService) {}
 

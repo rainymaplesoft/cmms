@@ -1,0 +1,48 @@
+.reactive-form {
+  .form-section {
+    padding: 10px !important;
+  }
+  .control {
+    max-width: 17em !important;
+    min-width: auto;
+  }
+}
+
+.table-container {
+  display: table;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+.club-img {
+  display: table-cell;
+  width: auto;
+  // background: url(../../assets/img/badminton_club1.jpg);
+  background-size: cover;
+}
+.signup-form {
+  display: table-cell;
+  width: 560px;
+  background-color: #ffffff;
+  color: #505e6c;
+}
+
+.sign-section {
+  justify-content: center;
+  .sign-button {
+    margin: 0 2em;
+  }
+  .alternative {
+    display: flex;
+    padding-top: 4px;
+    cursor: pointer;
+    .prompt {
+      margin: 0 1em;
+    }
+    .icon {
+      padding-top: 2px;
+      color: teal;
+    }
+  }
+}

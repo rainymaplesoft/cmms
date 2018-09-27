@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutes, AppComponents } from './app.route';
 import { AppComponent } from './app.component';
 import { ModuleFirebase } from './Module_Firebase';
+import { ClubService } from './Module_App/_Shared';
 
 @NgModule({
   declarations: AppComponents,
@@ -28,7 +29,7 @@ import { ModuleFirebase } from './Module_Firebase';
     // application feature modules
     RouterModule.forRoot(AppRoutes)
   ],
-  providers: [],
+  providers: [ClubService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

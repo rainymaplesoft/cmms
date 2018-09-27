@@ -61,6 +61,10 @@
       font-family: Kaushan Script, Helvetica Neue, Helvetica, Arial, cursive;
       font-size: 1.75em;
       transition: all 0.3s;
+      white-space: nowrap;
+      @media (max-width: 765.8px) {
+        font-size: 18px;
+      }
     }
     .main_menu {
       display: flex;
@@ -103,6 +107,9 @@
           border-right: 1px solid #dfe7b5;
           display: flex;
           padding-right: 5px;
+          .material-icons {
+            font-size: 26px;
+          }
         }
         &:last-child {
           .icon_wrap {

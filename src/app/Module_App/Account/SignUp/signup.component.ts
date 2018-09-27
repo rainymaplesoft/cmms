@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { KeyValue } from '../../../Module_Core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import {
   FireAuthService,
   IUser,
-  FirebaseDataService
+  FirebaseDataService,
+  IClub
 } from '../../../Module_Firebase';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { ClubService } from '../../_Shared';
+import RouteName from '../../../routename';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -15,24 +18,52 @@ import { Observable } from 'rxjs';
   templateUrl: 'signup.component.html',
   styleUrls: ['signup.component.scss']
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements OnInit, OnDestroy {
   constructor(
     private dbService: FirebaseDataService,
+    private clubService: ClubService,
     private fb: FormBuilder,
     private auth: FireAuthService,
-    router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
+  club: IClub;
+  clubId: string;
   user: Observable<IUser>;
+  sub: Subscription;
   signupForm: FormGroup;
   genders: KeyValue[] = [
     { key: 1, value: 'Male' },
     { key: 2, value: 'Female' }
   ];
   title = 'Sign Up';
+  clubImage: string;
 
   ngOnInit() {
     this.buildForm();
+    // this.clubImage = `assets/img/club/club_entry_${this.club.clubCode}.jpg`;
+
+    this.sub = this.route.queryParams.subscribe(params => {
+      this.clubId = params['clubId'] || '';
+      this.init(this.clubId);
+    });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+  init(clubId) {
+    if (!this.clubId) {
+      this.router.navigate([RouteName.Home]);
+      return;
+    }
+    this.clubService.getClubById(clubId).subscribe((club: IClub) => {
+      this.club = club;
+      this.clubImage = `url(assets/img/club/club_entry_${club.clubCode}.jpg)`;
+      this.title = this.club.clubName;
+    });
   }
 
   signUp(p: any) {

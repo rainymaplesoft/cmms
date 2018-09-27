@@ -21,7 +21,8 @@ import {
   MatAutocompleteModule,
   MatNativeDateModule,
   MatExpansionModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatBadgeModule
 } from '@angular/material';
 
 @NgModule({
@@ -46,7 +47,8 @@ import {
     MatRippleModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatBadgeModule
   ],
   exports: [
     MatButtonModule,
@@ -69,7 +71,8 @@ import {
     MatRippleModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatBadgeModule
   ],
   declarations: [],
   providers: [{ provide: LOCALE_ID, useValue: 'en-GB' }]
