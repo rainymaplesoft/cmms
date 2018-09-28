@@ -133,6 +133,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
       address: [''],
       phone1: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       phone2: [''],
+      mapLink: [''],
       isActive: [true, Validators.required]
     });
     this.hideEdit = false;

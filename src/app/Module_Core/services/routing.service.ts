@@ -22,4 +22,19 @@ export class RoutingService {
       return this.router.navigate([this.path], { fragment: value });
     }
   }
+  getUrlParam(parameter, defaultvalue = '') {
+    let urlparameter = defaultvalue;
+    if (window.location.href.indexOf(parameter) > -1) {
+      urlparameter = this.getUrlVars()[parameter];
+    }
+    return urlparameter;
+  }
+  private getUrlVars() {
+    const vars = {};
+    const parts = window.location.href.replace(
+      /[?&]+([^=&]+)=([^&]*)/gi,
+      (m, key, value) => (vars[key] = value)
+    );
+    return vars;
+  }
 }

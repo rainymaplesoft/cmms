@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { pullUpDownAnimate } from '../../Module_Core';
+import { IClub } from '../../Module_Firebase';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -8,13 +9,18 @@ import { pullUpDownAnimate } from '../../Module_Core';
   styleUrls: ['header-info.component.scss'],
   animations: [pullUpDownAnimate]
 })
-export class HeaderInfoComponent implements OnInit {
+export class HeaderInfoComponent implements OnInit, OnChanges {
   @Input()
   showContact = 'hide';
   @Input()
   showTimings = 'hide';
+  @Input()
+  club: IClub;
 
   constructor() {}
 
   ngOnInit() {}
+  ngOnChanges(e) {
+    const aa = this.club;
+  }
 }

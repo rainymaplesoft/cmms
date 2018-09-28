@@ -85,9 +85,11 @@ export class FireAuthService {
           .doc<IUser>(docPath)
           .valueChanges()
           .pipe(take(1));
+        this.loginClubId = clubId;
         return userRef;
       },
       e => {
+        this.loginClubId = '';
         return of(null);
       }
     );

@@ -140,7 +140,24 @@ export class UtilService {
     }
     return obj;
   }
-  /* private helper functions */
+
+  getUrlParam(url, parameter, defaultvalue = '') {
+    let urlparameter = defaultvalue;
+    if (url.indexOf(parameter) > -1) {
+      urlparameter = this.getUrlVars(url)[parameter];
+    }
+    return urlparameter;
+  }
+  private getUrlVars(url: string) {
+    const vars = {};
+    const parts = url.replace(
+      /[?&]+([^=&]+)=([^&]*)/gi,
+      (m, key, value) => (vars[key] = value)
+    );
+    return vars;
+  }
+
+  //#region private helper functions */
 
   private deviceType() {
     return {
@@ -271,3 +288,4 @@ export class UtilService {
     return highLightedMatch;
   }
 }
+//#endregion

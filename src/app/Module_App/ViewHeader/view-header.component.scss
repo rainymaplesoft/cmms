@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   height: 50px;
+
   @media (max-width: 767.8px) {
     height: 40px;
     h2 {
@@ -21,6 +22,7 @@
         padding: 0 20px;
 
         h2 {
+          font-size: 23px;
           color: #f9f9f9;
         }
       }

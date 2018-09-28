@@ -35,5 +35,6 @@ export interface IClub {
   email?: string;
   phone1?: string;
   phone2?: string;
+  mapLink?: string;
   isActive?: boolean;
 }

@@ -51,7 +51,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
   ];
   loginInfo = { email: '', password: '' };
   showLogin = true;
-  title = 'Sign Up';
+  title = 'Sign Up / Sign In';
   clubImage: string;
 
   ngOnInit() {
@@ -80,7 +80,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
       }
       this.club = club;
       this.clubImage = `url(assets/img/club/club_entry_${club.clubCode}.jpg)`;
-      this.title = this.club.clubName;
+      // this.title = this.club.clubName;
     });
   }
 

@@ -5,7 +5,7 @@
     </div>
     <div class="header-content">
       <div class="logo">
-        Club Name here
+        {{clubName}}
         <!-- <img [src]="logo" alt="" style="width: 78px;"> -->
       </div>
       <div class="main_menu">
@@ -69,4 +69,4 @@
   </div>
 </div>
 <!-- header -->
-<header-info [showContact]='showContact' [showTimings]='showTimings'></header-info>
+<header-info [showContact]='showContact' [showTimings]='showTimings' [club]='club'></header-info>

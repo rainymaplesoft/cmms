@@ -17,15 +17,32 @@
   </div>
   <form novalidate class='reactive-form' [formGroup]="clubForm" (ngSubmit)="onSubmit()">
     <div class="form_section">
-      <div class="form_content">
-        <div class="flex_row_col">
+      <div class="flex_row_col">
+        <div class="control">
+          <mat-form-field>
+            <input matInput placeholder="Club Name" formControlName="clubName" autocomplete="off">
+            <mat-icon matSuffix color='primary'>description</mat-icon>
+          </mat-form-field>
+          <val-msg [invalid]='clubName.invalid && clubName.touched'>
+            Club Name is required
+          </val-msg>
+        </div>
+        <div class="control">
+          <mat-form-field>
+            <input matInput placeholder="Address" formControlName="address" autocomplete="off">
+            <mat-icon matSuffix color='primary'>location_on</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="flex_row_col">
+        <div class="row_col_sm">
           <div class="control">
             <mat-form-field>
-              <input matInput placeholder="Club Name" formControlName="clubName" autocomplete="off">
-              <mat-icon matSuffix color='primary'>description</mat-icon>
+              <input matInput placeholder="Contact Name" formControlName="contactName" autocomplete="off">
+              <mat-icon matSuffix color='primary'>person</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='clubName.invalid && clubName.touched'>
-              Club Name is required
+            <val-msg [invalid]='contactName.invalid && contactName.touched'>
+              Contact Name is required
             </val-msg>
           </div>
           <div class="control">
@@ -38,24 +55,7 @@
             </val-msg>
           </div>
         </div>
-        <div class="flex_row_col">
-          <div class="control">
-            <mat-form-field>
-              <input matInput placeholder="Contact Name" formControlName="contactName" autocomplete="off">
-              <mat-icon matSuffix color='primary'>person</mat-icon>
-            </mat-form-field>
-            <val-msg [invalid]='contactName.invalid && contactName.touched'>
-              Contact Name is required
-            </val-msg>
-          </div>
-          <div class="control">
-            <mat-form-field>
-              <input matInput placeholder="Address" formControlName="address" autocomplete="off">
-              <mat-icon matSuffix color='primary'>location_on</mat-icon>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="flex_row_col">
+        <div class="row_col_sm">
           <div class="control">
             <mat-form-field>
               <input matInput placeholder="Email" formControlName="email" autocomplete="off">
@@ -75,12 +75,19 @@
             </val-msg>
           </div>
         </div>
+      </div>
+      <div class="flex_row_col">
         <div class="flex_row_col">
-          <div class="control checkbox">
-            <mat-checkbox class="example-margin" formControlName="isActive">Acitve</mat-checkbox>
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Google map link" formControlName="mapLink" autocomplete="off">
+              <mat-icon matSuffix color='primary'>location_on</mat-icon>
+            </mat-form-field>
           </div>
         </div>
-
+        <div class="control checkbox">
+          <mat-checkbox class="example-margin" formControlName="isActive">Acitve</mat-checkbox>
+        </div>
       </div>
     </div>
   </form>
