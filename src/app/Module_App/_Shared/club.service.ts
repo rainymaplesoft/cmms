@@ -21,10 +21,11 @@ export class ClubService {
     const path = `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
     const user = this.dbService.getSimpleCollection<IUser>(path).pipe(
       // take(1),
-      filter(u => {
-        const aa = u;
-        return !!u;
-      })
+      map(users =>
+        users.filter((u: IUser) => {
+          return u.email === email;
+        })
+      )
     );
     return user;
   }
