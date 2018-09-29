@@ -1,1 +1,1 @@
-export * from './club.service';
+export * from './meta.service';

@@ -4,7 +4,7 @@ import RouteName from '../../routename';
 import { PubSubService, UtilService } from '../../Module_Core';
 import { FireAuthService } from '../../Module_Firebase';
 import { take, tap, map, filter } from 'rxjs/operators';
-import { ClubService } from '../_Shared/club.service';
+import { MetaService } from '../_Shared/meta.service';
 import { IClub } from '../../Module_Firebase/models';
 
 @Component({
@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
     private eventService: PubSubService,
     private authService: FireAuthService,
     private utilService: UtilService,
-    private clubServie: ClubService
+    private clubServie: MetaService
   ) {}
 
   ngOnInit() {

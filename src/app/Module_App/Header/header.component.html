@@ -52,7 +52,7 @@
             <i class="material-icons">access_time</i>
           </div>
         </div>
-        <div class='menu_item' *ngIf="!isLoggedIn">
+        <div class='menu_item' *ngIf="isLoggedIn">
           <div class="icon_wrap" (click)='nav(r_signup)'>
             <!-- <i class="material-icons" [matBadge]="loginBadge" matBadgeColor="warn">account_circle</i> -->
             <i class="material-icons">account_circle</i>
@@ -60,7 +60,6 @@
         </div>
         <div class='menu_item' *ngIf="isLoggedIn">
           <div class="icon_wrap" (click)='onLogout()'>
-            <!-- <i class="material-icons" [matBadge]="loginBadge" matBadgeColor="warn">account_circle</i> -->
             <i class="material-icons">exit_to_app</i>
           </div>
         </div>

@@ -13,7 +13,7 @@ import {
   IClub
 } from '../../../Module_Firebase';
 import { Observable, Subscription } from 'rxjs';
-import { ClubService } from '../../_Shared';
+import { MetaService } from '../../_Shared';
 import RouteName from '../../../routename';
 
 @Component({
@@ -26,7 +26,7 @@ import RouteName from '../../../routename';
 export class SignUpComponent implements OnInit, OnDestroy {
   constructor(
     private dbService: FirebaseDataService,
-    private clubService: ClubService,
+    private metaService: MetaService,
     private fb: FormBuilder,
     private authService: FireAuthService,
     private router: Router,
@@ -73,7 +73,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
       this.router.navigate([RouteName.Home]);
       return;
     }
-    this.clubService.getClubById(clubId).subscribe((club: IClub) => {
+    this.metaService.getClubById(clubId).subscribe((club: IClub) => {
       if (!club) {
         this.router.navigate([RouteName.Home]);
         return;
@@ -104,7 +104,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
   onLogin() {
     console.log(this.loginInfo);
-    this.clubService
+    this.metaService
       .getUserByEmail(this.clubId, this.loginInfo.email)
       .subscribe(u => {
         const aa = u;

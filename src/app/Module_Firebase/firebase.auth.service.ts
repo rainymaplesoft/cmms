@@ -14,8 +14,8 @@ import { ToastrService } from '../Module_Core/services/toastr.service';
 
 @Injectable()
 export class FireAuthService {
+  loginClubId: string;
   private firebaseUser: firebase.User;
-  private loginClubId: string;
   private _authState: Observable<firebase.User>;
 
   constructor(
@@ -24,9 +24,9 @@ export class FireAuthService {
     private afAuth: AngularFireAuth,
     private toastr: ToastrService
   ) {
-    this.afAuth.authState.subscribe(user => {
-      this.firebaseUser = user;
-    });
+    // this.afAuth.authState.subscribe(user => {
+    //   this.firebaseUser = user;
+    // });
   }
 
   get authState() {
