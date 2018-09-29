@@ -26,7 +26,9 @@ import { MetaService } from './Module_App/_Shared';
     CoreModule,
     ModuleFirebase,
     NgTranslateModule,
-    // application feature modules
+
+    // DO NOT import any lazy-loading module here!!
+
     RouterModule.forRoot(AppRoutes)
   ],
   providers: [MetaService],

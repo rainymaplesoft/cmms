@@ -25,6 +25,7 @@ export const AppRoutes: Route[] = [
   { path: 'clubs', component: ClubListComponent, canActivate: [] },
   { path: 'signup', component: SignUpComponent },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
+  { path: 'club', loadChildren: './Module_Client/client.module#ClientModule' },
   { path: '**', redirectTo: '/home' }
 ];
 // { path: '**', component: ExceptionComponent }

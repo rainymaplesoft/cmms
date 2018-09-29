@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit {
         const u = url['url'];
         this.clubId = this.utilService.getUrlParam(u, 'clubId');
         this.getClubInfo();
+        this.hideHeaderInfo();
       });
     this.authService.authState.subscribe(u => {
       this.isLoggedIn = !!u;
@@ -89,6 +90,10 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  private hideHeaderInfo() {
+    this.showTimings = 'hide';
+    this.showContact = 'hide';
+  }
   //#region logo image data
   // tslint:disable-next-line:member-ordering
   logo = '';
