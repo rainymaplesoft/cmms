@@ -1,6 +1,58 @@
-<h1>Event Page!!!</h1>
-<ul>
-  <li *ngFor="let club of clubs | async" (click)='onClick(club)'>
-    {{ club.clubName }}
-  </li>
-</ul>
+<div class="events">
+  <div class="event_img" [ngStyle]="{'background-image': eventImage}"></div>
+  <div class='ul' class="event-list">
+    <div class='li'>
+      <div class='time' datetime="2014-07-20">
+        <span class="day">16</span>
+        <span class="month">Sep</span>
+        <!-- <span class="year">2014</span>
+            <span class="time">ALL DAY</span> -->
+      </div>
+      <div class="info">
+        <h2 class="title">Website testing</h2>
+        <p class="desc">Dev testing begins today</p>
+      </div>
+    </div>
+
+    <div class='li'>
+      <div class='time' datetime="2014-07-20 0000">
+        <span class="day">8</span>
+        <span class="month">Jul</span>
+        <!-- <span class="year">2014</span>
+            <span class="time">12:00 AM</span> -->
+      </div>
+      <div class="info">
+        <h2 class="title">Change court number</h2>
+        <p class="desc">This week we have only 2 courts on Sunday</p>
+      </div>
+    </div>
+
+    <div class='li'>
+      <div class='time' datetime="2014-07-20 2000">
+        <span class="day">20</span>
+        <span class="month">Jun</span>
+        <!-- <span class="year">2014</span>
+            <span class="time">8:00 PM</span> -->
+      </div>
+
+      <div class="info">
+        <h2 class="title">Badminton Rackets</h2>
+        <p class="desc">We are going to test some new badminton rackets</p>
+      </div>
+    </div>
+
+    <div class='li'>
+      <div class='time' datetime="2014-07-31 1600">
+        <span class="day">31</span>
+        <span class="month">Jan</span>
+        <!-- <span class="year">2014</span>
+            <span class="time">4:00 PM</span> -->
+      </div>
+
+      <div class="info">
+        <h2 class="title">Membership Fee Change</h2>
+        <p class="desc">Membership fee will become $8 for each</p>
+      </div>
+    </div>
+  </div>
+</div>

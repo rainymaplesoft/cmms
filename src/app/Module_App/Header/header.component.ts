@@ -6,6 +6,7 @@ import { FireAuthService } from '../../Module_Firebase';
 import { take, tap, map, filter } from 'rxjs/operators';
 import { IClub } from '../../Module_Firebase/models';
 import { MetaService } from 'src/app/Module_Shared';
+import { Subscription } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -27,9 +28,11 @@ export class HeaderComponent implements OnInit {
   r_event = RouteName.Event;
   r_clubs = RouteName.ClubSetting;
   loginBadge = '?';
+  sub: Subscription;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private eventService: PubSubService,
     private authService: FireAuthService,
     private utilService: UtilService,
@@ -37,18 +40,20 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.router.events
-      .pipe(filter(e => !!e['navigationTrigger']))
-      .subscribe(url => {
-        this.hideHeaderInfo();
-        const u: string = url['url'];
-        if (u.indexOf('/club/') !== 0) {
-          return;
-        }
-        const clubCode = u.replace('/club/', '').substr(0, 4);
-        // this.clubId = this.utilService.getUrlParam(u, 'clubId');
-        this.getClubInfo(clubCode);
-      });
+    this.sub = this.route.queryParams.subscribe(params => {
+      if (this.router.url.indexOf('/home') >= 0) {
+        this.clubName = 'Sport Center';
+      }
+      const clubId = params['clubId'];
+      if (!clubId) {
+        this.router.navigate([RouteName.Home]);
+        return;
+      }
+      if (this.clubId !== clubId) {
+        this.clubId = clubId;
+        this.getClubInfo(this.clubId);
+      }
+    });
     this.authService.authState.subscribe(u => {
       this.isLoggedIn = !!u;
     });
@@ -65,6 +70,7 @@ export class HeaderComponent implements OnInit {
   }
 
   nav(route: string) {
+    this.hideHeaderInfo();
     if (route) {
       this.r_selected = route;
       this.router.navigate([route]);
@@ -79,20 +85,21 @@ export class HeaderComponent implements OnInit {
     this.eventService.pub('Event_MobileToggleClicked');
   }
 
-  private getClubInfo(clubCode: string) {
+  private getClubInfo(clubId: string) {
     this.club = null;
     this.clubName = 'Sport Center';
-    if (!clubCode) {
+    if (!clubId) {
       return;
     }
-    this.metaService.getClubByCode(clubCode).subscribe(club => {
-      if (club && club.length > 0) {
-        this.club = club[0];
-        this.clubName = this.club.clubName;
-        this.club.mapLink = this.club.mapLink
-          ? this.utilService.sanitizeUrl(this.club.mapLink)
-          : '';
+    this.metaService.getClubById(this.clubId).subscribe(club => {
+      if (!club) {
+        this.router.navigate([RouteName.Home]);
       }
+      this.club = club;
+      this.clubName = this.club.clubName;
+      this.club.mapLink = this.club.mapLink
+        ? this.utilService.sanitizeUrl(this.club.mapLink)
+        : '';
     });
   }
 

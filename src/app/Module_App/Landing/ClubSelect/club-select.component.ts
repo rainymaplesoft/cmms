@@ -36,7 +36,8 @@ export class ClubSelectComponent implements OnInit {
       clubName: this.club.clubName,
       clubCode: this.club.clubCode
     };
-    const path = `${RouteName.Club}/${this.club.clubCode.toLowerCase()}`;
-    this.router.navigate([path]);
+    // const path = `${RouteName.Club}/${this.club.clubCode.toLowerCase()}`;
+    const path = `${RouteName.Club}`;
+    this.router.navigate([path], { queryParams: { clubId: this.club._id } });
   }
 }

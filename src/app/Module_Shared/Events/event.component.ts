@@ -15,17 +15,18 @@ import {
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'event',
+  selector: 'event-latest',
   templateUrl: 'event.component.html',
   styleUrls: ['event.component.scss']
 })
-export class EventComponent implements OnInit {
+export class EventLatestComponent implements OnInit {
   indicator_state;
   clubs: Observable<any[]>;
+  eventImage = `url(assets/img/club/pic_lpbc_02.jpg)`;
   constructor(private dbService: FirebaseDataService) {}
 
   ngOnInit() {
-    this.getAllClubs();
+    // this.getAllClubs();
   }
 
   getAllClubs() {

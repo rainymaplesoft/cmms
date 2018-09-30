@@ -26,7 +26,7 @@ const routes: Routes = [
       ]
     },
     children: [
-      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      // { path: '', redirectTo: '/home', pathMatch: 'full' },
       { path: 'lpbc', component: MainLPBCComponent },
       { path: 'lpbc/sign', component: SignUpComponent },
       {
@@ -59,6 +59,7 @@ const routes: Routes = [
     MainLVBCComponent,
     MainWIBCComponent
   ],
+  entryComponents: [MainLPBCComponent, MainLVBCComponent, MainWIBCComponent],
   providers: []
 })
 export class ClientModule {}

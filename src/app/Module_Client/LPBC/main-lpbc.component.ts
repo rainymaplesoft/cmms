@@ -10,7 +10,6 @@ import { filter } from 'rxjs/operators';
 })
 export class MainLPBCComponent implements OnInit {
   banner = `assets/img/club/club_banner_LPBC.jpg`;
-  eventImage = `url(assets/img/club/pic_lpbc_02.jpg)`;
   path = '';
 
   constructor(private router: Router) {}
