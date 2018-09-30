@@ -17,15 +17,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscriber, Subscription } from 'rxjs';
 import { RouteName } from '../routename';
 import { MetaService } from '../Module_Shared/meta.service';
-import { IClub } from '../Module_Firebase/models';
+import { IClub, IUser } from '../Module_Firebase/models';
 import { MainLVBCComponent } from './LVBC/main-lvbc.component';
 import { MainWIBCComponent } from './WIBC/main-wibc.component';
+import { EventService } from '../Module_Core/services/pubsub.service';
+import { OnEvent } from '../Module_Shared';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client',
-  // templateUrl: 'client.component.html',
-  template: `<div #club_placehoder></div>`,
-  // template: '<h1>Client!</h1>',
+  templateUrl: 'client.component.html',
   styleUrls: ['client.component.scss']
 })
 export class ClientComponent
@@ -43,23 +44,36 @@ export class ClientComponent
     LVBC: MainLVBCComponent,
     WIBC: MainWIBCComponent
   };
+  loggedInUser: IUser;
+  originUrl = '';
+  showClubMain = true;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private router: Router,
     private route: ActivatedRoute,
-    private metaService: MetaService
+    private metaService: MetaService,
+    private eventService: EventService
   ) {}
 
   ngOnInit() {
+    this.originUrl = this.router.url;
     this.sub = this.route.queryParams.subscribe(params => {
       this.clubId = params['clubId'];
-      if (!this.clubId) {
-        this.router.navigate([RouteName.Home]);
-        return;
-      }
       this.chooseClubPComponent();
     });
+    this.showClubMain = true;
+    this.metaService.authState
+      .pipe(switchMap(_ => this.metaService.LoggedInUser))
+      .subscribe(user => {
+        if (!user) {
+          return;
+        }
+        this.loggedInUser = user[0];
+        if (this.cmpRef) {
+          this.cmpRef.instance['loggedInUser'] = this.loggedInUser;
+        }
+      });
   }
 
   chooseClubPComponent() {
@@ -81,6 +95,18 @@ export class ClientComponent
     // to access the created instance use
     // this.compRef.instance.someProperty = 'someValue';
     // this.compRef.instance.someOutput.subscribe(val => doSomething());
+  }
+  onOutletActivate($event) {
+    // console.log($event);
+    this.showClubMain = false;
+    const outletComponentName = $event.constructor.name;
+  }
+  onOutletDeactivate($event) {
+    if (this.originUrl !== this.router.url) {
+      return;
+    }
+    this.showClubMain = true;
+    this.chooseClubPComponent();
   }
 
   ngOnChanges() {}

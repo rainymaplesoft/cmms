@@ -1,0 +1,58 @@
+.pricing {
+  display: flex;
+  @media (max-width: 959px) {
+    flex-direction: column;
+    .price {
+      margin-bottom: 5px;
+    }
+  }
+  .price {
+    display: flex;
+    flex: 1;
+    position: relative;
+    font-size: 20px;
+    background-color: #9990db;
+    &:last-child {
+      background-color: #f7e3c2;
+      .triangle {
+        border-color: #70aa8b transparent transparent transparent;
+      }
+    }
+    .triangle {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 160px 200px 0 0;
+      border-color: #007bff transparent transparent transparent;
+    }
+    .category {
+      position: absolute;
+      font-size: 38px;
+      font-style: italic;
+      color: #071b47;
+      font-family: monospace;
+      font-weight: 600;
+      top: 10%;
+      left: 10px;
+    }
+    .dollar {
+      position: absolute;
+      top: 45%;
+      font-size: 50px;
+      left: 100px;
+      color: wheat;
+      width: 80px;
+      height: 80px;
+      text-align: center;
+      background-color: navy;
+      border-radius: 40px;
+      padding-top: 10px;
+    }
+    .desc {
+      flex: 1;
+      padding: 20px 5px;
+      font-size: 16px;
+      color: navy;
+    }
+  }
+}

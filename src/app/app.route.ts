@@ -18,7 +18,7 @@ import { HeaderInfoComponent } from './Module_App/HeaderInfo/header-info.compone
 export const AppRoutes: Route[] = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: LandingComponent },
-  { path: 'clubs', component: ClubListComponent, canActivate: [] },
+  { path: 'setting/club', component: ClubListComponent, canActivate: [] },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
   { path: 'club', loadChildren: './Module_Client/client.module#ClientModule' },
   { path: '**', redirectTo: '/home' }

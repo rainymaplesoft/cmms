@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
   KeyValue,
   pullLeftRightAnimate,
+  EventService,
   ToastrService
 } from '../../Module_Core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -15,6 +16,8 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import RouteName from '../../routename';
 import { MetaService } from '../meta.service';
+import { switchMap, tap } from 'rxjs/operators';
+import { OnEvent } from '../config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -31,7 +34,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
     private authService: FireAuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private eventService: EventService
   ) {
     const url = this.router.url;
     this.clubCode = this.metaService.extractClubCode(url);
@@ -63,17 +67,23 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.sub.unsubscribe();
+    this.sub.unsubscribe();
   }
 
   init() {
-    this.metaService.getNavClub(this.clubCode).subscribe(clubs => {
-      this.club = clubs[0];
-      this.clubId = this.club._id;
-      this.clubImage = `url(assets/img/club/club_entry_${
-        this.club.clubCode
-      }.jpg)`;
-    });
+    this.sub = this.route.queryParams
+      .pipe(
+        tap(params => {
+          this.clubId = params['clubId'];
+        }),
+        switchMap(param => this.metaService.getClubById(this.clubId))
+      )
+      .subscribe((club: IClub) => {
+        this.club = club;
+        this.clubImage = `url(assets/img/club/club_entry_${
+          this.club.clubCode
+        }.jpg)`;
+      });
   }
 
   signUp(p: any) {
@@ -107,6 +117,10 @@ export class SignUpComponent implements OnInit, OnDestroy {
         user.subscribe(u => {
           if (u) {
             this.loggedInUser = u;
+            // navigate to club page after login successfully
+            this.router.navigate([RouteName.Club], {
+              queryParams: { clubId: this.clubId }
+            });
           } else {
             this.toastr.error('Email or password is incorrect for this club');
           }

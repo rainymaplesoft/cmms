@@ -16,12 +16,14 @@ export class MetaService {
   private _clubId: string;
   navClubCode: string;
   navigateClub: IClub;
+  authState: Observable<firebase.User>;
 
   constructor(
     private router: Router,
     private authService: FireAuthService,
     private dbService: FirebaseDataService
   ) {
+    this.authState = this.authService.authState;
     this.authService.authState.subscribe(user => {
       this._firebaseUser = user;
       this._clubId = this.authService.loginClubId;
@@ -69,12 +71,12 @@ export class MetaService {
   getUserByEmail(clubId: string, email: string) {
     const path = `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
     const user = this.dbService.getSimpleCollection<IUser>(path).pipe(
-      // take(1),
       map(users =>
         users.filter((u: IUser) => {
           return u.email === email;
         })
       )
+      // take(1)
     );
     return user;
   }

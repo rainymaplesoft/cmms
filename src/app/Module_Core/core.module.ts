@@ -19,7 +19,7 @@ import {
   LayoutService,
   ValidatorService,
   DialogService,
-  PubSubService
+  EventService
 } from '.';
 import { DeclarationComponents, ExportComponents } from './core.components';
 import { DialogModule } from './components/dialog/dialog.module';
@@ -48,7 +48,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LayoutService,
     ValidatorService,
     DialogService,
-    PubSubService
+    EventService
   ]
 })
 export class CoreModule {}

@@ -1,12 +1,13 @@
 import { Component, OnInit, Host } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import RouteName from '../../routename';
-import { PubSubService, UtilService } from '../../Module_Core';
+import { EventService, UtilService } from '../../Module_Core';
 import { FireAuthService } from '../../Module_Firebase';
 import { take, tap, map, filter } from 'rxjs/operators';
 import { IClub } from '../../Module_Firebase/models';
 import { MetaService } from 'src/app/Module_Shared';
 import { Subscription } from 'rxjs';
+import { OnEvent } from '../../Module_Shared/config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -33,7 +34,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private eventService: PubSubService,
+    private eventService: EventService,
     private authService: FireAuthService,
     private utilService: UtilService,
     private metaService: MetaService
@@ -41,8 +42,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.sub = this.route.queryParams.subscribe(params => {
-      if (this.router.url.indexOf('/home') >= 0) {
+      const url = this.router.url;
+      if (url.indexOf('/home') >= 0 || url.indexOf('/setting') >= 0) {
         this.clubName = 'Sport Center';
+        this.clubId = '';
+        return;
       }
       const clubId = params['clubId'];
       if (!clubId) {
@@ -82,7 +86,7 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleMobileMenu() {
-    this.eventService.pub('Event_MobileToggleClicked');
+    this.eventService.pub(OnEvent.Event_MobileToggleClicked);
   }
 
   private getClubInfo(clubId: string) {

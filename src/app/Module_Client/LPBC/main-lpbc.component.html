@@ -1,10 +1,10 @@
 <div class="img-wrap">
   <img [src]="banner" />
   <div class="intro-text">
-    <div class="intro-lead-in"><span>Welcome To Our Badminton Club!</span></div>
+    <div class="intro-lead-in"><span>Welcome {{welcome}}!</span></div>
     <div class="intro-heading text-uppercase"><span>It's Nice To PLAY BADMINTON</span></div>
   </div>
-  <div class='sign-button'>
+  <div class='sign-button' *ngIf='!loggedInUser'>
     <button mat-flat-button color="accent" (click)='onLogin()'>Sign In / Sign Up</button>
   </div>
 </div>
@@ -15,15 +15,17 @@
       <event-latest></event-latest>
     </div>
 
+    <div class="section-header">Pricing</div>
+    <div id="pricing">
+      <app-pricing></app-pricing>
+    </div>
+
     <section id="about">
       <div class="container">
         <div class="row">
-          <div class="col-lg-12 text-center">
-            <h2 class="section-header">badminton coaching program</h2>
-            <h3 class="text-muted section-subheading">Double play basic stratigies</h3><iframe width="560" height="315"
-              src="https://www.youtube.com/embed/x6FHTqdHGXo" frameborder="0" allow="autoplay; encrypted-media"
-              allowfullscreen=""></iframe>
-          </div>
+          <h2 class="section-header">badminton coaching program</h2>
+          <h3 class="sub-head">Double play basic stratigies</h3><iframe width="560" height="315" src="https://www.youtube.com/embed/x6FHTqdHGXo"
+            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
         </div>
       </div>
     </section>

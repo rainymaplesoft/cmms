@@ -7,8 +7,9 @@ import {
   transition,
   animate
 } from '@angular/animations';
-import { PubSubService } from '../../../services';
+import { EventService } from '../../../services';
 import { rotateAnimate, pullUpDownAnimate } from '../../../animation';
+import { OnEvent } from '../../../../Module_Shared/config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -24,13 +25,13 @@ export class MenuItemComponent implements OnInit {
   arrowState = 'right'; // right/down
   subMenuState = 'hide'; // hide/show
 
-  constructor(private eventService: PubSubService) {}
+  constructor(private eventService: EventService) {}
 
   ngOnInit() {}
 
   onItemClick() {
     this.eventService.pub<string>(
-      'Event_MenuItemClicked',
+      OnEvent.Event_MenuItemClicked,
       this.menuItem.action
     );
   }

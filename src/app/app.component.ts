@@ -6,9 +6,10 @@ import {
   transition,
   animate
 } from '@angular/animations';
-import { PubSubService } from './Module_Core';
+import { EventService } from './Module_Core';
 import { Route, Router } from '@angular/router';
 import { MobileMenu } from './routename';
+import { OnEvent } from './Module_Shared';
 
 const menuSlideAnimate =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax
@@ -38,22 +39,24 @@ export class AppComponent {
   containerState = 'normal'; // normal/right
   mobileMenu = MobileMenu;
 
-  constructor(private eventService: PubSubService, private router: Router) {
+  constructor(private eventService: EventService, private router: Router) {
     this.eventSubscripe();
   }
 
   eventSubscripe() {
     // from MobileMenu
-    this.eventService.on<string>('Event_MenuItemClicked').subscribe(r => {
+    this.eventService.on<string>(OnEvent.Event_MenuItemClicked).subscribe(r => {
       if (r) {
         this.router.navigate([r]);
       }
       this.toggleMobileMenu();
     });
     // from MobileMenu
-    this.eventService.on<string>('Event_MobileToggleClicked').subscribe(r => {
-      this.toggleMobileMenu();
-    });
+    this.eventService
+      .on<string>(OnEvent.Event_MobileToggleClicked)
+      .subscribe(r => {
+        this.toggleMobileMenu();
+      });
   }
 
   toggleMobileMenu() {

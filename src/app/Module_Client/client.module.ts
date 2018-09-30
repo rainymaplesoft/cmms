@@ -27,20 +27,7 @@ const routes: Routes = [
     },
     children: [
       // { path: '', redirectTo: '/home', pathMatch: 'full' },
-      { path: 'lpbc', component: MainLPBCComponent },
-      { path: 'lpbc/sign', component: SignUpComponent },
-      {
-        path: 'lvbc',
-        component: MainLVBCComponent,
-        canDeactivate: []
-      },
-      { path: 'lvbc/sign', component: SignUpComponent },
-      {
-        path: 'wibc',
-        component: MainWIBCComponent,
-        canDeactivate: []
-      },
-      { path: 'wibc/sign', component: SignUpComponent }
+      { path: 'sign', component: SignUpComponent }
     ]
   }
 ];

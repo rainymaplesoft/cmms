@@ -10,3 +10,9 @@ export enum ClaimType {
   Member = 'Member',
   Guest = 'Guest'
 }
+
+export enum OnEvent {
+  Event_HideClubMainContent = 'Event_HideClubMainContent',
+  Event_MobileToggleClicked = 'Event_MobileToggleClicked',
+  Event_MenuItemClicked = 'Event_MenuItemClicked'
+}

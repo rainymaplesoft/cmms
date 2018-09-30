@@ -1,2 +1,2 @@
-<!-- <router-outlet></router-outlet> -->
-<div #target></div>
+<router-outlet (activate)='onOutletActivate($event)' (deactivate)='onOutletDeactivate($event)'></router-outlet>
+<div #club_placehoder *ngIf='showClubMain'></div>

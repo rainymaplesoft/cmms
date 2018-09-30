@@ -5,13 +5,13 @@ export class RouteName {
     return '';
   }
   static Home = 'home';
-  static SignIn = 'signin';
+  static Club = 'club';
+  static Sign = `${RouteName.Club}/sign`;
   static SignUp = 'signup';
   static Event = 'event';
-  static ClubSetting = 'clubsetting';
+  static ClubSetting = 'setting/club';
   static Exception = 'Exception';
 
-  static Club = 'club';
   static GeoSchoolInfo = 'schoolinfo';
 
   static Terminology = 'i18n';

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
-export class PubSubService {
+export class EventService {
   private subjects: Subject<any>[] = [];
   private behaviorSubjects: BehaviorSubject<any>[] = [];
 

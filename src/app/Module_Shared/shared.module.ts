@@ -9,6 +9,7 @@ import { CoreModule } from '../Module_Core/core.module';
 import { ModuleFirebase } from '../Module_Firebase';
 import { CommonModule } from '@angular/common';
 import { EventLatestComponent } from './Events';
+import { PricingComponent } from './Pricing';
 
 @NgModule({
   imports: [
@@ -22,8 +23,18 @@ import { EventLatestComponent } from './Events';
     ModuleFirebase,
     NgTranslateModule
   ],
-  exports: [SignUpComponent, ViewHeaderComponent, EventLatestComponent],
-  declarations: [SignUpComponent, ViewHeaderComponent, EventLatestComponent],
+  exports: [
+    SignUpComponent,
+    ViewHeaderComponent,
+    EventLatestComponent,
+    PricingComponent
+  ],
+  declarations: [
+    SignUpComponent,
+    ViewHeaderComponent,
+    PricingComponent,
+    EventLatestComponent
+  ],
   providers: [MetaService]
 })
 export class SharedModule {}
