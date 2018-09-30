@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -7,7 +8,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['../client.component.scss']
 })
 export class MainLVBCComponent implements OnInit {
-  constructor() {}
+  banner = `assets/img/club/club_banner_LVBC.jpg`;
+  path = '';
 
-  ngOnInit() {}
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.path = this.router.url;
+  }
+
+  onLogin() {
+    const signPath = `${this.path}/sign`;
+    this.router.navigate([signPath]);
+  }
 }

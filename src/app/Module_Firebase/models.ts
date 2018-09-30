@@ -27,10 +27,9 @@ export interface IRole {
 
 export interface IClub {
   _id?: string; // _id is document id of firebase document
-  id: number;
   clubName: string;
   clubCode: string;
-  contactName: string;
+  contactName?: string;
   address?: string;
   email?: string;
   phone1?: string;

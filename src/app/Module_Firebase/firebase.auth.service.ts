@@ -83,8 +83,8 @@ export class FireAuthService {
         const docPath = this.getDocPathUser(clubId, credential.user.uid);
         const userRef: Observable<IUser> = this.afs
           .doc<IUser>(docPath)
-          .valueChanges()
-          .pipe(take(1));
+          .valueChanges();
+        // .pipe(take(1));
         this.loginClubId = clubId;
         return userRef;
       },

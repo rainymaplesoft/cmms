@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['../client.component.scss']
 })
 export class MainWIBCComponent implements OnInit {
+  banner = `assets/img/club/club_banner_WIBC.jpg`;
+
   constructor() {}
 
   ngOnInit() {}

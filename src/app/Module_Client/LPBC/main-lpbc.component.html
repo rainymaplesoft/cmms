@@ -1,4 +1,105 @@
-<div class="img-wrap"><img [src]="banner" /></div>
+<div class="img-wrap">
+  <img [src]="banner" />
+  <div class="intro-text">
+    <div class="intro-lead-in"><span>Welcome To Our Badminton Club!</span></div>
+    <div class="intro-heading text-uppercase"><span>It's Nice To PLAY BADMINTON</span></div>
+  </div>
+  <div class='sign-button'>
+    <button mat-flat-button color="accent" (click)='onLogin()'>Sign In / Sign Up</button>
+  </div>
+</div>
 <div class="page_view">
-  <div class='page_content'></div>
+  <div class='page_content'>
+    <div class="section-header">latest events</div>
+    <div class="events">
+      <div class="event_img" [ngStyle]="{'background-image': eventImage}"></div>
+      <div class='ul' class="event-list">
+        <div class='li'>
+          <div class='time' datetime="2014-07-20">
+            <span class="day">16</span>
+            <span class="month">Sep</span>
+            <!-- <span class="year">2014</span>
+            <span class="time">ALL DAY</span> -->
+          </div>
+          <div class="info">
+            <h2 class="title">Website testing</h2>
+            <p class="desc">Dev testing begins today</p>
+          </div>
+        </div>
+
+        <div class='li'>
+          <div class='time' datetime="2014-07-20 0000">
+            <span class="day">8</span>
+            <span class="month">Jul</span>
+            <!-- <span class="year">2014</span>
+            <span class="time">12:00 AM</span> -->
+          </div>
+          <div class="info">
+            <h2 class="title">Change court number</h2>
+            <p class="desc">This week we have only 2 courts on Sunday</p>
+          </div>
+        </div>
+
+        <div class='li'>
+          <div class='time' datetime="2014-07-20 2000">
+            <span class="day">20</span>
+            <span class="month">Jun</span>
+            <!-- <span class="year">2014</span>
+            <span class="time">8:00 PM</span> -->
+          </div>
+
+          <div class="info">
+            <h2 class="title">Badminton Rackets</h2>
+            <p class="desc">We are going to test some new badminton rackets</p>
+          </div>
+        </div>
+
+        <div class='li'>
+          <div class='time' datetime="2014-07-31 1600">
+            <span class="day">31</span>
+            <span class="month">Jan</span>
+            <!-- <span class="year">2014</span>
+            <span class="time">4:00 PM</span> -->
+          </div>
+
+          <div class="info">
+            <h2 class="title">Membership Fee Change</h2>
+            <p class="desc">Membership fee will become $8 for each</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-header">badminton coaching program</h2>
+            <h3 class="text-muted section-subheading">Double play basic stratigies</h3><iframe width="560" height="315"
+              src="https://www.youtube.com/embed/x6FHTqdHGXo" frameborder="0" allow="autoplay; encrypted-media"
+              allowfullscreen=""></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="section flex_1">
+    <div class="item"><span class="copyright">Copyright&nbsp;© Badmintonhub 2018</span></div>
+  </div>
+  <div class="section">
+    <div class="item">
+      <button mat-mini-fab><i class="fab fa-facebook-f"></i></button>
+      <button mat-mini-fab><i class="fab fa-twitter"></i></button>
+      <button mat-mini-fab><i class="fab fa-div class='li'nkedin-in"></i></button>
+    </div>
+  </div>
+  <div class="section flex_1">
+    <div class="item">
+      <div><a href="#">Privacy Policy</a></div>
+      <div><a href="#">Terms of Use</a></div>
+    </div>
+  </div>
 </div>

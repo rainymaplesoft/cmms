@@ -3,14 +3,11 @@ import { Route } from '@angular/router';
 import RouteName from './routename';
 import { ExceptionComponent, IMenuItem } from './Module_Core';
 import { AppComponent } from './app.component';
-import { SignUpComponent } from './Module_App/Account/SignUp/signup.component';
 import { LandingComponent } from './Module_App/Landing/landing.component';
 import { HeaderComponent } from './Module_App/Header/header.component';
-import { HeaderInfoComponent } from './Module_App/HeaderInfo/header-info.component';
-import { ViewHeaderComponent } from './Module_App/ViewHeader/view-header.component';
-import { EventComponent } from './Module_App/Events/event.component';
 import { ClubListComponent, ClubEditComponent } from './Module_App/Club';
 import { ClubSelectComponent } from './Module_App/Landing';
+import { HeaderInfoComponent } from './Module_App/HeaderInfo/header-info.component';
 
 // RouteName.DefaultRoute
 /* to avoid any error in production (ng build --prod)
@@ -21,9 +18,7 @@ import { ClubSelectComponent } from './Module_App/Landing';
 export const AppRoutes: Route[] = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: LandingComponent },
-  { path: 'event', component: EventComponent },
   { path: 'clubs', component: ClubListComponent, canActivate: [] },
-  { path: 'signup', component: SignUpComponent },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
   { path: 'club', loadChildren: './Module_Client/client.module#ClientModule' },
   { path: '**', redirectTo: '/home' }
@@ -32,12 +27,9 @@ export const AppRoutes: Route[] = [
 
 export const AppComponents: any = [
   AppComponent,
-  SignUpComponent,
   LandingComponent,
   HeaderComponent,
   HeaderInfoComponent,
-  ViewHeaderComponent,
-  EventComponent,
   ClubListComponent,
   ClubEditComponent,
   ClubSelectComponent

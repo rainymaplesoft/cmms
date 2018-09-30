@@ -3,6 +3,7 @@ import { hoverScaleAnimation } from '../../../Module_Core';
 import { IClub } from '../../../Module_Firebase/models';
 import { Router } from '@angular/router';
 import { RouteName } from '../../../routename';
+import { MetaService } from 'src/app/Module_Shared';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -18,7 +19,7 @@ export class ClubSelectComponent implements OnInit {
   clubImage: string;
   showImgOverlay = 'none';
   hoverState = 'mouseleave'; // mouseleave/moseenter
-  constructor(private router: Router) {}
+  constructor(private router: Router, private metaService: MetaService) {}
 
   ngOnInit() {
     this.clubImage = `assets/img/club/club_entry_${this.club.clubCode}.jpg`;
@@ -30,8 +31,12 @@ export class ClubSelectComponent implements OnInit {
   }
 
   nav() {
-    this.router.navigate([RouteName.SignUp], {
-      queryParams: { clubId: this.club._id }
-    });
+    this.metaService.navigateClub = {
+      _id: this.club._id,
+      clubName: this.club.clubName,
+      clubCode: this.club.clubCode
+    };
+    const path = `${RouteName.Club}/${this.club.clubCode.toLowerCase()}`;
+    this.router.navigate([path]);
   }
 }

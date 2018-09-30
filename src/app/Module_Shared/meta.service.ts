@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
 import {
   FirebaseDataService,
+  FireAuthService,
   IClub,
   CollectionPath,
   IUser
-} from '../../Module_Firebase';
+} from '../Module_Firebase';
 import { filter, take, map } from 'rxjs/operators';
-import { FireAuthService } from '../../Module_Firebase/firebase.auth.service';
 import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class MetaService {
   private _firebaseUser: firebase.User;
-  _clubId: string;
+  private _clubId: string;
+  navClubCode: string;
+  navigateClub: IClub;
 
   constructor(
+    private router: Router,
     private authService: FireAuthService,
     private dbService: FirebaseDataService
   ) {
@@ -32,14 +36,14 @@ export class MetaService {
     return this._clubId;
   }
 
-  get Club(): Observable<IClub> {
+  get LoggedInClub(): Observable<IClub> {
     if (!this._clubId) {
       return of(null);
     }
     return this.getClubById(this._clubId);
   }
 
-  get User() {
+  get LoggedInUser() {
     if (!this._clubId || !this._firebaseUser) {
       return of(null);
     }
@@ -49,6 +53,16 @@ export class MetaService {
   getClubById(clubId: string) {
     const path = `${CollectionPath.CLUBS}/${clubId}`;
     const club = this.dbService.getDocument<IClub>(path).valueChanges();
+    return club;
+  }
+
+  getClubByCode(clubCode: string) {
+    const path = `${CollectionPath.CLUBS}`;
+    const club = this.dbService.getCollection<IClub>(path, [
+      'clubCode',
+      '==',
+      clubCode.toUpperCase()
+    ]); // .pipe(take(1));
     return club;
   }
 
@@ -63,5 +77,23 @@ export class MetaService {
       )
     );
     return user;
+  }
+
+  getNavClub(clubCode: string) {
+    const path = `${CollectionPath.CLUBS}`;
+    const club = this.dbService.getCollection<IClub>(path, [
+      'clubCode',
+      '==',
+      clubCode.toUpperCase()
+    ]); // .pipe(take(1));
+    return club;
+  }
+
+  extractClubCode(url: string) {
+    if (url.indexOf('/club/') !== 0) {
+      this.navClubCode = '';
+      return '';
+    }
+    return url.replace('/club/', '').substr(0, 4);
   }
 }

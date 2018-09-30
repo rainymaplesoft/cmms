@@ -4,8 +4,8 @@ import RouteName from '../../routename';
 import { PubSubService, UtilService } from '../../Module_Core';
 import { FireAuthService } from '../../Module_Firebase';
 import { take, tap, map, filter } from 'rxjs/operators';
-import { MetaService } from '../_Shared/meta.service';
 import { IClub } from '../../Module_Firebase/models';
+import { MetaService } from 'src/app/Module_Shared';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   r_home = RouteName.Home;
   r_signup = RouteName.SignUp;
   r_event = RouteName.Event;
-  r_clubs = RouteName.Clubs;
+  r_clubs = RouteName.ClubSetting;
   loginBadge = '?';
 
   constructor(
@@ -33,17 +33,21 @@ export class HeaderComponent implements OnInit {
     private eventService: PubSubService,
     private authService: FireAuthService,
     private utilService: UtilService,
-    private clubServie: MetaService
+    private metaService: MetaService
   ) {}
 
   ngOnInit() {
     this.router.events
       .pipe(filter(e => !!e['navigationTrigger']))
       .subscribe(url => {
-        const u = url['url'];
-        this.clubId = this.utilService.getUrlParam(u, 'clubId');
-        this.getClubInfo();
         this.hideHeaderInfo();
+        const u: string = url['url'];
+        if (u.indexOf('/club/') !== 0) {
+          return;
+        }
+        const clubCode = u.replace('/club/', '').substr(0, 4);
+        // this.clubId = this.utilService.getUrlParam(u, 'clubId');
+        this.getClubInfo(clubCode);
       });
     this.authService.authState.subscribe(u => {
       this.isLoggedIn = !!u;
@@ -75,18 +79,20 @@ export class HeaderComponent implements OnInit {
     this.eventService.pub('Event_MobileToggleClicked');
   }
 
-  private getClubInfo() {
+  private getClubInfo(clubCode: string) {
     this.club = null;
     this.clubName = 'Sport Center';
-    if (!this.clubId) {
+    if (!clubCode) {
       return;
     }
-    this.clubServie.getClubById(this.clubId).subscribe(club => {
-      this.club = club;
-      this.clubName = this.club.clubName;
-      this.club.mapLink = club.mapLink
-        ? this.utilService.sanitizeUrl(club.mapLink)
-        : '';
+    this.metaService.getClubByCode(clubCode).subscribe(club => {
+      if (club && club.length > 0) {
+        this.club = club[0];
+        this.clubName = this.club.clubName;
+        this.club.mapLink = this.club.mapLink
+          ? this.utilService.sanitizeUrl(this.club.mapLink)
+          : '';
+      }
     });
   }
 

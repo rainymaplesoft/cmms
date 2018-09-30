@@ -6,9 +6,12 @@ import {
   transition,
   animate
 } from '@angular/animations';
-import { FirebaseDataService, IClub, IUser } from '../../Module_Firebase';
 import { Observable } from 'rxjs';
-import { CollectionPath } from '../../Module_Firebase/models';
+import {
+  CollectionPath,
+  FirebaseDataService,
+  IClub
+} from 'src/app/Module_Firebase';
 
 @Component({
   // tslint:disable-next-line:component-selector

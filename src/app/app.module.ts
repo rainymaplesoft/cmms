@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 import { AppRoutes, AppComponents } from './app.route';
 import { AppComponent } from './app.component';
 import { ModuleFirebase } from './Module_Firebase';
-import { MetaService } from './Module_App/_Shared';
+import { SharedModule } from './Module_Shared/shared.module';
 
 @NgModule({
   declarations: AppComponents,
@@ -27,11 +27,12 @@ import { MetaService } from './Module_App/_Shared';
     ModuleFirebase,
     NgTranslateModule,
 
+    SharedModule,
     // DO NOT import any lazy-loading module here!!
 
     RouterModule.forRoot(AppRoutes)
   ],
-  providers: [MetaService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

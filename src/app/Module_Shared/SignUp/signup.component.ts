@@ -4,17 +4,17 @@ import {
   KeyValue,
   pullLeftRightAnimate,
   ToastrService
-} from '../../../Module_Core';
+} from '../../Module_Core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import {
   FireAuthService,
   IUser,
   FirebaseDataService,
   IClub
-} from '../../../Module_Firebase';
+} from '../../Module_Firebase';
 import { Observable, Subscription } from 'rxjs';
-import { MetaService } from '../../_Shared';
-import RouteName from '../../../routename';
+import RouteName from '../../routename';
+import { MetaService } from '../meta.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -33,6 +33,8 @@ export class SignUpComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService
   ) {
+    const url = this.router.url;
+    this.clubCode = this.metaService.extractClubCode(url);
     this.authService.authState.subscribe(u => {
       this.isLoggedIn = !!u;
     });
@@ -40,6 +42,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
   club: IClub;
   clubId: string;
+  clubCode: string;
   user: Observable<IUser>;
   loggedInUser: IUser;
   isLoggedIn = false;
@@ -56,31 +59,20 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.buildForm();
-    // this.clubImage = `assets/img/club/club_entry_${this.club.clubCode}.jpg`;
-
-    this.sub = this.route.queryParams.subscribe(params => {
-      this.clubId = params['clubId'] || '';
-      this.init(this.clubId);
-    });
+    this.init();
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    // this.sub.unsubscribe();
   }
 
-  init(clubId) {
-    if (!this.clubId) {
-      this.router.navigate([RouteName.Home]);
-      return;
-    }
-    this.metaService.getClubById(clubId).subscribe((club: IClub) => {
-      if (!club) {
-        this.router.navigate([RouteName.Home]);
-        return;
-      }
-      this.club = club;
-      this.clubImage = `url(assets/img/club/club_entry_${club.clubCode}.jpg)`;
-      // this.title = this.club.clubName;
+  init() {
+    this.metaService.getNavClub(this.clubCode).subscribe(clubs => {
+      this.club = clubs[0];
+      this.clubId = this.club._id;
+      this.clubImage = `url(assets/img/club/club_entry_${
+        this.club.clubCode
+      }.jpg)`;
     });
   }
 
