@@ -46,6 +46,10 @@ export class AccountEditComponent implements OnInit, OnChanges {
   }
 
   set selectRecordId(recordId: string) {
+    if (!recordId) {
+      this.formEdit = null;
+      return;
+    }
     this.userId = recordId;
     this.getRecordById();
   }
@@ -103,8 +107,9 @@ export class AccountEditComponent implements OnInit, OnChanges {
       email: { value: '', disabled: true },
       cellPhone: { value: '', disabled: true },
       imageUrl: { value: '', disabled: true },
-      gender: { value: 1, disabled: false },
+      gender: { value: 1, disabled: true },
       isMember: { value: false, disabled: false },
+      isAdmin: { value: false, disabled: false },
       isActive: { value: '', disabled: false }
     });
     this.hideEdit = false;
@@ -137,6 +142,10 @@ export class AccountEditComponent implements OnInit, OnChanges {
 
   get isMember() {
     return this.formEdit.get('isMember');
+  }
+
+  get isAdmin() {
+    return this.formEdit.get('isAdmin');
   }
 
   get cellPhone() {

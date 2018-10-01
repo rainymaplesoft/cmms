@@ -79,6 +79,8 @@ export class AccountListComponent implements OnInit, OnChanges {
   }
 
   onChangeClub() {
+    this.selectedRecordId = '';
+    this.accountEdit.selectRecordId = this.selectedRecordId;
     this.accounts = this.getAllAccounts();
   }
 

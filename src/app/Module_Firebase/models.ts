@@ -9,6 +9,7 @@ export interface IUser {
   email: string;
   role: IRole;
   isMember?: boolean;
+  isAdmin?: boolean;
   gender?: number; // 1 => male
   password?: string;
   passwordConfirm?: string;
