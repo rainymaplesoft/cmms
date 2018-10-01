@@ -109,6 +109,20 @@ export class MetaService {
     return club;
   }
 
+  getDocPathClub(clubId: string) {
+    return `${CollectionPath.CLUBS}/${clubId}`;
+  }
+
+  getDocPathUser(clubId: string, userId: string) {
+    return `${CollectionPath.CLUBS}/${clubId}/${
+      CollectionPath.USERS
+    }/${userId}`;
+  }
+
+  getDocPathUsers(clubId: string) {
+    return `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
+  }
+
   extractClubCode(url: string) {
     if (url.indexOf('/club/') !== 0) {
       this.navClubCode = '';

@@ -114,6 +114,10 @@ export class FireAuthService {
     }/${userId}`;
   }
 
+  getDocPathUsers(clubId: string) {
+    return `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
+  }
+
   /*
   googleSignIn(clubId: string, routeOk = '/', routeFaile = '/') {
     this.afAuth.auth

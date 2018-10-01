@@ -10,6 +10,7 @@ export class RouteName {
   static SignUp = 'signup';
   static Event = 'event';
   static ClubSetting = 'setting/club';
+  static AccountSetting = 'setting/account';
   static Exception = 'Exception';
 
   static GeoSchoolInfo = 'schoolinfo';
@@ -30,7 +31,7 @@ export const MobileMenu: IMenuItem[] = [
     action: '',
     sub_menu: [
       { menu_text: 'Club Settings', action: RouteName.ClubSetting },
-      { menu_text: 'Member Settings' }
+      { menu_text: 'Account Settings', action: RouteName.AccountSetting }
     ]
   },
   { menu_text: 'Gallery', action: RouteName.SignUp },

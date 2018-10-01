@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
   r_signup = RouteName.SignUp;
   r_event = RouteName.Event;
   r_clubs = RouteName.ClubSetting;
+  r_accounts = RouteName.AccountSetting;
   loginBadge = '?';
   sub: Subscription;
 
@@ -86,6 +87,7 @@ export class HeaderComponent implements OnInit {
 
   onLogout() {
     this.metaService.logout();
+    this.router.navigate([RouteName.Home]);
     // this.authService.signOut();
     // this.eventService.pub(OnEvent.Event_SignOut);
     // this.metaService.LoggedInUser = null;

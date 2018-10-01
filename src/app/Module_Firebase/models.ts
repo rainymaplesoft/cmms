@@ -8,7 +8,8 @@ export interface IUser {
   uid: string;
   email: string;
   role: IRole;
-  gender?: number;
+  isMember?: boolean;
+  gender?: number; // 1 => male
   password?: string;
   passwordConfirm?: string;
   cellPhone?: string;

@@ -1,0 +1,73 @@
+<div class="form_edit" *ngIf="formEdit" [ngClass]='{"hide_edit":hideEdit}'>
+  <div class="header">
+    <div class="flex_row">
+      <div class='flex_1 flex_start'>
+        <div class="back_button">
+          <button mat-icon-button color="primary" (click)='backToList()'>
+            <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div style="margin-right: 5px;">
+        <button (click)='onSave()' mat-stroked-button color="primary" [disabled]="!formEdit.dirty || !formEdit.valid">
+          <mat-icon matSuffix color='primary'>done</mat-icon>Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <form novalidate class='reactive-form' [formGroup]="formEdit" (ngSubmit)="onSubmit()">
+    <div class="form_section">
+      <div class="flex_1">
+        <div class="avatar">
+          <img [src]="avatar" alt="">
+        </div>
+      </div>
+      <div class="flex_row_col">
+        <div class="row_col_sm">
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
+              <mat-icon matSuffix color='primary'>person</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Last Naem" formControlName="lastName" autocomplete="off">
+              <mat-icon matSuffix color='primary'>vpn_key</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row_col_sm">
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Email" formControlName="email" autocomplete="off">
+              <mat-icon matSuffix color='primary'>email</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
+              <mat-icon matSuffix color='primary'>phone</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="flex_row_col">
+        <div class="control">
+          <mat-form-field>
+            <input matInput placeholder="Avatar Link" formControlName="imageUrl" autocomplete="off">
+            <mat-icon matSuffix color='primary'>location_on</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="row_col_sm">
+          <div class="control checkbox">
+            <mat-checkbox class="example-margin" formControlName="isMember">Member?</mat-checkbox>
+          </div>
+          <div class="control checkbox">
+            <mat-checkbox class="example-margin" formControlName="isActive">Acitve</mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

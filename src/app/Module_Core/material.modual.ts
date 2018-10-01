@@ -22,7 +22,8 @@ import {
   MatNativeDateModule,
   MatExpansionModule,
   MatPaginatorModule,
-  MatBadgeModule
+  MatBadgeModule,
+  MatMenuModule
 } from '@angular/material';
 
 @NgModule({
@@ -48,7 +49,8 @@ import {
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatMenuModule
   ],
   exports: [
     MatButtonModule,
@@ -72,7 +74,8 @@ import {
     MatProgressSpinnerModule,
     MatExpansionModule,
     MatPaginatorModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatMenuModule
   ],
   declarations: [],
   providers: [{ provide: LOCALE_ID, useValue: 'en-GB' }]
