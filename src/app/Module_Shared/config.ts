@@ -14,5 +14,7 @@ export enum ClaimType {
 export enum OnEvent {
   Event_HideClubMainContent = 'Event_HideClubMainContent',
   Event_MobileToggleClicked = 'Event_MobileToggleClicked',
-  Event_MenuItemClicked = 'Event_MenuItemClicked'
+  Event_MenuItemClicked = 'Event_MenuItemClicked',
+  Event_SignIn = 'Event_SignIn',
+  Event_SignOut = 'Event_SignOut'
 }

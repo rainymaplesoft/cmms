@@ -42,6 +42,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.sub = this.route.queryParams.subscribe(params => {
+      this.authService.authState.subscribe(u => {
+        this.isLoggedIn = !!u;
+      });
       const url = this.router.url;
       if (url.indexOf('/home') >= 0 || url.indexOf('/setting') >= 0) {
         this.clubName = 'Sport Center';
@@ -82,7 +85,10 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
-    this.authService.signOut();
+    this.metaService.logout();
+    // this.authService.signOut();
+    // this.eventService.pub(OnEvent.Event_SignOut);
+    // this.metaService.LoggedInUser = null;
   }
 
   toggleMobileMenu() {

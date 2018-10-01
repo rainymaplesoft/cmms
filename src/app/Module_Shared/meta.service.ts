@@ -9,27 +9,45 @@ import {
 import { filter, take, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { EventService } from '../Module_Core';
+import { OnEvent } from './config';
 
 @Injectable()
 export class MetaService {
   private _firebaseUser: firebase.User;
   private _clubId: string;
+  LoggedInUser: IUser;
   navClubCode: string;
   navigateClub: IClub;
   authState: Observable<firebase.User>;
 
   constructor(
     private router: Router,
+    private eventService: EventService,
     private authService: FireAuthService,
     private dbService: FirebaseDataService
   ) {
     this.authState = this.authService.authState;
+    this.setEvents();
+  }
+
+  setEvents() {
     this.authService.authState.subscribe(user => {
       this._firebaseUser = user;
       this._clubId = this.authService.loginClubId;
     });
+    this.eventService.on<boolean>(OnEvent.Event_SignOut).subscribe(c => {
+      this.LoggedInUser = null;
+    });
+    this.eventService.on<IUser>(OnEvent.Event_SignIn).subscribe(user => {
+      this.LoggedInUser = user;
+    });
   }
 
+  logout() {
+    this.authService.signOut();
+    this.eventService.pub(OnEvent.Event_SignOut);
+  }
   get IsLogIn(): boolean {
     return !!this._firebaseUser;
   }
@@ -45,12 +63,12 @@ export class MetaService {
     return this.getClubById(this._clubId);
   }
 
-  get LoggedInUser() {
-    if (!this._clubId || !this._firebaseUser) {
-      return of(null);
-    }
-    return this.getUserByEmail(this._clubId, this._firebaseUser.email);
-  }
+  // get LoggedInUser() {
+  //   if (!this._clubId || !this._firebaseUser) {
+  //     return of(null);
+  //   }
+  //   return this.getUserByEmail(this._clubId, this._firebaseUser.email);
+  // }
 
   getClubById(clubId: string) {
     const path = `${CollectionPath.CLUBS}/${clubId}`;

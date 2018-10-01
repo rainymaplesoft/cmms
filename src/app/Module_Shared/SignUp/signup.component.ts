@@ -117,6 +117,12 @@ export class SignUpComponent implements OnInit, OnDestroy {
         user.subscribe(u => {
           if (u) {
             this.loggedInUser = u;
+            this.loggedInUser.loggedInClubId = this.clubId;
+            this.eventService.pub<IUser>(
+              OnEvent.Event_SignIn,
+              this.loggedInUser
+            );
+            // this.metaService.LoggedInUser = u;
             // navigate to club page after login successfully
             this.router.navigate([RouteName.Club], {
               queryParams: { clubId: this.clubId }

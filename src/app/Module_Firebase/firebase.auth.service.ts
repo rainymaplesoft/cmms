@@ -71,10 +71,9 @@ export class FireAuthService {
       });
   }
 
-  signOut(route = '/') {
+  signOut() {
     this.afAuth.auth.signOut();
     this.loginClubId = '';
-    this.router.navigate([route]);
   }
 
   login(clubId: string, email: string, password: string) {

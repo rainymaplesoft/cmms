@@ -15,7 +15,7 @@ export interface IUser {
   firstName?: string;
   lastName?: string;
   imageUrl?: string;
-  loggedInClub?: IClub;
+  loggedInClubId?: string;
 }
 
 export interface IRole {

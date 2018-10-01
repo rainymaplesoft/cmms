@@ -22,7 +22,7 @@ import { MainLVBCComponent } from './LVBC/main-lvbc.component';
 import { MainWIBCComponent } from './WIBC/main-wibc.component';
 import { EventService } from '../Module_Core/services/pubsub.service';
 import { OnEvent } from '../Module_Shared';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, debounceTime, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client',
@@ -57,23 +57,31 @@ export class ClientComponent
   ) {}
 
   ngOnInit() {
+    /*
+    this.router.events
+      .pipe(
+        filter(e => {
+          return !!e['navigationTrigger'];
+        })
+      )
+      .subscribe(event => {
+        if (this.cmpRef && this.metaService.LoggedInUser) {
+          this.cmpRef.instance['loggedInUser'] = this.metaService.LoggedInUser;
+        }
+      });
+      */
     this.originUrl = this.router.url;
     this.sub = this.route.queryParams.subscribe(params => {
       this.clubId = params['clubId'];
+      if (
+        this.metaService.LoggedInUser &&
+        this.metaService.LoggedInUser.loggedInClubId !== this.clubId
+      ) {
+        this.metaService.logout();
+      }
       this.chooseClubPComponent();
     });
     this.showClubMain = true;
-    this.metaService.authState
-      .pipe(switchMap(_ => this.metaService.LoggedInUser))
-      .subscribe(user => {
-        if (!user) {
-          return;
-        }
-        this.loggedInUser = user[0];
-        if (this.cmpRef) {
-          this.cmpRef.instance['loggedInUser'] = this.loggedInUser;
-        }
-      });
   }
 
   chooseClubPComponent() {
@@ -92,16 +100,14 @@ export class ClientComponent
       cmpType
     );
     this.cmpRef = this.target.createComponent(factory);
-    // to access the created instance use
-    // this.compRef.instance.someProperty = 'someValue';
-    // this.compRef.instance.someOutput.subscribe(val => doSomething());
+    this.cmpRef.instance['loggedInUser'] = this.metaService.LoggedInUser;
   }
   onOutletActivate($event) {
-    // console.log($event);
     this.showClubMain = false;
     const outletComponentName = $event.constructor.name;
   }
   onOutletDeactivate($event) {
+    // navigate away the club page, log out anyway
     if (this.originUrl !== this.router.url) {
       return;
     }

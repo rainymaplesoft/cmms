@@ -173,3 +173,7 @@ mat-form-field {
 .flex_3 {
   flex: 3;
 }
+img {
+  /* fix the mysterious extra 4px at bottom problem*/
+  display: block;
+}
