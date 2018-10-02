@@ -14,16 +14,12 @@ import {
 } from '@angular/core';
 import { MainLPBCComponent } from './LPBC/main-lpbc.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscriber, Subscription } from 'rxjs';
-import { RouteName } from '../routename';
-import { MetaService } from '../Module_Shared/meta.service';
-import { IClub, IUser } from '../Module_Firebase/models';
+import { Subscription } from 'rxjs';
 import { MainLVBCComponent } from './LVBC/main-lvbc.component';
 import { MainWIBCComponent } from './WIBC/main-wibc.component';
-import { EventService } from '../Module_Core/services/pubsub.service';
-import { OnEvent } from '../Module_Shared';
-import { switchMap, debounceTime, filter } from 'rxjs/operators';
-
+import { IUser, IClub } from '../../Module_Firebase';
+import { MetaService } from '../meta.service';
+import { UtilService } from '../../Module_Core/services/util.service';
 @Component({
   selector: 'app-client',
   templateUrl: 'client.component.html',
@@ -51,9 +47,7 @@ export class ClientComponent
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private router: Router,
-    private route: ActivatedRoute,
-    private metaService: MetaService,
-    private eventService: EventService
+    private metaService: MetaService
   ) {}
 
   ngOnInit() {
@@ -71,16 +65,11 @@ export class ClientComponent
       });
       */
     this.originUrl = this.router.url;
-    this.sub = this.route.queryParams.subscribe(params => {
-      this.clubId = params['clubId'];
-      if (
-        this.metaService.LoggedInUser &&
-        this.metaService.LoggedInUser.loggedInClubId !== this.clubId
-      ) {
-        this.metaService.logout();
-      }
-      this.chooseClubPComponent();
-    });
+    this.clubId = this.metaService.getUrlClubId(this.router.url);
+    if (this.metaService.clubId !== this.clubId) {
+      this.metaService.logout();
+    }
+    this.chooseClubPComponent();
     this.showClubMain = true;
   }
 
@@ -100,7 +89,7 @@ export class ClientComponent
       cmpType
     );
     this.cmpRef = this.target.createComponent(factory);
-    this.cmpRef.instance['loggedInUser'] = this.metaService.LoggedInUser;
+    // this.cmpRef.instance['loggedInUser'] = this.metaService.LoggedInUser;
   }
   onOutletActivate($event) {
     this.showClubMain = false;
@@ -123,6 +112,5 @@ export class ClientComponent
     if (this.cmpRef) {
       this.cmpRef.destroy();
     }
-    this.sub.unsubscribe();
   }
 }

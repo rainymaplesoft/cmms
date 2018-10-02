@@ -6,17 +6,22 @@ export class StorageService {
 
   getItem(key: string) {
     const data = window.sessionStorage.getItem(key);
-    if (typeof data === 'string') {
-      return data;
+    if (typeof data === 'object') {
+      return JSON.parse(data);
     }
-    return JSON.parse(data);
+    return data;
   }
 
   setItem(key: string, value: any) {
-    const data = JSON.stringify(value);
-    window.sessionStorage.setItem(key, data);
+    if (typeof value === 'object') {
+      const data = JSON.stringify(value);
+      window.sessionStorage.setItem(key, data);
+    } else {
+      window.sessionStorage.setItem(key, value);
+    }
     return { key, value };
   }
+
   removeItem(key: string) {
     window.sessionStorage.removeItem(key);
   }

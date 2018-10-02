@@ -5,9 +5,9 @@ import { EventService, UtilService } from '../../Module_Core';
 import { FireAuthService } from '../../Module_Firebase';
 import { take, tap, map, filter } from 'rxjs/operators';
 import { IClub } from '../../Module_Firebase/models';
-import { MetaService } from 'src/app/Module_Shared';
 import { Subscription } from 'rxjs';
-import { OnEvent } from '../../Module_Shared/config';
+import { MetaService } from '../meta.service';
+import { OnEvent } from '../config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
 
   r_selected = RouteName.Home;
   r_home = RouteName.Home;
-  r_signup = RouteName.SignUp;
+  r_signup = RouteName.Sign;
   r_event = RouteName.Event;
   r_clubs = RouteName.ClubSetting;
   r_accounts = RouteName.AccountSetting;
@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    /*
     this.sub = this.route.queryParams.subscribe(params => {
       this.authService.authState.subscribe(u => {
         this.isLoggedIn = !!u;
@@ -62,6 +63,7 @@ export class HeaderComponent implements OnInit {
         this.getClubInfo(this.clubId);
       }
     });
+    */
     this.authService.authState.subscribe(u => {
       this.isLoggedIn = !!u;
     });

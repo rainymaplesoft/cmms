@@ -11,7 +11,12 @@ import { RouterModule } from '@angular/router';
 import { AppRoutes, AppComponents } from './app.route';
 import { AppComponent } from './app.component';
 import { ModuleFirebase } from './Module_Firebase';
-import { SharedModule } from './Module_Shared/shared.module';
+import { MetaService } from './Module_App/meta.service';
+import {
+  MainLPBCComponent,
+  MainLVBCComponent,
+  MainWIBCComponent
+} from './Module_App/_Clients';
 
 @NgModule({
   declarations: AppComponents,
@@ -27,12 +32,12 @@ import { SharedModule } from './Module_Shared/shared.module';
     ModuleFirebase,
     NgTranslateModule,
 
-    SharedModule,
     // DO NOT import any lazy-loading module here!!
 
     RouterModule.forRoot(AppRoutes)
   ],
-  providers: [],
+  entryComponents: [MainLPBCComponent, MainLVBCComponent, MainWIBCComponent],
+  providers: [MetaService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

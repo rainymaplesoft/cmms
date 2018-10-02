@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {
   KeyValue,
   pullLeftRightAnimate,
-  EventService,
   ToastrService
 } from '../../Module_Core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
@@ -28,14 +27,12 @@ import { OnEvent } from '../config';
 })
 export class SignUpComponent implements OnInit, OnDestroy {
   constructor(
-    private dbService: FirebaseDataService,
     private metaService: MetaService,
     private fb: FormBuilder,
     private authService: FireAuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService,
-    private eventService: EventService
+    private toastr: ToastrService
   ) {
     const url = this.router.url;
     this.clubCode = this.metaService.extractClubCode(url);
@@ -67,7 +64,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   init() {
@@ -105,12 +104,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   onLogin() {
-    console.log(this.loginInfo);
-    this.metaService
-      .getUserByEmail(this.clubId, this.loginInfo.email)
-      .subscribe(u => {
-        const aa = u;
-      });
     this.authService
       .login(this.clubId, this.loginInfo.email, this.loginInfo.password)
       .then((user: Observable<IUser>) => {
@@ -118,10 +111,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
           if (u) {
             this.loggedInUser = u;
             this.loggedInUser.loggedInClubId = this.clubId;
-            this.eventService.pub<IUser>(
-              OnEvent.Event_SignIn,
-              this.loggedInUser
-            );
             // this.metaService.LoggedInUser = u;
             // navigate to club page after login successfully
             this.router.navigate([RouteName.Club], {
