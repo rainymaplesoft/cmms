@@ -8,7 +8,21 @@ import { HeaderComponent } from './Module_App/Header/header.component';
 import { ClubListComponent, ClubEditComponent } from './Module_App/Club';
 import { ClubSelectComponent } from './Module_App/Landing';
 import { HeaderInfoComponent } from './Module_App/HeaderInfo/header-info.component';
-import { AccountListComponent } from './Module_Shared/Account/accountList.component';
+import {
+  AccountEditComponent,
+  AccountListComponent
+} from './Module_App/Account';
+import { UserComponent } from './Module_App/Account/User/user.component';
+import { EventLatestComponent } from './Module_App/Events';
+import { PricingComponent } from './Module_App/Pricing';
+import { SignUpComponent } from './Module_App/SignUp';
+import { ViewHeaderComponent } from './Module_App/ViewHeader';
+import { ClientComponent } from './Module_App/_Clients/client.component';
+import {
+  MainWIBCComponent,
+  MainLPBCComponent,
+  MainLVBCComponent
+} from './Module_App/_Clients';
 
 // RouteName.DefaultRoute
 /* to avoid any error in production (ng build --prod)
@@ -22,7 +36,15 @@ export const AppRoutes: Route[] = [
   { path: 'setting/club', component: ClubListComponent, canActivate: [] },
   { path: 'setting/account', component: AccountListComponent, canActivate: [] },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
-  { path: 'club', loadChildren: './Module_Client/client.module#ClientModule' },
+  {
+    path: 'club',
+    component: ClientComponent,
+    canActivate: [],
+    children: [
+      { path: 'sign', component: SignUpComponent },
+      { path: 'user', component: UserComponent }
+    ]
+  },
   { path: '**', redirectTo: '/home' }
 ];
 // { path: '**', component: ExceptionComponent }
@@ -34,5 +56,16 @@ export const AppComponents: any = [
   HeaderInfoComponent,
   ClubListComponent,
   ClubEditComponent,
-  ClubSelectComponent
+  ClubSelectComponent,
+  AccountEditComponent,
+  AccountListComponent,
+  UserComponent,
+  EventLatestComponent,
+  PricingComponent,
+  SignUpComponent,
+  ViewHeaderComponent,
+  ClientComponent,
+  MainLPBCComponent,
+  MainLVBCComponent,
+  MainWIBCComponent
 ];

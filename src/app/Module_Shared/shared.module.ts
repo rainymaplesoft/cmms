@@ -1,3 +1,4 @@
+/*
 import { NgModule } from '@angular/core';
 import { MetaService } from './meta.service';
 import { SignUpComponent } from './SignUp';
@@ -45,3 +46,4 @@ import { UserComponent } from './Account/User/user.component';
   providers: [MetaService]
 })
 export class SharedModule {}
+*/

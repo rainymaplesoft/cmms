@@ -3,6 +3,11 @@ export enum CollectionPath {
   USERS = 'users'
 }
 
+export enum StorageItem {
+  CLUB_ID = '__STORAGE_CLUB_ID__',
+  USER_ID = '__STORAGE_USER_ID__'
+}
+
 export interface IUser {
   _id?: string;
   uid: string;

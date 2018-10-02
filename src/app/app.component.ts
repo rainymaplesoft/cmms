@@ -9,7 +9,7 @@ import {
 import { EventService } from './Module_Core';
 import { Route, Router } from '@angular/router';
 import { MobileMenu } from './routename';
-import { OnEvent } from './Module_Shared';
+import { OnEvent } from './Module_App';
 
 const menuSlideAnimate =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax

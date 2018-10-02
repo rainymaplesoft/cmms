@@ -3,7 +3,7 @@ import { hoverScaleAnimation } from '../../../Module_Core';
 import { IClub } from '../../../Module_Firebase/models';
 import { Router } from '@angular/router';
 import { RouteName } from '../../../routename';
-import { MetaService } from 'src/app/Module_Shared';
+import { MetaService } from '../../meta.service';
 
 @Component({
   // tslint:disable-next-line:component-selector

@@ -32,7 +32,7 @@
               "src/assets/styles/material-theme.scss",
               "src/assets/font-awesome/css/all.min.css",
               "src/app/Module_Core/common.scss",
-              "src/app/Module_Shared/app.scss"
+              "src/app/Module_App/app.scss"
             ],
             "scripts": [
               "src/assets/font-awesome/js/all.min.js",

@@ -4,13 +4,13 @@ import {
   FireAuthService,
   IClub,
   CollectionPath,
-  IUser
+  IUser,
+  StorageItem
 } from '../Module_Firebase';
-import { filter, take, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { EventService } from '../Module_Core';
-import { OnEvent } from './config';
+import { StorageService } from '../Module_Core/services/storage.service';
+import { UtilService } from '../Module_Core';
 
 @Injectable()
 export class MetaService {
@@ -23,48 +23,41 @@ export class MetaService {
 
   constructor(
     private router: Router,
-    private eventService: EventService,
+    private utilService: UtilService,
     private authService: FireAuthService,
-    private dbService: FirebaseDataService
-  ) {
-    this.authState = this.authService.authState;
-    this.setEvents();
+    private dbService: FirebaseDataService,
+    private storageService: StorageService
+  ) {}
+
+  get clubId() {
+    return this.storageService.getItem(StorageItem.USER_ID);
   }
 
-  setEvents() {
-    this.authService.authState.subscribe(user => {
-      this._firebaseUser = user;
-      this._clubId = this.authService.loginClubId;
-    });
-    this.eventService.on<boolean>(OnEvent.Event_SignOut).subscribe(c => {
-      this._loggedInUser = null;
-    });
-    this.eventService.on<IUser>(OnEvent.Event_SignIn).subscribe(user => {
-      this._loggedInUser = user;
-    });
+  get userId() {
+    return this.storageService.getItem(StorageItem.USER_ID);
   }
 
-  logout() {
-    this.authService.signOut();
-    this.eventService.pub(OnEvent.Event_SignOut);
-  }
   get IsLogIn(): boolean {
     return !!this._firebaseUser;
   }
 
-  get LoginClubId() {
-    return this._clubId;
-  }
-
-  get LoggedInClub(): Observable<IClub> {
-    if (!this._clubId) {
+  get loggedInClub(): Observable<IClub> {
+    if (!this.clubId) {
       return of(null);
     }
-    return this.getClubById(this._clubId);
+    return this.getClubById(this.clubId);
   }
 
-  get LoggedInUser() {
-    return this._loggedInUser;
+  get loggedInUser() {
+    return this.authService.getCurrentUser();
+  }
+
+  logout() {
+    this.authService.signOut();
+  }
+
+  getUrlClubId(url: string) {
+    return this.utilService.getUrlParam(url, 'clubId');
   }
 
   getClubById(clubId: string) {
@@ -81,19 +74,6 @@ export class MetaService {
       clubCode.toUpperCase()
     ]); // .pipe(take(1));
     return club;
-  }
-
-  getUserByEmail(clubId: string, email: string) {
-    const path = `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
-    const user = this.dbService.getSimpleCollection<IUser>(path).pipe(
-      map(users =>
-        users.filter((u: IUser) => {
-          return u.email === email;
-        })
-      )
-      // take(1)
-    );
-    return user;
   }
 
   getNavClub(clubCode: string) {

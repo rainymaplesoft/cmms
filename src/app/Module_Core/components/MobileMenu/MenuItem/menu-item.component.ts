@@ -9,7 +9,7 @@ import {
 } from '@angular/animations';
 import { EventService } from '../../../services';
 import { rotateAnimate, pullUpDownAnimate } from '../../../animation';
-import { OnEvent } from '../../../../Module_Shared/config';
+import { OnEvent } from '../../../../Module_App/config';
 
 @Component({
   // tslint:disable-next-line:component-selector

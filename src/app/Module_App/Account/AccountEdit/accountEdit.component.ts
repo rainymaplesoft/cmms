@@ -11,9 +11,9 @@ import { CollectionPath, IUser } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from '../../../Module_Core';
-import { MetaService } from 'src/app/Module_Shared/meta.service';
 import { Images } from '../../Images/image';
 import { UtilService } from '../../../Module_Core/services/util.service';
+import { MetaService } from '../../meta.service';
 
 @Component({
   // tslint:disable-next-line:component-selector

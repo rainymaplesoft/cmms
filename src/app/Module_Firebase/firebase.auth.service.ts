@@ -8,26 +8,20 @@ import {
   AngularFirestoreDocument
 } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
-import { switchMap, take } from 'rxjs/operators';
-import { IUser, CollectionPath, IClub } from './models';
+import { IUser, CollectionPath, IClub, StorageItem } from './models';
 import { ToastrService } from '../Module_Core/services/toastr.service';
+import { StorageService } from '../Module_Core';
 
 @Injectable()
 export class FireAuthService {
-  loginClubId: string;
   private firebaseUser: firebase.User;
-  private _authState: Observable<firebase.User>;
 
   constructor(
-    private router: Router,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
-    private toastr: ToastrService
-  ) {
-    // this.afAuth.authState.subscribe(user => {
-    //   this.firebaseUser = user;
-    // });
-  }
+    private toastr: ToastrService,
+    private storage: StorageService
+  ) {}
 
   get authState() {
     return this.afAuth.authState;
@@ -37,28 +31,25 @@ export class FireAuthService {
     return this.firebaseUser !== null;
   }
 
-  getCurrentUser(loginClubId: string): Observable<IUser> {
+  getCurrentUser(): Observable<IUser> {
     // Get auth data, then get firestore user document || null
-    if (!loginClubId || !this.isAuthenticated) {
+    const userId = this.storage.getItem(StorageItem.USER_ID);
+    const clubId = this.storage.getItem(StorageItem.CLUB_ID);
+    if (!userId || !this.isAuthenticated) {
       return of(null);
     }
-    const docPath = this.getDocPathUser(
-      this.loginClubId,
-      this.firebaseUser.uid
-    );
+    const docPath = this.getDocPathUser(clubId, userId);
     return this.afs.doc<IUser>(docPath).valueChanges();
   }
 
-  signupWithEmailPassword(
-    clubId: string,
-    userInfo: IUser
-  ): Promise<auth.UserCredential> {
+  signupWithEmailPassword(clubId: string, userInfo: IUser) {
     return this.afAuth.auth
       .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
       .then(credential => {
         userInfo._id = credential.user.uid;
+        this.saveLoginStatus(clubId, credential.user.uid);
         this.updateUserData(clubId, userInfo);
-        this.loginClubId = clubId;
+        return this.getCurrentUser();
       })
       .catch(error => {
         const errorCode = error.code;
@@ -67,31 +58,31 @@ export class FireAuthService {
         if (errorCode === 'auth/email-already-in-use') {
           this.toastr.error('This Email Address is already in use');
         }
-        return null;
+        return of(null);
       });
   }
 
   signOut() {
     this.afAuth.auth.signOut();
-    this.loginClubId = '';
+    this.storage.removeItem(StorageItem.CLUB_ID);
+    this.storage.removeItem(StorageItem.USER_ID);
   }
 
   login(clubId: string, email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
       credential => {
-        const docPath = this.getDocPathUser(clubId, credential.user.uid);
-        const userRef: Observable<IUser> = this.afs
-          .doc<IUser>(docPath)
-          .valueChanges();
-        // .pipe(take(1));
-        this.loginClubId = clubId;
-        return userRef;
+        this.saveLoginStatus(clubId, credential.user.uid);
+        return this.getCurrentUser();
       },
       e => {
-        this.loginClubId = '';
         return of(null);
       }
     );
+  }
+
+  private saveLoginStatus(clubId: string, userId: string) {
+    this.storage.setItem(StorageItem.USER_ID, userId);
+    this.storage.setItem(StorageItem.CLUB_ID, clubId);
   }
 
   private updateUserData(clubId: string, userInfo: IUser) {

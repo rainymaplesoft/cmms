@@ -7,7 +7,6 @@ export class RouteName {
   static Home = 'home';
   static Club = 'club';
   static Sign = `${RouteName.Club}/sign`;
-  static SignUp = 'signup';
   static Event = 'event';
   static ClubSetting = 'setting/club';
   static AccountSetting = 'setting/account';
@@ -20,7 +19,7 @@ export class RouteName {
   static EditClient = 'editclient';
   static ManageTerm = 'manageterm';
 
-  static DefaultRoute = RouteName.SignUp;
+  static DefaultRoute = RouteName.Home;
 }
 export default RouteName;
 
@@ -34,7 +33,7 @@ export const MobileMenu: IMenuItem[] = [
       { menu_text: 'Account Settings', action: RouteName.AccountSetting }
     ]
   },
-  { menu_text: 'Gallery', action: RouteName.SignUp },
+  { menu_text: 'Gallery', action: RouteName.Home },
   {
     menu_text: 'Events',
     sub_menu: [
