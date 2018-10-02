@@ -1,0 +1,21 @@
+.form_section {
+  padding-left: 10px;
+  .row_col {
+    display: flex;
+    flex-direction: row;
+  }
+  @media (max-width: 570px) {
+    .row_col {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  .control {
+    max-width: 17em !important;
+    min-width: auto;
+    @media (max-width: 570px) {
+      width: 90%;
+      max-width: none !important;
+    }
+  }
+}

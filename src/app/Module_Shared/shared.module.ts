@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { EventLatestComponent } from './Events';
 import { PricingComponent } from './Pricing';
 import { AccountListComponent, AccountEditComponent } from './Account';
+import { UserComponent } from './Account/User/user.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { AccountListComponent, AccountEditComponent } from './Account';
     EventLatestComponent,
     PricingComponent,
     AccountListComponent,
-    AccountEditComponent
+    AccountEditComponent,
+    UserComponent
   ],
   declarations: [
     SignUpComponent,
@@ -37,7 +39,8 @@ import { AccountListComponent, AccountEditComponent } from './Account';
     PricingComponent,
     EventLatestComponent,
     AccountListComponent,
-    AccountEditComponent
+    AccountEditComponent,
+    UserComponent
   ],
   providers: [MetaService]
 })

@@ -16,7 +16,7 @@ import { OnEvent } from './config';
 export class MetaService {
   private _firebaseUser: firebase.User;
   private _clubId: string;
-  LoggedInUser: IUser;
+  _loggedInUser: IUser;
   navClubCode: string;
   navigateClub: IClub;
   authState: Observable<firebase.User>;
@@ -37,10 +37,10 @@ export class MetaService {
       this._clubId = this.authService.loginClubId;
     });
     this.eventService.on<boolean>(OnEvent.Event_SignOut).subscribe(c => {
-      this.LoggedInUser = null;
+      this._loggedInUser = null;
     });
     this.eventService.on<IUser>(OnEvent.Event_SignIn).subscribe(user => {
-      this.LoggedInUser = user;
+      this._loggedInUser = user;
     });
   }
 
@@ -63,12 +63,9 @@ export class MetaService {
     return this.getClubById(this._clubId);
   }
 
-  // get LoggedInUser() {
-  //   if (!this._clubId || !this._firebaseUser) {
-  //     return of(null);
-  //   }
-  //   return this.getUserByEmail(this._clubId, this._firebaseUser.email);
-  // }
+  get LoggedInUser() {
+    return this._loggedInUser;
+  }
 
   getClubById(clubId: string) {
     const path = `${CollectionPath.CLUBS}/${clubId}`;

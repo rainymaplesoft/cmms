@@ -1,37 +1,22 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  OnChanges,
-  EventEmitter,
-  Output
-} from '@angular/core';
-import { FirebaseDataService } from '../../../Module_Firebase';
-import { CollectionPath, IUser } from '../../../Module_Firebase/models';
-import { Observable } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ToastrService } from '../../../Module_Core';
-import { MetaService } from 'src/app/Module_Shared/meta.service';
+import { Component, OnInit } from '@angular/core';
+import { ToastrService, UtilService } from '../../../Module_Core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Images } from '../../Images/image';
-import { UtilService } from '../../../Module_Core/services/util.service';
+import { IUser } from '../../../Module_Firebase/models';
+import { Observable } from 'rxjs';
+import { FirebaseDataService } from '../../../Module_Firebase';
+import { MetaService } from '../../meta.service';
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'account-edit',
-  templateUrl: './accountEdit.component.html',
-  styleUrls: ['accountEdit.component.scss']
+  selector: 'app-user',
+  templateUrl: 'user.component.html',
+  styleUrls: ['user.component.scss']
 })
-export class AccountEditComponent implements OnInit, OnChanges {
-  @Input()
-  clubId: string;
-  @Output()
-  showList = new EventEmitter<boolean>();
-
-  userId: string;
-  hideEdit = false;
-  disableCode = false;
+export class UserComponent implements OnInit {
   user: Observable<IUser>;
   formEdit: FormGroup;
+  clubId: string;
+  userId: string;
 
   constructor(
     private dbService: FirebaseDataService,
@@ -41,28 +26,11 @@ export class AccountEditComponent implements OnInit, OnChanges {
     private fb: FormBuilder
   ) {}
 
+  ngOnInit() {}
+
   get userDocPath() {
     return this.metaService.getDocPathUser(this.clubId, this.userId);
   }
-
-  set selectRecordId(recordId: string) {
-    if (!recordId) {
-      // hide the form
-      this.formEdit = null;
-      return;
-    }
-    this.userId = recordId;
-    this.getRecordById();
-  }
-
-  ngOnInit() {}
-  ngOnChanges() {}
-
-  onSubmit() {
-    this.onSave();
-  }
-
-  //#region data functions
 
   private getRecordById() {
     this.user = this.dbService
@@ -73,32 +41,6 @@ export class AccountEditComponent implements OnInit, OnChanges {
       this.formEdit.patchValue(user);
     });
   }
-
-  onSave() {
-    if (this.formEdit.invalid) {
-      console.log('form is not valid, cannot save to database');
-      return;
-    }
-    const data: IUser = this.formEdit.value;
-    if (this.userId) {
-      this.updateRecord(data);
-    }
-  }
-
-  private updateRecord(data: any) {
-    this.dbService
-      .updateDocument<IUser>(this.userDocPath, data)
-      .then((r: boolean) => {
-        this.getRecordById();
-      });
-  }
-
-  backToList() {
-    this.showList.emit(true);
-    this.hideEdit = true;
-  }
-  //#endregion
-
   //#region reactive form and field getters
 
   private buildForm() {
@@ -113,7 +55,6 @@ export class AccountEditComponent implements OnInit, OnChanges {
       isAdmin: { value: false, disabled: false },
       isActive: { value: '', disabled: false }
     });
-    this.hideEdit = false;
   }
 
   get avatar() {

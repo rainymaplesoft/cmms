@@ -1,0 +1,70 @@
+<view-header [title]='title'></view-header>
+<div class="page_view">
+  <div class='page_content'>
+    <div class="login-form">
+      <form novalidate class='reactive-form'>
+        <div class="form_section">
+          <div class="form_content">
+            <div class="row_col">
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="Email" formControlName="email" autocomplete="off">
+                  <mat-icon matSuffix color='primary'>email</mat-icon>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row_col">
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
+                  <mat-icon matSuffix color='primary'>person</mat-icon>
+                </mat-form-field>
+                <val-msg [invalid]='firstName.invalid && firstName.touched'>
+                  First Name is required
+                </val-msg>
+              </div>
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="Last Name" formControlName="lastName" autocomplete="off">
+                  <mat-icon matSuffix color='primary'>person</mat-icon>
+                </mat-form-field>
+                <val-msg [invalid]='lastName.invalid && lastName.touched'>
+                  Last Name is required
+                </val-msg>
+              </div>
+            </div>
+            <div class="row_col">
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
+                  <mat-icon matSuffix color='primary'>phone_android</mat-icon>
+                </mat-form-field>
+                <val-msg [invalid]='cellPhone.invalid && cellPhone.touched'>
+                  Phone Number is required
+                </val-msg>
+              </div>
+              <div class="control" style='align-items: flex-start'>
+                <mat-radio-group style="padding-top:1em;" formControlName="gender">
+                  <mat-radio-button style="width: 6em;" *ngFor="let gender of genders" [value]="gender.key">
+                    {{gender.value}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="flex_row sign-section">
+              <div class='sign-button'>
+                <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !signupForm.valid">Sign
+                  Up</button>
+              </div>
+              <div class="alternative" (click)='toggleSign()'>
+                <div class='prompt'>Or I already have account</div>
+                <div class="icon">
+                  <i class="material-icons">forward</i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
