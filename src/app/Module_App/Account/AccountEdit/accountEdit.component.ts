@@ -122,7 +122,7 @@ export class AccountEditComponent implements OnInit, OnChanges {
       return this.utilService.sanitizeUrl(imageUrl);
     }
     imageUrl = this.gender.value === 1 ? Images.Male : Images.Female;
-    return this.utilService.sanitizeUrl(Images.Female);
+    return this.utilService.sanitizeUrl(imageUrl);
   }
 
   get firstName() {

@@ -19,3 +19,12 @@
     }
   }
 }
+
+.avatar {
+  display: flex;
+  padding: 1em;
+  img {
+    width: 60px;
+    height: 60px;
+  }
+}

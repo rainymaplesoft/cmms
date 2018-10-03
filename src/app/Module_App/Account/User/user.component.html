@@ -2,14 +2,25 @@
 <div class="page_view">
   <div class='page_content'>
     <div class="login-form">
-      <form novalidate class='reactive-form'>
+      <form novalidate class='reactive-form' [formGroup]="formEdit">
         <div class="form_section">
           <div class="form_content">
+            <div class="flex_1">
+              <div class="avatar">
+                <img [src]="avatar" alt="">
+              </div>
+            </div>
             <div class="row_col">
               <div class="control">
                 <mat-form-field>
                   <input matInput placeholder="Email" formControlName="email" autocomplete="off">
                   <mat-icon matSuffix color='primary'>email</mat-icon>
+                </mat-form-field>
+              </div>
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="Avatar Link" formControlName="imageUrl" autocomplete="off">
+                  <mat-icon matSuffix color='primary'>link</mat-icon>
                 </mat-form-field>
               </div>
             </div>
@@ -53,13 +64,7 @@
             </div>
             <div class="flex_row sign-section">
               <div class='sign-button'>
-                <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !signupForm.valid">Sign
-                  Up</button>
-              </div>
-              <div class="alternative" (click)='toggleSign()'>
-                <div class='prompt'>Or I already have account</div>
-                <div class="icon">
-                  <i class="material-icons">forward</i></div>
+                <button type='submit' mat-stroked-button color="primary" (click)='onSave()' [disabled]="!formEdit.valid">Save</button>
               </div>
             </div>
           </div>

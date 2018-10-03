@@ -30,7 +30,7 @@ export class MetaService {
   ) {}
 
   get clubId() {
-    return this.storageService.getItem(StorageItem.USER_ID);
+    return this.storageService.getItem(StorageItem.CLUB_ID);
   }
 
   get userId() {
@@ -52,7 +52,7 @@ export class MetaService {
     return this.authService.getCurrentUser();
   }
 
-  logout() {
+  signOut() {
     this.authService.signOut();
   }
 

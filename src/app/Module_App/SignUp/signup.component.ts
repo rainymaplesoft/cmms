@@ -12,7 +12,7 @@ import {
   FirebaseDataService,
   IClub
 } from '../../Module_Firebase';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import RouteName from '../../routename';
 import { MetaService } from '../meta.service';
 import { switchMap, tap } from 'rxjs/operators';
@@ -34,8 +34,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private toastr: ToastrService
   ) {
-    const url = this.router.url;
-    this.clubCode = this.metaService.extractClubCode(url);
     this.authService.authState.subscribe(u => {
       this.isLoggedIn = !!u;
     });
@@ -70,14 +68,25 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   init() {
+    this.clubId = this.metaService.getUrlClubId(this.router.url);
     this.sub = this.route.queryParams
       .pipe(
         tap(params => {
           this.clubId = params['clubId'];
         }),
-        switchMap(param => this.metaService.getClubById(this.clubId))
+        switchMap(clubId => {
+          if (!this.clubId) {
+            return of(null);
+          }
+          return this.metaService.getClubById(this.clubId);
+        })
       )
       .subscribe((club: IClub) => {
+        if (!club) {
+          this.router.navigate([RouteName.Home]);
+          console.warn('signup: clubId is null or club is null');
+          return;
+        }
         this.club = club;
         this.clubImage = `url(assets/img/club/club_entry_${
           this.club.clubCode
@@ -122,7 +131,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
         });
       });
   }
-  onLogout() {
+  onSignOut() {
     this.authService.signOut();
   }
 

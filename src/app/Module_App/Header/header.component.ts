@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
   r_signup = RouteName.Sign;
   r_event = RouteName.Event;
   r_clubs = RouteName.ClubSetting;
+  r_user = RouteName.User;
   r_accounts = RouteName.AccountSetting;
   loginBadge = '?';
   sub: Subscription;
@@ -42,28 +43,6 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    /*
-    this.sub = this.route.queryParams.subscribe(params => {
-      this.authService.authState.subscribe(u => {
-        this.isLoggedIn = !!u;
-      });
-      const url = this.router.url;
-      if (url.indexOf('/home') >= 0 || url.indexOf('/setting') >= 0) {
-        this.clubName = 'Sport Center';
-        this.clubId = '';
-        return;
-      }
-      const clubId = params['clubId'];
-      if (!clubId) {
-        this.router.navigate([RouteName.Home]);
-        return;
-      }
-      if (this.clubId !== clubId) {
-        this.clubId = clubId;
-        this.getClubInfo(this.clubId);
-      }
-    });
-    */
     this.authService.authState.subscribe(u => {
       this.isLoggedIn = !!u;
     });
@@ -79,20 +58,25 @@ export class HeaderComponent implements OnInit {
     this.showTimings = this.showTimings === 'hide' ? 'show' : 'hide';
   }
 
-  nav(route: string) {
+  nav(route: string, withClubId: false) {
     this.hideHeaderInfo();
+    const clubId = this.metaService.getUrlClubId(this.router.url);
     if (route) {
       this.r_selected = route;
-      this.router.navigate([route]);
+      if (withClubId) {
+        if (!clubId) {
+          return;
+        }
+        this.router.navigate([route], { queryParams: { clubId: clubId } });
+      } else {
+        this.router.navigate([route]);
+      }
     }
   }
 
-  onLogout() {
-    this.metaService.logout();
+  onSignOut() {
+    this.metaService.signOut();
     this.router.navigate([RouteName.Home]);
-    // this.authService.signOut();
-    // this.eventService.pub(OnEvent.Event_SignOut);
-    // this.metaService.LoggedInUser = null;
   }
 
   toggleMobileMenu() {

@@ -67,13 +67,13 @@
           </div>
         </div>
         <div class='menu_item' *ngIf="isLoggedIn">
-          <div class="icon_wrap" (click)='nav(r_signup)'>
+          <div class="icon_wrap" (click)='nav(r_user,true)'>
             <!-- <i class="material-icons" [matBadge]="loginBadge" matBadgeColor="warn">account_circle</i> -->
             <i class="material-icons">account_circle</i>
           </div>
         </div>
         <div class='menu_item' *ngIf="isLoggedIn">
-          <div class="icon_wrap" (click)='onLogout()'>
+          <div class="icon_wrap" (click)='onSignOut()'>
             <i class="material-icons">exit_to_app</i>
           </div>
         </div>

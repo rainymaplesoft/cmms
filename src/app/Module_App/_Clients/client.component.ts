@@ -66,8 +66,12 @@ export class ClientComponent
       */
     this.originUrl = this.router.url;
     this.clubId = this.metaService.getUrlClubId(this.router.url);
-    if (this.metaService.clubId !== this.clubId) {
-      this.metaService.logout();
+    if (
+      this.clubId &&
+      this.metaService.clubId &&
+      this.metaService.clubId !== this.clubId
+    ) {
+      this.metaService.signOut();
     }
     this.chooseClubPComponent();
     this.showClubMain = true;
