@@ -46,6 +46,13 @@ export class HeaderComponent implements OnInit {
     this.authService.authState.subscribe(u => {
       this.isLoggedIn = !!u;
     });
+    this.router.events
+      .pipe(
+        filter(e => {
+          return !!e['navigationTrigger'];
+        })
+      )
+      .subscribe(params => this.getClubInfo(params));
   }
 
   onShowContact() {
@@ -83,13 +90,14 @@ export class HeaderComponent implements OnInit {
     this.eventService.pub(OnEvent.Event_MobileToggleClicked);
   }
 
-  private getClubInfo(clubId: string) {
+  private getClubInfo(params) {
     this.club = null;
     this.clubName = 'Sport Center';
-    if (!clubId) {
+    const navClubId = this.metaService.getUrlClubId(params['url']);
+    if (!navClubId) {
       return;
     }
-    this.metaService.getClubById(this.clubId).subscribe(club => {
+    this.metaService.getClubById(navClubId).subscribe(club => {
       if (!club) {
         this.router.navigate([RouteName.Home]);
       }

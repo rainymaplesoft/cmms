@@ -43,4 +43,11 @@ export interface IClub {
   phone2?: string;
   mapLink?: string;
   isActive?: boolean;
+  openDates?: Date[];
+}
+
+export interface IBooking {
+  _id?: string;
+  date: Date;
+  isActive?: boolean;
 }

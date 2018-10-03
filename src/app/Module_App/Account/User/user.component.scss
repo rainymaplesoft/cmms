@@ -28,3 +28,22 @@
     height: 60px;
   }
 }
+
+.table-container {
+  display: table;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  .section-img {
+    display: table-cell;
+    width: auto;
+    background-size: cover;
+  }
+  .section-form {
+    display: table-cell;
+    width: 560px;
+    background-color: #ffffff;
+    color: #505e6c;
+  }
+}

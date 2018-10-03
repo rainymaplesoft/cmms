@@ -143,7 +143,7 @@ export class UtilService {
 
   getUrlParam(url, parameter, defaultvalue = '') {
     let urlparameter = defaultvalue;
-    if (url.indexOf(parameter) > -1) {
+    if (url && url.indexOf(parameter) > -1) {
       urlparameter = this.getUrlVars(url)[parameter];
     }
     return urlparameter;

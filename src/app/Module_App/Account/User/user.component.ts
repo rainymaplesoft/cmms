@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { FirebaseDataService } from '../../../Module_Firebase';
 import { MetaService } from '../../meta.service';
 import { StorageService } from '../../../Module_Core/services/storage.service';
+import { Router } from '../../../../../node_modules/@angular/router';
+import RouteName from 'src/app/routename';
 
 @Component({
   selector: 'app-user',
@@ -18,7 +20,8 @@ export class UserComponent implements OnInit {
   formEdit: FormGroup;
   clubId: string;
   userId: string;
-  title = 'Edit User';
+  title = 'Edit My Account';
+  themeImage = `url(assets/img/edit_01.jpg)`;
 
   genders: KeyValue[] = [
     { key: 1, value: 'Male' },
@@ -27,8 +30,7 @@ export class UserComponent implements OnInit {
 
   constructor(
     private dbService: FirebaseDataService,
-    private toastr: ToastrService,
-    private storageService: StorageService,
+    private router: Router,
     private utilService: UtilService,
     private metaService: MetaService,
     private fb: FormBuilder

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ClientBase } from '../client.base';
+import { MetaService } from 'src/app/Module_App';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -7,18 +9,9 @@ import { Router } from '@angular/router';
   templateUrl: 'main-lvbc.component.html',
   styleUrls: ['../client.component.scss']
 })
-export class MainLVBCComponent implements OnInit {
+export class MainLVBCComponent extends ClientBase implements OnInit {
   banner = `assets/img/club/club_banner_LVBC.jpg`;
-  path = '';
-
-  constructor(private router: Router) {}
-
-  ngOnInit() {
-    this.path = this.router.url;
-  }
-
-  onLogin() {
-    const signPath = `${this.path}/sign`;
-    this.router.navigate([signPath]);
+  constructor(router: Router, metaService: MetaService) {
+    super(router, metaService);
   }
 }

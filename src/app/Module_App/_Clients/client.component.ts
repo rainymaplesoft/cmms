@@ -20,6 +20,7 @@ import { MainWIBCComponent } from './WIBC/main-wibc.component';
 import { IUser, IClub } from '../../Module_Firebase';
 import { MetaService } from '../meta.service';
 import { UtilService } from '../../Module_Core/services/util.service';
+import { RouteName } from '../../routename';
 @Component({
   selector: 'app-client',
   templateUrl: 'client.component.html',
@@ -42,7 +43,10 @@ export class ClientComponent
   };
   loggedInUser: IUser;
   originUrl = '';
-  showClubMain = true;
+  isOutletActivated = false;
+  get showClubMain() {
+    return !this.isOutletActivated;
+  }
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -74,12 +78,15 @@ export class ClientComponent
       this.metaService.signOut();
     }
     this.chooseClubPComponent();
-    this.showClubMain = true;
   }
 
   chooseClubPComponent() {
     this.metaService.getClubById(this.clubId).subscribe((club: IClub) => {
       this.cmpType = this.clubTypes[club.clubCode];
+      if (!this.cmpType) {
+        this.router.navigate([RouteName.Home]);
+        return;
+      }
       this.loadClubComponent(this.cmpType);
     });
   }
@@ -92,11 +99,13 @@ export class ClientComponent
     const factory = this.componentFactoryResolver.resolveComponentFactory(
       cmpType
     );
-    this.cmpRef = this.target.createComponent(factory);
+    if (this.target) {
+      this.cmpRef = this.target.createComponent(factory);
+    }
     // this.cmpRef.instance['loggedInUser'] = this.metaService.LoggedInUser;
   }
   onOutletActivate($event) {
-    this.showClubMain = false;
+    this.isOutletActivated = true;
     const outletComponentName = $event.constructor.name;
   }
   onOutletDeactivate($event) {
@@ -104,7 +113,7 @@ export class ClientComponent
     if (this.originUrl !== this.router.url) {
       return;
     }
-    this.showClubMain = true;
+    this.isOutletActivated = false;
     this.chooseClubPComponent();
   }
 

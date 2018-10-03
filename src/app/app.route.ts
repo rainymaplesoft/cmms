@@ -23,6 +23,7 @@ import {
   MainLPBCComponent,
   MainLVBCComponent
 } from './Module_App/_Clients';
+import { FooterComponent } from './Module_App/Footer/footer.component';
 
 // RouteName.DefaultRoute
 /* to avoid any error in production (ng build --prod)
@@ -67,5 +68,6 @@ export const AppComponents: any = [
   ClientComponent,
   MainLPBCComponent,
   MainLVBCComponent,
-  MainWIBCComponent
+  MainWIBCComponent,
+  FooterComponent
 ];
