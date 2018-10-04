@@ -11,6 +11,9 @@ import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { StorageService } from '../Module_Core/services/storage.service';
 import { UtilService } from '../Module_Core';
+import { RouteName } from '../routename';
+import { EventService } from '../Module_Core/services/pubsub.service';
+import { EventName } from './config';
 
 @Injectable()
 export class MetaService {
@@ -24,6 +27,7 @@ export class MetaService {
   constructor(
     private router: Router,
     private utilService: UtilService,
+    private eventService: EventService,
     private authService: FireAuthService,
     private dbService: FirebaseDataService,
     private storageService: StorageService
@@ -54,6 +58,8 @@ export class MetaService {
 
   signOut() {
     this.authService.signOut();
+    this.eventService.pub(EventName.Event_SignOut);
+    this.router.navigate([RouteName.Home]);
   }
 
   getUrlClubId(url: string) {

@@ -11,6 +11,7 @@ export class RouteName {
   static Event = 'event';
   static ClubSetting = 'setting/club';
   static AccountSetting = 'setting/account';
+  static BookingSetting = 'setting/booking';
   static Exception = 'Exception';
 
   static GeoSchoolInfo = 'schoolinfo';

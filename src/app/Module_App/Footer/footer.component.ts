@@ -15,7 +15,7 @@ import { Component, OnInit } from '@angular/core';
                 </div>
             </div>
             <div class="section flex_1">
-                <div class="item">
+                <div class="item terms">
                 <div><a href="#">Privacy Policy</a></div>
                 <div><a href="#">Terms of Use</a></div>
                 </div>
@@ -28,7 +28,7 @@ import { Component, OnInit } from '@angular/core';
         width: 100 %;
         margin-top: 20px;
         padding-top: 20px;
-        background-color: bisque;
+        background-color: rgba(12, 12, 12, 0.8);
         @media (max - width: 780px) {
           flex-direction: column;
         }
@@ -56,6 +56,7 @@ import { Component, OnInit } from '@angular/core';
       }
       .footer .section .item a {
         margin: 0 5px;
+        color: yellowgreen;
       }
     `
   ]

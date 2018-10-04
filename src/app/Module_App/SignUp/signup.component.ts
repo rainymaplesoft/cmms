@@ -16,7 +16,6 @@ import { Observable, Subscription, of } from 'rxjs';
 import RouteName from '../../routename';
 import { MetaService } from '../meta.service';
 import { switchMap, tap } from 'rxjs/operators';
-import { OnEvent } from '../config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -99,6 +98,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
     if (!userInfo.email || !userInfo.password) {
       return;
     }
+    this.authService.signOut();
     const userCredential$ = this.authService
       .signupWithEmailPassword(this.clubId, userInfo)
       .then(v => console.log(v), e => console.log(e));
@@ -113,6 +113,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   onLogin() {
+    this.authService.signOut();
     this.authService
       .login(this.clubId, this.loginInfo.email, this.loginInfo.password)
       .then((user: Observable<IUser>) => {

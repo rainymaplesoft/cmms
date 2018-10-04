@@ -36,6 +36,7 @@ export interface IClub {
   _id?: string; // _id is document id of firebase document
   clubName: string;
   clubCode: string;
+  maxAmount?: number;
   contactName?: string;
   address?: string;
   email?: string;
@@ -43,7 +44,12 @@ export interface IClub {
   phone2?: string;
   mapLink?: string;
   isActive?: boolean;
-  openDates?: Date[];
+  openDays?: IOpenDay[];
+}
+
+export interface IOpenDay {
+  day: number; // Sunday=>0 ...
+  isActive?: boolean;
 }
 
 export interface IBooking {

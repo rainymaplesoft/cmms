@@ -1,3 +1,4 @@
+import { KeyValue } from '../Module_Core/enums';
 export enum ClubClient {
   LPBC = 'LPBC',
   LVBC = 'LVBC',
@@ -11,7 +12,7 @@ export enum ClaimType {
   Guest = 'Guest'
 }
 
-export enum OnEvent {
+export enum EventName {
   Event_HideClubMainContent = 'Event_HideClubMainContent',
   Event_MobileToggleClicked = 'Event_MobileToggleClicked',
   Event_MenuItemClicked = 'Event_MenuItemClicked',

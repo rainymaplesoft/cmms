@@ -4,18 +4,19 @@ import {
   Input,
   OnChanges,
   EventEmitter,
-  Output
+  Output,
+  ViewChild
 } from '@angular/core';
 import { FirebaseDataService } from '../../../Module_Firebase';
 import { CollectionPath, IClub } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import * as firebase from 'firebase';
 import { DocumentReference } from '@angular/fire/firestore';
-import { ToastrService } from '../../../Module_Core';
+import { ToastrService, UtilService } from '../../../Module_Core';
 import { ClubValidator } from '../club.validator';
-import { toBase64String } from '../../../../../node_modules/@angular/compiler/src/output/source_map';
 import { tap } from 'rxjs/operators';
+import { KeyValue } from '../../../Module_Core/enums';
+import { DaySelectorComponent } from 'src/app/Module_App/_shared';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -28,11 +29,16 @@ export class ClubEditComponent implements OnInit, OnChanges {
   clubId: string;
   @Output()
   showList = new EventEmitter<boolean>();
+  @ViewChild(DaySelectorComponent)
+  daySelector: DaySelectorComponent;
 
   hideEdit = false;
   disableCode = false;
   club: Observable<IClub>;
   clubForm: FormGroup;
+  selectedDays = '';
+  dayChanged = false;
+
   get docPathClub() {
     return `${CollectionPath.CLUBS}/${this.clubId}`;
   }
@@ -49,12 +55,16 @@ export class ClubEditComponent implements OnInit, OnChanges {
 
   constructor(
     private dbService: FirebaseDataService,
-    private toastr: ToastrService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private util: UtilService
   ) {}
 
   ngOnInit() {}
   ngOnChanges() {}
+
+  onDayChanged(e) {
+    this.dayChanged = true;
+  }
 
   onSubmit() {
     this.onSaveClub();
@@ -77,6 +87,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
       if (this.disableCode) {
         this.clubCode.disable();
       }
+      this.selectedDays = !!this.openDays.value ? this.openDays.value : '';
     });
   }
 
@@ -85,6 +96,8 @@ export class ClubEditComponent implements OnInit, OnChanges {
       console.log('form is not valid, cannot save to database');
       return;
     }
+    const selectedDays = this.daySelector.selectedDays;
+    this.openDays.setValue(selectedDays);
     const data: IClub = this.clubForm.value;
     if (this.clubId) {
       this.updateClub(data);
@@ -128,12 +141,14 @@ export class ClubEditComponent implements OnInit, OnChanges {
         [Validators.pattern('^[A-Z]{4}$')],
         [ClubValidator.clubCode(this.dbService.afs, this.clubId)]
       ],
+      maxAmount: [20, Validators.required],
       email: ['', Validators.required],
       contactName: ['', Validators.required],
       address: [''],
       phone1: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       phone2: [''],
       mapLink: [''],
+      openDays: [''],
       isActive: [true, Validators.required]
     });
     this.hideEdit = false;
@@ -151,6 +166,10 @@ export class ClubEditComponent implements OnInit, OnChanges {
     return this.clubForm.get('email');
   }
 
+  get maxAmount() {
+    return this.clubForm.get('maxAmount');
+  }
+
   get contactName() {
     return this.clubForm.get('contactName');
   }
@@ -165,6 +184,10 @@ export class ClubEditComponent implements OnInit, OnChanges {
 
   get isActive() {
     return this.clubForm.get('isActive');
+  }
+
+  get openDays() {
+    return this.clubForm.get('openDays');
   }
   //#endregion
 }

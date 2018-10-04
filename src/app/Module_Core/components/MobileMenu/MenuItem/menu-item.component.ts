@@ -9,7 +9,7 @@ import {
 } from '@angular/animations';
 import { EventService } from '../../../services';
 import { rotateAnimate, pullUpDownAnimate } from '../../../animation';
-import { OnEvent } from '../../../../Module_App/config';
+import { EventName } from '../../../../Module_App/config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -31,7 +31,7 @@ export class MenuItemComponent implements OnInit {
 
   onItemClick() {
     this.eventService.pub<string>(
-      OnEvent.Event_MenuItemClicked,
+      EventName.Event_MenuItemClicked,
       this.menuItem.action
     );
   }

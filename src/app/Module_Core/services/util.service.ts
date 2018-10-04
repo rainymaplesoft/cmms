@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
+import { KeyValue } from '../enums';
 
 export interface IUtilService {
   isNarrowView(): boolean;
@@ -8,6 +9,7 @@ export interface IUtilService {
   isNumber(value: any, decimalNumber: number): boolean;
   isNullOrEmptyObject(obj): boolean;
   sanitizeUrl(url): string;
+  weekDays(): KeyValue[];
 }
 export interface IGetLeftResult {
   textLeft: string;
@@ -155,6 +157,18 @@ export class UtilService {
       (m, key, value) => (vars[key] = value)
     );
     return vars;
+  }
+
+  get weekDays(): KeyValue[] {
+    return [
+      { key: 0, value: 'Sunday' },
+      { key: 1, value: 'Monday' },
+      { key: 2, value: 'Tuesday' },
+      { key: 3, value: 'Wednesday' },
+      { key: 4, value: 'Thursday' },
+      { key: 5, value: 'Friday' },
+      { key: 6, value: 'Saturday' }
+    ];
   }
 
   //#region private helper functions */

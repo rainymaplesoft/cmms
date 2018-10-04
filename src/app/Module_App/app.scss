@@ -54,6 +54,7 @@ body {
     flex-direction: column;
     @media (min-width: 1200px) {
       align-items: center;
+      padding: 2em;
     }
     @media (max-width: $cellphone_width) {
       width: 100%;
@@ -64,17 +65,17 @@ body {
       flex-direction: column;
       align-items: center;
       padding: 1em;
-      min-width: 30em;
-      max-width: 30em;
+      // min-width: 30em;
+      // max-width: 30em;
       min-height: 3em;
       @media (max-width: $cellphone_width) {
         min-width: 0;
         max-width: none;
         width: 100%;
       }
-      mat-select {
-        min-width: 18em;
-      }
+      // mat-select {
+      //   min-width: 18em;
+      // }
       &.max_line {
         padding-top: 1em;
         max-width: 100%;
@@ -84,6 +85,7 @@ body {
 
   .row_col_sm {
     display: flex;
+    flex: 1;
     padding: 0 1em;
     .control {
       max-width: none;
@@ -155,10 +157,10 @@ body {
   }
 }
 
-mat-select {
-  max-width: 20em;
-  min-width: 6em;
-}
+// mat-select {
+//   max-width: 20em;
+//   min-width: 6em;
+// }
 
 mat-form-field {
   width: 100%;

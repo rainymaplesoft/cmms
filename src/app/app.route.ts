@@ -24,6 +24,7 @@ import {
   MainLVBCComponent
 } from './Module_App/_Clients';
 import { FooterComponent } from './Module_App/Footer/footer.component';
+import { DaySelectorComponent } from 'src/app/Module_App/_shared';
 
 // RouteName.DefaultRoute
 /* to avoid any error in production (ng build --prod)
@@ -69,5 +70,6 @@ export const AppComponents: any = [
   MainLPBCComponent,
   MainLVBCComponent,
   MainWIBCComponent,
-  FooterComponent
+  FooterComponent,
+  DaySelectorComponent
 ];

@@ -306,9 +306,10 @@ div {
 .flex_row_col {
   display: flex;
   justify-content: flex-start;
+  width: 100%;
   @media (max-width: 959px) {
     flex-direction: column;
-    align-items: center;
+    // align-items: center;
   }
 }
 

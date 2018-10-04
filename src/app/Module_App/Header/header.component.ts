@@ -7,7 +7,7 @@ import { take, tap, map, filter } from 'rxjs/operators';
 import { IClub } from '../../Module_Firebase/models';
 import { Subscription } from 'rxjs';
 import { MetaService } from '../meta.service';
-import { OnEvent } from '../config';
+import { EventName } from '../config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
   r_clubs = RouteName.ClubSetting;
   r_user = RouteName.User;
   r_accounts = RouteName.AccountSetting;
+  r_bookings = RouteName.AccountSetting;
   loginBadge = '?';
   sub: Subscription;
 
@@ -37,22 +38,30 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private eventService: EventService,
-    private authService: FireAuthService,
     private utilService: UtilService,
     private metaService: MetaService
   ) {}
 
   ngOnInit() {
-    this.authService.authState.subscribe(u => {
-      this.isLoggedIn = !!u;
-    });
     this.router.events
       .pipe(
         filter(e => {
           return !!e['navigationTrigger'];
         })
       )
-      .subscribe(params => this.getClubInfo(params));
+      .subscribe(params => {
+        this.getClubInfo(params);
+        this.checkLogin();
+      });
+    this.eventService
+      .on(EventName.Event_SignOut)
+      .subscribe(e => this.checkLogin());
+  }
+
+  private checkLogin() {
+    this.metaService.loggedInUser.subscribe(u => {
+      this.isLoggedIn = !!u;
+    });
   }
 
   onShowContact() {
@@ -87,7 +96,7 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleMobileMenu() {
-    this.eventService.pub(OnEvent.Event_MobileToggleClicked);
+    this.eventService.pub(EventName.Event_MobileToggleClicked);
   }
 
   private getClubInfo(params) {

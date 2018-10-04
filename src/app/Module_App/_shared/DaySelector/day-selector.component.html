@@ -1,0 +1,5 @@
+<div class="day-checkbox">
+  <div class="day" *ngFor="let dayName of dayNames; index as i">
+    <mat-checkbox [(ngModel)]="selections[i]" (change)='onChange()'>{{dayName}}</mat-checkbox>
+  </div>
+</div>
