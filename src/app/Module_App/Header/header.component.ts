@@ -53,6 +53,7 @@ export class HeaderComponent implements OnInit {
           clubCode: '',
           mapLink: ''
         };
+        this.clubName = this.navClub.clubName;
         this.navClub.mapLink = this.navClub.mapLink
           ? this.utilService.sanitizeUrl(this.navClub.mapLink)
           : '';

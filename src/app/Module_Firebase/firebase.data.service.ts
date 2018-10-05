@@ -108,6 +108,17 @@ export class FirebaseDataService {
     });
   }
 
+  addDocumentWithId<T>(ref: string, id: string, data) {
+    this.db
+      .collection(ref)
+      .doc(id)
+      .set({
+        ...data,
+        updatedAt: this.timestamp,
+        createdAt: this.timestamp
+      });
+  }
+
   updateDocument<T>(docPath: string, data): Promise<boolean> {
     const doc = this.db.doc<T>(docPath);
     return doc
@@ -119,7 +130,7 @@ export class FirebaseDataService {
     return this.db
       .doc(ref)
       .delete()
-      .then(i => this.actionSucceeded(), i => this.actionFailed());
+      .then(i => true, i => false);
   }
 
   /* https://angularfirebase.com/lessons/firestore-advanced-usage-angularfire/

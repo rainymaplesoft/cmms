@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from 'src/app/Module_Core';
-import { MetaService } from 'src/app/Module_App/meta.service';
 import { IMetaInfo, IUser } from 'src/app/Module_Firebase';
 import { EventName } from '../../config';
-import RouteName from 'src/app/routename';
 import { IClub, IBooking } from '../../../Module_Firebase/models';
 import { BookingService } from '../booking.service';
 import { tap, take } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-booking',
   template: `
       <div class="booking-list" *ngIf='bookingList'>
         <div class="li"  *ngFor='let booking of bookingList; index as i;'>
-          <booing-widget [booking]='booking'></booing-widget>
+          <booing-widget [booking]='booking' [loggedinUser]='user'></booing-widget>
         </div>
       </div>
       `,
@@ -22,7 +19,9 @@ import { of, Observable } from 'rxjs';
     `
       .booking-list {
         display: flex;
-        @media (max-width: 767.8px) {
+      }
+      @media (max-width: 900px) {
+        .booking-list {
           flex-direction: column;
         }
       }
@@ -73,6 +72,9 @@ export class BookingComponent implements OnInit {
                 : 0;
           })
           .slice(0, 2);
+        for (const booking of this.bookingList) {
+          booking.maxPlayers = this.navClub.maxPlayers;
+        }
       });
   }
 
@@ -97,7 +99,14 @@ export class BookingComponent implements OnInit {
         return a > b ? 1 : a < b ? -1 : 0;
       });
     this.bookings = bb.slice(0, 2).map(d => {
-      return { dateName: d.toDateString(), bookingDate: d, isActive: true };
+      const newBooking: IBooking = {
+        dateName: d.toDateString(),
+        bookingDate: d,
+        isActive: true,
+        clubId: this.navClub._id,
+        maxPlayers: this.navClub.maxPlayers
+      };
+      return newBooking;
     });
   }
 
@@ -110,7 +119,7 @@ export class BookingComponent implements OnInit {
   private addBookings() {
     for (const booking of this.bookings) {
       this.bookingService
-        .getBookingsByName(this.clubId, booking.dateName)
+        .getBookingsByDateName(this.clubId, booking.dateName)
         .subscribe(r => {
           if (!r || r.length === 0) {
             this.bookingService.addBooking(this.navClub._id, booking);

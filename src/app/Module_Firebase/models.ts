@@ -30,6 +30,33 @@ export interface IUser {
   lastName?: string;
   imageUrl?: string;
   loggedInClubId?: string;
+  // => collection: bookings
+}
+
+export interface IClub {
+  _id?: string; // _id is document id of firebase document
+  clubName: string;
+  clubCode: string;
+  contactName?: string;
+  address?: string;
+  email?: string;
+  phone1?: string;
+  phone2?: string;
+  mapLink?: string;
+  isActive?: boolean;
+  openDays?: string;
+  maxPlayers?: number;
+  // => collection: users
+}
+
+export interface IBooking {
+  _id?: string;
+  clubId: string;
+  dateName: string;
+  bookingDate: Date;
+  isActive?: boolean;
+  maxPlayers?: number;
+  // => collection: users
 }
 
 export interface IRole {
@@ -39,30 +66,7 @@ export interface IRole {
   superUser?: boolean;
 }
 
-export interface IClub {
-  _id?: string; // _id is document id of firebase document
-  clubName: string;
-  clubCode: string;
-  maxAmount?: number;
-  contactName?: string;
-  address?: string;
-  email?: string;
-  phone1?: string;
-  phone2?: string;
-  mapLink?: string;
-  isActive?: boolean;
-  openDays?: string;
-}
-
 export interface IOpenDay {
   day: number; // Sunday=>0 ...
   isActive?: boolean;
-}
-
-export interface IBooking {
-  _id?: string;
-  dateName: string;
-  bookingDate: Date;
-  isActive?: boolean;
-  users?: IUser[];
 }

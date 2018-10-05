@@ -141,7 +141,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
         [Validators.pattern('^[A-Z]{4}$')],
         [ClubValidator.clubCode(this.dbService.afs, this.clubId)]
       ],
-      maxAmount: [20, Validators.required],
+      maxPlayers: [20, Validators.required],
       email: ['', Validators.required],
       contactName: ['', Validators.required],
       address: [''],
@@ -166,8 +166,8 @@ export class ClubEditComponent implements OnInit, OnChanges {
     return this.clubForm.get('email');
   }
 
-  get maxAmount() {
-    return this.clubForm.get('maxAmount');
+  get maxPlayers() {
+    return this.clubForm.get('maxPlayers');
   }
 
   get contactName() {
