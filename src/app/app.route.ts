@@ -29,6 +29,10 @@ import {
   BookingWidgetComponent,
   BookingComponent
 } from 'src/app/Module_App/_shared';
+import {
+  BookedPlaysComponent,
+  BookingListComponent
+} from './Module_App/Booking';
 
 // RouteName.DefaultRoute
 /* to avoid any error in production (ng build --prod)
@@ -41,6 +45,11 @@ export const AppRoutes: Route[] = [
   { path: 'home', component: LandingComponent },
   { path: 'setting/club', component: ClubListComponent, canActivate: [] },
   { path: 'setting/account', component: AccountListComponent, canActivate: [] },
+  {
+    path: 'setting/booking',
+    component: BookingListComponent,
+    canActivate: []
+  },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
   {
     path: 'club',
@@ -77,5 +86,7 @@ export const AppComponents: any = [
   FooterComponent,
   DaySelectorComponent,
   BookingComponent,
-  BookingWidgetComponent
+  BookingWidgetComponent,
+  BookingListComponent,
+  BookedPlaysComponent
 ];

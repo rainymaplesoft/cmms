@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
   r_clubs = RouteName.ClubSetting;
   r_user = RouteName.User;
   r_accounts = RouteName.AccountSetting;
-  r_bookings = RouteName.AccountSetting;
+  r_bookings = RouteName.BookingSetting;
   loginBadge = '?';
   sub: Subscription;
 
