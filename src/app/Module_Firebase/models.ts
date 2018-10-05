@@ -1,6 +1,13 @@
+export interface IMetaInfo {
+  navClub: IClub;
+  loggedinUser: IUser;
+  // loggedInClub: IClub;
+}
+
 export enum CollectionPath {
   CLUBS = 'clubs',
-  USERS = 'users'
+  USERS = 'users',
+  BOOKINGS = 'bookings'
 }
 
 export enum StorageItem {
@@ -44,7 +51,7 @@ export interface IClub {
   phone2?: string;
   mapLink?: string;
   isActive?: boolean;
-  openDays?: IOpenDay[];
+  openDays?: string;
 }
 
 export interface IOpenDay {
@@ -54,6 +61,8 @@ export interface IOpenDay {
 
 export interface IBooking {
   _id?: string;
-  date: Date;
+  dateName: string;
+  bookingDate: Date;
   isActive?: boolean;
+  users?: IUser[];
 }

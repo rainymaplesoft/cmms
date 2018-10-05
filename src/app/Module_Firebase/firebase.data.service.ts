@@ -78,8 +78,22 @@ export class FirebaseDataService {
     return col;
   }
 
-  getDocument<T>(docPath: string) {
+  getSimpleDocument<T>(docPath: string) {
     const doc = this.db.doc<T>(docPath);
+    return doc;
+  }
+
+  getDocument<T>(docPath: string) {
+    const doc = this.db
+      .doc<T>(docPath)
+      .snapshotChanges()
+      .pipe(
+        map(action => {
+          const data = action.payload.data() as T;
+          data['_id'] = action.payload.id;
+          return data;
+        })
+      );
     return doc;
   }
 

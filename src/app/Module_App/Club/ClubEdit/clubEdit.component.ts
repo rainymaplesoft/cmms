@@ -74,7 +74,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
 
   private getClubById() {
     this.club = this.dbService
-      .getDocument<IClub>(this.docPathClub)
+      .getSimpleDocument<IClub>(this.docPathClub)
       .valueChanges()
       .pipe(
         tap((club: IClub) => {

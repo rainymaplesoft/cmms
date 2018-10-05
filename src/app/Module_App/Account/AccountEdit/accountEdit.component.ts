@@ -35,7 +35,6 @@ export class AccountEditComponent implements OnInit, OnChanges {
 
   constructor(
     private dbService: FirebaseDataService,
-    private toastr: ToastrService,
     private utilService: UtilService,
     private metaService: MetaService,
     private fb: FormBuilder
@@ -66,7 +65,7 @@ export class AccountEditComponent implements OnInit, OnChanges {
 
   private getRecordById() {
     this.user = this.dbService
-      .getDocument<IUser>(this.userDocPath)
+      .getSimpleDocument<IUser>(this.userDocPath)
       .valueChanges();
     this.buildForm();
     this.user.subscribe(user => {

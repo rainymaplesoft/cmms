@@ -48,7 +48,7 @@ export class UserComponent implements OnInit {
 
   private getRecordById() {
     this.user = this.dbService
-      .getDocument<IUser>(this.userDocPath)
+      .getSimpleDocument<IUser>(this.userDocPath)
       .valueChanges();
     this.buildForm();
     this.user.subscribe(user => {

@@ -101,7 +101,21 @@ export class SignUpComponent implements OnInit, OnDestroy {
     this.authService.signOut();
     const userCredential$ = this.authService
       .signupWithEmailPassword(this.clubId, userInfo)
-      .then(v => console.log(v), e => console.log(e));
+      .then((user: Observable<IUser>) => {
+        user.subscribe(u => {
+          if (u) {
+            this.loggedInUser = u;
+            this.loggedInUser.loggedInClubId = this.clubId;
+            // this.metaService.LoggedInUser = u;
+            // navigate to club page after login successfully
+            this.router.navigate([RouteName.Club], {
+              queryParams: { clubId: this.clubId }
+            });
+          } else {
+            this.toastr.error('Failed to signup to this club');
+          }
+        });
+      });
     const aa = 1;
     // todo: navigate to club
   }

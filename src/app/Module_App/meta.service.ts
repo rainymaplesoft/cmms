@@ -5,15 +5,17 @@ import {
   IClub,
   CollectionPath,
   IUser,
-  StorageItem
+  StorageItem,
+  IMetaInfo
 } from '../Module_Firebase';
 import { Observable, of } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { StorageService } from '../Module_Core/services/storage.service';
 import { UtilService } from '../Module_Core';
 import { RouteName } from '../routename';
 import { EventService } from '../Module_Core/services/pubsub.service';
 import { EventName } from './config';
+import { filter, switchMap, tap, take, delay } from 'rxjs/operators';
 
 @Injectable()
 export class MetaService {
@@ -21,7 +23,7 @@ export class MetaService {
   private _clubId: string;
   _loggedInUser: IUser;
   navClubCode: string;
-  navigateClub: IClub;
+  _navClub: IClub;
   authState: Observable<firebase.User>;
 
   constructor(
@@ -31,7 +33,63 @@ export class MetaService {
     private authService: FireAuthService,
     private dbService: FirebaseDataService,
     private storageService: StorageService
-  ) {}
+  ) {
+    this.setEvents();
+  }
+
+  setEvents() {
+    const event$ = this.router.events.pipe(
+      filter(e => {
+        if (e instanceof NavigationStart) {
+          console.log('navigate caught!');
+        }
+        return e instanceof NavigationStart;
+        // return !!e['navigationTrigger'];
+      })
+      // take(1)
+    );
+    const navClub$ = event$.pipe(
+      switchMap(event => {
+        const navClubId = this.getUrlClubId(event['url']);
+        if (!navClubId) {
+          return of(null);
+        }
+        return this.getClubById(navClubId);
+      })
+    );
+    const user$ = navClub$.pipe(
+      switchMap(e => {
+        this._navClub = e;
+        return this.authService.getCurrentUser();
+      }),
+      delay(200)
+    );
+    user$.subscribe(u => {
+      this._loggedInUser = u;
+      const metaInfo: IMetaInfo = {
+        navClub: this._navClub,
+        loggedinUser: this._loggedInUser
+      };
+      this.eventService.pub<IMetaInfo>(
+        EventName.Event_MetaInfoChanged,
+        metaInfo
+      );
+    });
+
+    this.eventService.on(EventName.Event_SignOut).subscribe(e =>
+      this.loggedInUser.subscribe((u: IUser) => {
+        this._loggedInUser = u;
+        const metaInfo: IMetaInfo = {
+          navClub: this._navClub,
+          loggedinUser: this._loggedInUser
+        };
+        this.eventService.pub<IMetaInfo>(
+          EventName.Event_MetaInfoChanged,
+          metaInfo
+        );
+      })
+    );
+  }
 
   get clubId() {
     return this.storageService.getItem(StorageItem.CLUB_ID);
@@ -68,7 +126,7 @@ export class MetaService {
 
   getClubById(clubId: string) {
     const path = `${CollectionPath.CLUBS}/${clubId}`;
-    const club = this.dbService.getDocument<IClub>(path).valueChanges();
+    const club = this.dbService.getDocument<IClub>(path);
     return club;
   }
 

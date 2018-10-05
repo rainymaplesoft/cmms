@@ -31,11 +31,11 @@ export class ClubSelectComponent implements OnInit {
   }
 
   nav() {
-    this.metaService.navigateClub = {
-      _id: this.club._id,
-      clubName: this.club.clubName,
-      clubCode: this.club.clubCode
-    };
+    // this.metaService.navigateClub = {
+    //   _id: this.club._id,
+    //   clubName: this.club.clubName,
+    //   clubCode: this.club.clubCode
+    // };
     // const path = `${RouteName.Club}/${this.club.clubCode.toLowerCase()}`;
     const path = `${RouteName.Club}`;
     this.router.navigate([path], { queryParams: { clubId: this.club._id } });

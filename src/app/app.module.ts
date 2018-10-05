@@ -17,6 +17,11 @@ import {
   MainLVBCComponent,
   MainWIBCComponent
 } from './Module_App/_Clients';
+import {
+  BookingService,
+  ClubService,
+  AccountService
+} from './Module_App/_shared';
 
 @NgModule({
   declarations: AppComponents,
@@ -37,7 +42,7 @@ import {
     RouterModule.forRoot(AppRoutes)
   ],
   entryComponents: [MainLPBCComponent, MainLVBCComponent, MainWIBCComponent],
-  providers: [MetaService],
+  providers: [MetaService, BookingService, ClubService, AccountService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

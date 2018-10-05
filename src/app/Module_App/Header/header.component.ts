@@ -2,12 +2,11 @@ import { Component, OnInit, Host } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import RouteName from '../../routename';
 import { EventService, UtilService } from '../../Module_Core';
-import { FireAuthService } from '../../Module_Firebase';
-import { take, tap, map, filter } from 'rxjs/operators';
-import { IClub } from '../../Module_Firebase/models';
+import { IClub, IMetaInfo } from '../../Module_Firebase/models';
 import { Subscription } from 'rxjs';
 import { MetaService } from '../meta.service';
 import { EventName } from '../config';
+import { IUser } from 'src/app/Module_Firebase';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -19,7 +18,7 @@ export class HeaderComponent implements OnInit {
   showContact = 'hide';
   showTimings = 'hide';
   isLoggedIn = false;
-  club: IClub;
+  navClub: IClub;
   clubId = '';
   clubName = 'Sport Center';
 
@@ -36,32 +35,28 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private eventService: EventService,
     private utilService: UtilService,
     private metaService: MetaService
   ) {}
 
   ngOnInit() {
-    this.router.events
-      .pipe(
-        filter(e => {
-          return !!e['navigationTrigger'];
-        })
-      )
-      .subscribe(params => {
-        this.getClubInfo(params);
-        this.checkLogin();
-      });
     this.eventService
-      .on(EventName.Event_SignOut)
-      .subscribe(e => this.checkLogin());
-  }
-
-  private checkLogin() {
-    this.metaService.loggedInUser.subscribe(u => {
-      this.isLoggedIn = !!u;
-    });
+      .on<IMetaInfo>(EventName.Event_MetaInfoChanged)
+      .subscribe((metaInfo: IMetaInfo) => {
+        this.isLoggedIn = !!metaInfo.loggedinUser;
+        // if (!metaInfo.navClub) {
+        //   this.router.navigate([RouteName.Home]);
+        // }
+        this.navClub = metaInfo.navClub || {
+          clubName: 'Sport Center',
+          clubCode: '',
+          mapLink: ''
+        };
+        this.navClub.mapLink = this.navClub.mapLink
+          ? this.utilService.sanitizeUrl(this.navClub.mapLink)
+          : '';
+      });
   }
 
   onShowContact() {
@@ -74,7 +69,7 @@ export class HeaderComponent implements OnInit {
     this.showTimings = this.showTimings === 'hide' ? 'show' : 'hide';
   }
 
-  nav(route: string, withClubId: false) {
+  nav(route: string, withClubId?: false) {
     this.hideHeaderInfo();
     const clubId = this.metaService.getUrlClubId(this.router.url);
     if (route) {
@@ -97,25 +92,6 @@ export class HeaderComponent implements OnInit {
 
   toggleMobileMenu() {
     this.eventService.pub(EventName.Event_MobileToggleClicked);
-  }
-
-  private getClubInfo(params) {
-    this.club = null;
-    this.clubName = 'Sport Center';
-    const navClubId = this.metaService.getUrlClubId(params['url']);
-    if (!navClubId) {
-      return;
-    }
-    this.metaService.getClubById(navClubId).subscribe(club => {
-      if (!club) {
-        this.router.navigate([RouteName.Home]);
-      }
-      this.club = club;
-      this.clubName = this.club.clubName;
-      this.club.mapLink = this.club.mapLink
-        ? this.utilService.sanitizeUrl(this.club.mapLink)
-        : '';
-    });
   }
 
   private hideHeaderInfo() {
