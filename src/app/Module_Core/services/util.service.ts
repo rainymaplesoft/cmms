@@ -10,6 +10,7 @@ export interface IUtilService {
   isNullOrEmptyObject(obj): boolean;
   sanitizeUrl(url): string;
   weekDays(): KeyValue[];
+  sort(): any[];
 }
 export interface IGetLeftResult {
   textLeft: string;
@@ -118,6 +119,24 @@ export class UtilService {
       }
     }
     return obj;
+  }
+
+  public sort(list: any[], prop?: string, direction?: string) {
+    // direction = 'desc'
+    if (prop) {
+      return list.sort((a, b) => {
+        if (!direction) {
+          return a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0;
+        } else {
+          return a[prop] < b[prop] ? 1 : a[prop] > b[prop] ? -1 : 0;
+        }
+      });
+    }
+    if (!direction) {
+      return list.sort((a, b) => (a > b ? 1 : a < b ? -1 : 0));
+    } else {
+      list.sort((a, b) => (a < b ? 1 : a > b ? -1 : 0));
+    }
   }
 
   public keysToUpperCase(obj) {

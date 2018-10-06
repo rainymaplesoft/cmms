@@ -120,11 +120,11 @@ export const fadeOutAnimation =
 export const slideUpDownAnimation = trigger('slideUpDownAnimation', [
   transition(':enter', [
     style({ height: 0 }),
-    animate('200ms ease-in', style({ height: '*' }))
+    animate('300ms ease-in', style({ height: '*' }))
   ]),
   transition(':leave', [
     style({ height: '*' }),
-    animate('200ms ease-out', style({ height: 0 }))
+    animate('300ms ease-out', style({ height: 0 }))
   ])
 ]);
 

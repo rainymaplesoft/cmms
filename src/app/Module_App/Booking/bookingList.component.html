@@ -1,61 +1,57 @@
 <view-header [title]='title'></view-header>
 <div class="page_view">
-    <div class='page_content'>
-        <div class="selection">
-            <form>
-                <div class="selectClub">
-                    <mat-form-field style="width: 320px;">
-                        <mat-select placeholder="Select Club" (selectionChange)='onChangeClub(club)' [(ngModel)]='club'
-                            name='club'>
-                            <mat-option *ngFor="let club of clubs" [value]="club">
-                                {{club.clubName}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-            </form>
+  <div class='page_content'>
+    <div class="selection">
+      <form>
+        <div class="selectClub">
+          <mat-form-field style="width: 320px;">
+            <mat-select placeholder="Select Club" (selectionChange)='onChangeClub(club)' [(ngModel)]='club' name='club'>
+              <mat-option *ngFor="let club of clubs" [value]="club">
+                {{club.clubName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-        <div class="record_table" [ngClass]='{"hide_list":!showListSection}'>
-            <div class='header'>
-                <div class="t_col flex_3">Date</div>
-                <div class="t_col flex_2 mobile_hide">Max Player Amount</div>
-                <div class="t_col flex_1">Acitve</div>
-                <div class="t_col control">
-                    <div class="indicator">
-                        <!-- <div [@rotateAnimate]='arrowState' (click)='onArrowClick()'>
-                            <mat-icon inline='true'>keyboard_arrow_right</mat-icon>
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-            <div class="table_content" [@pullUpDownAnimate]='tableContentState'>
-                <div class='t_row' *ngFor="let booking of bookingList; index as i; last as islast" [ngClass]='{hideByPage:hideByPage(i)}'
-                    (click)='onRecordClick(booking)'>
-                    <div class="t_col flex_3">{{booking.dateName }}</div>
-                    <div class="t_col flex_2 mobile_hide">{{ booking.maxPlayers }}</div>
-                    <div class="t_col flex_1">
-                        <div class="checkbox" *ngIf="booking.isActive">
-                            <mat-icon inline='true'>done</mat-icon>
-                        </div>
-                    </div>
-                    <div class="t_col control">
-                        <div class="icon">
-                            <div [@rotateAnimate]='arrowState' (click)='onArrowClick()'>
-                                <mat-icon inline='true'>keyboard_arrow_right</mat-icon>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer">
-                    <div class="pagination">
-                        <mat-paginator [length]="pageConfig.length" [pageSize]="pageConfig.pageSize" [pageSizeOptions]="pageConfig.pageSizeOptions"
-                            (page)="onPageChange($event)"></mat-paginator>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="account_edit">
-            <!-- <account-edit [clubId]='clubId' (showList)='showList()'></account-edit> -->
-        </div>
+      </form>
     </div>
+    <div class="record_table" [ngClass]='{"hide_list":!showListSection}'>
+      <div class='header'>
+        <div class="t_col flex_3">Date</div>
+        <div class="t_col flex_2 mobile_hide">Max Player Amount</div>
+        <div class="t_col flex_1">Acitve</div>
+        <div class="t_col control">
+          <div class="indicator">
+          </div>
+        </div>
+      </div>
+      <div class="table_content">
+        <div class='t_row' *ngFor="let booking of bookingList; index as i; last as islast" [ngClass]='{hideByPage:hideByPage(i)}'
+          (click)='onRecordClick(booking)'>
+          <div class="row-section">
+            <div class="t_col flex_3">{{booking.dateName }}</div>
+            <div class="t_col flex_2 mobile_hide">{{ booking.maxPlayers }}</div>
+            <div class="t_col flex_1">
+              <div class="checkbox" *ngIf="booking.isActive">
+                <mat-icon inline='true'>done</mat-icon>
+              </div>
+            </div>
+            <div class="t_col control">
+            </div>
+          </div>
+          <div class="section-detail" [@pullUpDownAnimate]='chipState[booking._id]'>
+            <booked-players [bookingId]='booking._id' [selectedBookingId]='selectedBookingId' [bookedPlayers]='bookedPlayers'></booked-players>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="pagination">
+            <mat-paginator [length]="pageConfig.length" [pageSize]="pageConfig.pageSize" [pageSizeOptions]="pageConfig.pageSizeOptions"
+              (page)="onPageChange($event)"></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section-detail">
+
+    </div>
+  </div>
 </div>

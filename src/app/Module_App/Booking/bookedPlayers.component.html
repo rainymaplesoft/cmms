@@ -1,0 +1,6 @@
+<div class='player-chip'>
+  <mat-chip-list>
+    <mat-chip [ngClass]="{member: player.isMember}" *ngFor="let player of players">{{player.firstName}}
+      {{player.lastName}}</mat-chip>
+  </mat-chip-list>
+</div>

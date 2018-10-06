@@ -9,7 +9,11 @@ import {
 import { MetaService } from 'src/app/Module_App/meta.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { rotateAnimate, pullUpDownAnimate } from '../../Module_Core';
+import {
+  rotateAnimate,
+  pullUpDownAnimate,
+  UtilService
+} from '../../Module_Core';
 import { PageEvent } from '@angular/material';
 import { BookingService } from '../_shared';
 
@@ -25,12 +29,14 @@ export class BookingListComponent implements OnInit {
   clubs: IClub[];
   club: IClub;
   bookingList: IBooking[];
+  bookedPlayers: IUser[];
+  selectedBookingId: string;
   showListSection = true;
   recordCount = 0;
   title = 'Bookings';
   selectedRecordId = '';
   arrowState = 'right'; // right/down
-  tableContentState = 'show'; // hide/show
+  chipState = {}; // hide/show
   get pageLength() {
     return this.recordCount;
   }
@@ -45,7 +51,7 @@ export class BookingListComponent implements OnInit {
   constructor(
     private dbService: FirebaseDataService,
     private bookingService: BookingService,
-    private metaServie: MetaService
+    private util: UtilService
   ) {}
   ngOnInit() {
     this.getAllClubs();
@@ -74,32 +80,34 @@ export class BookingListComponent implements OnInit {
   }
 
   onRecordClick(booking: IBooking) {
-    // this.selectedRecordId = user._id;
-    // this.accountEdit.selectRecordId = this.selectedRecordId;
-    // this.showListSection = false;
+    this.bookingService
+      .getBookingUsers(this.clubId, booking._id)
+      .subscribe(u => (this.bookedPlayers = u));
+    this.selectedBookingId = booking._id;
+
+    for (const key in this.chipState) {
+      if (this.chipState.hasOwnProperty(key)) {
+        this.chipState[key] = 'hide';
+      }
+    }
+    this.chipState[booking._id] = 'show';
   }
 
   onArrowClick() {
     this.arrowState = this.arrowState === 'right' ? 'down' : 'right';
-    // this.tableContentState = this.arrowState === 'down' ? 'hide' : 'show';
   }
+
   private getAllBookings(clubId: string) {
     this.bookingService
       .getBookings(clubId)
       .subscribe((bookings: IBooking[]) => {
         // get bookingList
-        this.bookingList = bookings
-          .sort((a, b) => {
-            return a.bookingDate > b.bookingDate
-              ? 1
-              : a.bookingDate < b.bookingDate
-                ? -1
-                : 0;
-          })
-          .slice(0, 2);
+        this.bookingList = this.util.sort(bookings, 'bookingDate', 'desc');
         for (const booking of this.bookingList) {
           booking.maxPlayers = this.club.maxPlayers;
+          this.chipState[booking._id] = 'hide';
         }
+        this.pageConfig.length = this.bookingList.length;
       });
   }
 

@@ -12,7 +12,7 @@
   margin-bottom: 20px;
   .t_row,
   .header {
-    height: 50px;
+    height: auto;
     padding: 12px;
     display: flex;
     justify-content: space-between;
@@ -33,11 +33,15 @@
   }
   .t_row {
     cursor: pointer;
+    flex-direction: column;
     &.selected {
       background-color: aliceblue;
     }
     &:hover {
       background-color: #f4f4f4;
+    }
+    .row-section {
+      display: flex;
     }
   }
 
