@@ -9,8 +9,8 @@ export class ClientBase implements OnInit {
   constructor(protected router: Router, protected metaService: MetaService) {}
 
   ngOnInit() {
-    this.__clubId = this.metaService.getUrlClubId(this.router.url);
-    this.metaService.loggedInUser.subscribe(u => {
+    this.__clubId = this.metaService.getUrlClubId();
+    this.metaService.getLoggedInUser.subscribe(u => {
       this.__loggedInUser = u;
     });
   }

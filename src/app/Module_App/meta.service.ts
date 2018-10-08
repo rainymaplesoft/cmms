@@ -33,63 +33,7 @@ export class MetaService {
     private authService: FireAuthService,
     private dbService: FirebaseDataService,
     private storageService: StorageService
-  ) {
-    this.setEvents();
-  }
-
-  setEvents() {
-    const event$ = this.router.events.pipe(
-      filter(e => {
-        if (e instanceof NavigationStart) {
-          console.log('navigate caught!');
-        }
-        return e instanceof NavigationStart;
-        // return !!e['navigationTrigger'];
-      })
-      // take(1)
-    );
-    const navClub$ = event$.pipe(
-      switchMap(event => {
-        const navClubId = this.getUrlClubId(event['url']);
-        if (!navClubId) {
-          return of(null);
-        }
-        return this.getClubById(navClubId);
-      })
-    );
-    const user$ = navClub$.pipe(
-      switchMap(e => {
-        this._navClub = e;
-        return this.authService.getCurrentUser();
-      }),
-      delay(200)
-    );
-    user$.subscribe(u => {
-      this._loggedInUser = u;
-      const metaInfo: IMetaInfo = {
-        navClub: this._navClub,
-        loggedinUser: this._loggedInUser
-      };
-      this.eventService.pub<IMetaInfo>(
-        EventName.Event_MetaInfoChanged,
-        metaInfo
-      );
-    });
-
-    this.eventService.on(EventName.Event_SignOut).subscribe(e =>
-      this.loggedInUser.subscribe((u: IUser) => {
-        this._loggedInUser = u;
-        const metaInfo: IMetaInfo = {
-          navClub: this._navClub,
-          loggedinUser: this._loggedInUser
-        };
-        this.eventService.pub<IMetaInfo>(
-          EventName.Event_MetaInfoChanged,
-          metaInfo
-        );
-      })
-    );
-  }
+  ) {}
 
   get clubId() {
     return this.storageService.getItem(StorageItem.CLUB_ID);
@@ -110,8 +54,8 @@ export class MetaService {
     return this.getClubById(this.clubId);
   }
 
-  get loggedInUser() {
-    return this.authService.getCurrentUser();
+  get getLoggedInUser() {
+    return this.authService.getCurrentUser().pipe(take(1));
   }
 
   signOut() {
@@ -120,8 +64,8 @@ export class MetaService {
     this.router.navigate([RouteName.Home]);
   }
 
-  getUrlClubId(url: string) {
-    return this.utilService.getUrlParam(url, 'clubId');
+  getUrlClubId(url?: string) {
+    return this.utilService.getUrlParam('clubId', url);
   }
 
   getClubById(clubId: string) {
@@ -136,7 +80,7 @@ export class MetaService {
       'clubCode',
       '==',
       clubCode.toUpperCase()
-    ]); // .pipe(take(1));
+    ]);
     return club;
   }
 

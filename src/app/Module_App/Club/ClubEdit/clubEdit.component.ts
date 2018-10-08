@@ -35,7 +35,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
   hideEdit = false;
   disableCode = false;
   club: Observable<IClub>;
-  clubForm: FormGroup;
+  formEdit: FormGroup;
   selectedDays = '';
   dayChanged = false;
 
@@ -83,7 +83,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
       );
     this.buildForm();
     this.club.subscribe(club => {
-      this.clubForm.patchValue(club);
+      this.formEdit.patchValue(club);
       if (this.disableCode) {
         this.clubCode.disable();
       }
@@ -92,13 +92,13 @@ export class ClubEditComponent implements OnInit, OnChanges {
   }
 
   onSaveClub() {
-    if (this.clubForm.invalid) {
+    if (this.formEdit.invalid) {
       console.log('form is not valid, cannot save to database');
       return;
     }
     const selectedDays = this.daySelector.selectedDays;
     this.openDays.setValue(selectedDays);
-    const data: IClub = this.clubForm.value;
+    const data: IClub = this.formEdit.value;
     if (this.clubId) {
       this.updateClub(data);
     } else {
@@ -134,7 +134,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
   //#region reactive form and field getters
 
   private buildForm() {
-    this.clubForm = this.fb.group({
+    this.formEdit = this.fb.group({
       clubName: ['', Validators.required],
       clubCode: [
         '',
@@ -154,40 +154,20 @@ export class ClubEditComponent implements OnInit, OnChanges {
     this.hideEdit = false;
   }
 
-  get clubName() {
-    return this.clubForm.get('clubName');
-  }
-
-  get clubCode() {
-    return this.clubForm.get('clubCode');
-  }
-
-  get email() {
-    return this.clubForm.get('email');
-  }
-
-  get maxPlayers() {
-    return this.clubForm.get('maxPlayers');
-  }
-
-  get contactName() {
-    return this.clubForm.get('contactName');
-  }
-
-  get phone1() {
-    return this.clubForm.get('phone1');
-  }
-
-  get address() {
-    return this.clubForm.get('address');
-  }
-
-  get isActive() {
-    return this.clubForm.get('isActive');
+  getValidate(control: string) {
+    const ctrl = this.formEdit.get(control);
+    if (!ctrl) {
+      return true;
+    }
+    return ctrl.invalid && ctrl.dirty;
   }
 
   get openDays() {
-    return this.clubForm.get('openDays');
+    return this.formEdit.get('openDays');
+  }
+
+  get clubCode() {
+    return this.formEdit.get('clubCode');
   }
   //#endregion
 }

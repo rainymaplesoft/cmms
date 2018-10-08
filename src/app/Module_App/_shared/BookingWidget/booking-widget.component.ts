@@ -1,12 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IBooking } from '../../../Module_Firebase';
-import { DateConst } from '../../config';
 import { fadeInAnimation } from '../../../Module_Core/animation/animation.common';
 import { BookingService } from '../booking.service';
 import { MatDialog } from '@angular/material';
 import { DialogYesNoComponent } from '../../../Module_Core/components/dialog/dialog-yes-no';
 import { DialogConfirm } from '../../../Module_Core/enums';
 import { IUser } from '../../../Module_Firebase/models';
+import { Config } from '../../config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -21,8 +21,8 @@ export class BookingWidgetComponent implements OnInit {
   @Input()
   loggedinUser: IUser;
 
-  monthes = DateConst.monthes;
-  weekdays = DateConst.weekdays;
+  monthes = Config.Monthes;
+  weekdays = Config.Weekdays;
 
   year: string;
   month: string;
@@ -33,7 +33,9 @@ export class BookingWidgetComponent implements OnInit {
   available: number;
 
   get labelAvailable() {
-    return this.available ? `Available: ${this.available}` : 'Fully booked';
+    return this.available && this.available > 0
+      ? `Available: ${this.available}`
+      : 'Fully booked';
   }
 
   constructor(

@@ -1,21 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   KeyValue,
   pullLeftRightAnimate,
   ToastrService
 } from '../../Module_Core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import {
-  FireAuthService,
-  IUser,
-  FirebaseDataService,
-  IClub
-} from '../../Module_Firebase';
+import { FireAuthService, IUser, IClub } from '../../Module_Firebase';
 import { Observable, Subscription, of } from 'rxjs';
 import RouteName from '../../routename';
 import { MetaService } from '../meta.service';
 import { switchMap, tap } from 'rxjs/operators';
+import { Config } from '../config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -24,100 +20,43 @@ import { switchMap, tap } from 'rxjs/operators';
   styleUrls: ['signup.component.scss'],
   animations: [pullLeftRightAnimate]
 })
-export class SignUpComponent implements OnInit, OnDestroy {
+export class SignUpComponent implements OnInit {
   constructor(
     private metaService: MetaService,
     private fb: FormBuilder,
     private authService: FireAuthService,
     private router: Router,
-    private route: ActivatedRoute,
     private toastr: ToastrService
-  ) {
-    this.authService.authState.subscribe(u => {
-      this.isLoggedIn = !!u;
-    });
-  }
+  ) {}
 
   club: IClub;
-  clubId: string;
-  clubCode: string;
-  user: Observable<IUser>;
-  loggedInUser: IUser;
-  isLoggedIn = false;
-  sub: Subscription;
   signupForm: FormGroup;
-  genders: KeyValue[] = [
-    { key: 1, value: 'Male' },
-    { key: 2, value: 'Female' }
-  ];
+  genders: KeyValue[];
   loginInfo = { email: '', password: '' };
   showLogin = true;
   title = 'Sign Up / Sign In';
   clubImage: string;
 
-  ngOnInit() {
-    this.buildForm();
-    this.init();
+  get clubId() {
+    return this.metaService.getUrlClubId();
   }
 
-  ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
+  ngOnInit() {
+    this.init();
+    this.genders = Config.Gender;
+    this.buildForm();
   }
 
   init() {
-    this.clubId = this.metaService.getUrlClubId(this.router.url);
-    this.sub = this.route.queryParams
-      .pipe(
-        tap(params => {
-          this.clubId = params['clubId'];
-        }),
-        switchMap(clubId => {
-          if (!this.clubId) {
-            return of(null);
-          }
-          return this.metaService.getClubById(this.clubId);
-        })
-      )
-      .subscribe((club: IClub) => {
-        if (!club) {
-          this.router.navigate([RouteName.Home]);
-          console.warn('signup: clubId is null or club is null');
-          return;
-        }
-        this.club = club;
-        this.clubImage = `url(assets/img/club/club_entry_${
-          this.club.clubCode
-        }.jpg)`;
-      });
-  }
-
-  signUp(p: any) {
-    const userInfo = <IUser>this.signupForm.value;
-    if (!userInfo.email || !userInfo.password) {
-      return;
-    }
-    this.authService.signOut();
-    const userCredential$ = this.authService
-      .signupWithEmailPassword(this.clubId, userInfo)
-      .then((user: Observable<IUser>) => {
-        user.subscribe(u => {
-          if (u) {
-            this.loggedInUser = u;
-            this.loggedInUser.loggedInClubId = this.clubId;
-            // this.metaService.LoggedInUser = u;
-            // navigate to club page after login successfully
-            this.router.navigate([RouteName.Club], {
-              queryParams: { clubId: this.clubId }
-            });
-          } else {
-            this.toastr.error('Failed to signup to this club');
-          }
-        });
-      });
-    const aa = 1;
-    // todo: navigate to club
+    this.metaService.getClubById(this.clubId).subscribe((club: IClub) => {
+      if (!club) {
+        this.router.navigate([RouteName.Home]);
+        console.warn('signup: clubId is null or club is null');
+        return;
+      }
+      this.club = club;
+      this.clubImage = `url(assets/img/club/club_entry_${club.clubCode}.jpg)`;
+    });
   }
 
   onSubmit() {
@@ -130,29 +69,36 @@ export class SignUpComponent implements OnInit, OnDestroy {
     this.authService.signOut();
     this.authService
       .login(this.clubId, this.loginInfo.email, this.loginInfo.password)
-      .then((user: Observable<IUser>) => {
-        user.subscribe(u => {
-          if (u) {
-            this.loggedInUser = u;
-            this.loggedInUser.loggedInClubId = this.clubId;
-            // this.metaService.LoggedInUser = u;
-            // navigate to club page after login successfully
-            this.router.navigate([RouteName.Club], {
-              queryParams: { clubId: this.clubId }
-            });
-          } else {
-            this.toastr.error('Email or password is incorrect for this club');
-          }
-        });
-      });
-  }
-  onSignOut() {
-    this.authService.signOut();
+      .then(user => this.afterSignIn(user));
   }
 
-  toggleSign() {
+  private signUp(p: any) {
+    const userInfo = <IUser>this.signupForm.value;
+    if (!userInfo.email || !userInfo.password) {
+      return;
+    }
+    this.authService.signOut();
+    this.authService
+      .signupWithEmailPassword(this.clubId, userInfo)
+      .then(user => this.afterSignIn(user));
+  }
+  private afterSignIn = (user: Observable<IUser>) => {
+    user.subscribe(u => {
+      if (u) {
+        // navigate to club page after login successfully
+        this.router.navigate([RouteName.Club], {
+          queryParams: { clubId: this.clubId }
+        });
+      } else {
+        this.toastr.error('Email or password is incorrect for this club');
+      }
+    });
+  };
+
+  onToggleSign() {
     this.showLogin = !this.showLogin;
   }
+
   //#region reactive form and field getters
 
   private buildForm() {
@@ -173,39 +119,23 @@ export class SignUpComponent implements OnInit, OnDestroy {
     });
   }
 
-  get email() {
-    return this.signupForm.get('email');
-  }
-  get password() {
-    return this.signupForm.get('password');
-  }
-
-  get passwordConfirm() {
-    return this.signupForm.get('passwordConfirm');
+  getValidate(control: string) {
+    const ctrl = this.signupForm.get(control);
+    if (!ctrl) {
+      return true;
+    }
+    return ctrl.invalid && ctrl.dirty;
   }
 
-  get firstName() {
-    return this.signupForm.get('firstName');
-  }
-
-  get lastName() {
-    return this.signupForm.get('lastName');
-  }
-
-  get cellPhone() {
-    return this.signupForm.get('cellPhone');
-  }
-
-  get gender() {
-    return this.signupForm.get('gender');
-  }
   get notSamePassword() {
+    const password = this.signupForm.get('password');
+    const passwordConfirm = this.signupForm.get('passwordConfirm');
     return (
-      this.password.valid &&
-      this.password.touched &&
-      this.passwordConfirm.valid &&
-      this.passwordConfirm.touched &&
-      this.password.value !== this.passwordConfirm.value
+      password.valid &&
+      password.touched &&
+      passwordConfirm.valid &&
+      passwordConfirm.touched &&
+      password.value !== passwordConfirm.value
     );
   }
 

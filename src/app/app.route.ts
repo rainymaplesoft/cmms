@@ -45,19 +45,16 @@ export const AppRoutes: Route[] = [
   { path: 'home', component: LandingComponent },
   { path: 'setting/club', component: ClubListComponent, canActivate: [] },
   { path: 'setting/account', component: AccountListComponent, canActivate: [] },
-  {
-    path: 'setting/booking',
-    component: BookingListComponent,
-    canActivate: []
-  },
+  { path: 'setting/booking', component: BookingListComponent, canActivate: [] },
+  { path: 'setting/user', component: UserComponent, canActivate: [] },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
   {
     path: 'club',
     component: ClientComponent,
     canActivate: [],
     children: [
-      { path: 'sign', component: SignUpComponent },
-      { path: 'user', component: UserComponent }
+      { path: 'sign', component: SignUpComponent }
+      // { path: 'user', component: UserComponent }
     ]
   },
   { path: '**', redirectTo: '/home' }

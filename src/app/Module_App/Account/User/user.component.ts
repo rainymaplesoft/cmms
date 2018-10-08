@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastrService, UtilService, KeyValue } from '../../../Module_Core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UtilService, KeyValue } from '../../../Module_Core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Images } from '../../Images/image';
 import { IUser } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
 import { FirebaseDataService } from '../../../Module_Firebase';
 import { MetaService } from '../../meta.service';
-import { StorageService } from '../../../Module_Core/services/storage.service';
 import { Router } from '../../../../../node_modules/@angular/router';
 import RouteName from 'src/app/routename';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user',
@@ -17,6 +17,7 @@ import RouteName from 'src/app/routename';
 })
 export class UserComponent implements OnInit {
   user: Observable<IUser>;
+  formUser: IUser;
   formEdit: FormGroup;
   clubId: string;
   userId: string;
@@ -37,9 +38,13 @@ export class UserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userId = this.metaService.userId;
-    this.clubId = this.metaService.clubId;
-    this.getRecordById();
+    this.metaService.getLoggedInUser.subscribe(u => {
+      this.userId = u._id;
+      this.clubId = u.loggedInClubId;
+      this.getRecordById();
+    });
+    // this.userId = this.metaService.userId;
+    // this.clubId = this.metaService.clubId;
   }
 
   get userDocPath() {
@@ -49,9 +54,11 @@ export class UserComponent implements OnInit {
   private getRecordById() {
     this.user = this.dbService
       .getSimpleDocument<IUser>(this.userDocPath)
-      .valueChanges();
+      .valueChanges()
+      .pipe(take(1));
     this.buildForm();
     this.user.subscribe(user => {
+      this.formUser = user;
       this.formEdit.patchValue(user);
     });
   }
@@ -71,17 +78,30 @@ export class UserComponent implements OnInit {
       });
   }
 
+  onClose() {
+    this.router.navigate([RouteName.Club], {
+      queryParams: { clubId: this.clubId }
+    });
+  }
   //#region reactive form and field getters
 
   private buildForm() {
     this.formEdit = this.fb.group({
-      firstName: { value: '', disabled: false },
+      firstName: [{ value: '', disabled: false }, [Validators.required]],
       lastName: { value: '', disabled: false },
       email: { value: '', disabled: true },
-      cellPhone: { value: '', disabled: false },
+      cellPhone: [{ value: '', disabled: false }, [Validators.required]],
       imageUrl: { value: '', disabled: false },
       gender: { value: 1, disabled: false }
     });
+  }
+
+  getValidate(control: string) {
+    const ctrl = this.formEdit.get(control);
+    if (!ctrl) {
+      return true;
+    }
+    return ctrl.invalid && ctrl.dirty;
   }
 
   get avatar() {
@@ -89,44 +109,10 @@ export class UserComponent implements OnInit {
     if (!!imageUrl) {
       return this.utilService.sanitizeUrl(imageUrl);
     }
-    imageUrl = this.gender.value === 1 ? Images.Male : Images.Female;
+    const gender = this.formEdit.get('gender');
+    imageUrl = gender.value === 1 ? Images.Male : Images.Female;
     return this.utilService.sanitizeUrl(imageUrl);
   }
 
-  get firstName() {
-    return this.formEdit.get('firstName');
-  }
-
-  get lastName() {
-    return this.formEdit.get('lastName');
-  }
-
-  get email() {
-    return this.formEdit.get('email');
-  }
-
-  get gender() {
-    return this.formEdit.get('gender');
-  }
-
-  get isMember() {
-    return this.formEdit.get('isMember');
-  }
-
-  get isAdmin() {
-    return this.formEdit.get('isAdmin');
-  }
-
-  get cellPhone() {
-    return this.formEdit.get('cellPhone');
-  }
-
-  get imageUrl() {
-    return this.formEdit.get('imageUrl');
-  }
-
-  get isActive() {
-    return this.formEdit.get('isActive');
-  }
   //#endregion
 }

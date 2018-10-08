@@ -4,7 +4,9 @@ import { IMetaInfo, IUser } from 'src/app/Module_Firebase';
 import { EventName } from '../../config';
 import { IClub, IBooking } from '../../../Module_Firebase/models';
 import { BookingService } from '../booking.service';
-import { tap, take } from 'rxjs/operators';
+import { tap, take, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { MetaService } from '../../meta.service';
 
 @Component({
   selector: 'app-booking',
@@ -39,17 +41,24 @@ export class BookingComponent implements OnInit {
   bookingList: IBooking[];
   constructor(
     private eventService: EventService,
+    private router: Router,
+    private metaService: MetaService,
     private bookingService: BookingService
   ) {}
 
   ngOnInit() {
-    this.eventService
-      .on<IMetaInfo>(EventName.Event_MetaInfoChanged)
-      .pipe(take(1))
-      .subscribe((metaInfo: IMetaInfo) => {
-        this.isLoggedIn = !!metaInfo.loggedinUser;
-        this.navClub = metaInfo.navClub;
-        this.user = metaInfo.loggedinUser;
+    const clubId = this.metaService.getUrlClubId();
+    this.metaService.getLoggedInUser
+      .pipe(
+        tap(u => {
+          this.user = u;
+        }),
+        switchMap(u => {
+          return this.metaService.getClubById(clubId);
+        })
+      )
+      .subscribe(club => {
+        this.navClub = club;
         this.getBookingInfo();
         this.addBookings();
       });

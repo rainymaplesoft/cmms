@@ -7,6 +7,7 @@ import { FirebaseDataService, IClub } from '../../Module_Firebase';
 import { CollectionPath } from '../../Module_Firebase/models';
 import { ClubEditComponent } from './ClubEdit';
 import { rotateAnimate, pullUpDownAnimate } from '../../Module_Core';
+import { Config } from '../config';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'club-list',
@@ -31,12 +32,7 @@ export class ClubListComponent implements OnInit, OnChanges {
     return this.clubCount;
   }
 
-  pageConfig = {
-    length: 0,
-    pageSize: 5,
-    pageIndex: 0,
-    pageSizeOptions: [5, 10, 20]
-  };
+  pageConfig = Config.PageConfig;
 
   constructor(private dbService: FirebaseDataService) {}
 

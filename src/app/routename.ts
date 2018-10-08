@@ -7,11 +7,11 @@ export class RouteName {
   static Home = 'home';
   static Club = 'club';
   static Sign = `${RouteName.Club}/sign`;
-  static User = `${RouteName.Club}/user`;
   static Event = 'event';
   static ClubSetting = 'setting/club';
   static AccountSetting = 'setting/account';
   static BookingSetting = 'setting/booking';
+  static User = `setting/user`;
   static Exception = 'Exception';
 
   static GeoSchoolInfo = 'schoolinfo';

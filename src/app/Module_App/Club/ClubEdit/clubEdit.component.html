@@ -1,4 +1,4 @@
-<div class="club_edit" *ngIf="clubForm" [ngClass]='{"hide_edit":hideEdit}'>
+<div class="club_edit" *ngIf="formEdit" [ngClass]='{"hide_edit":hideEdit}'>
   <div class="header">
     <div class="flex_row">
       <div class='flex_1 flex_start'>
@@ -9,13 +9,13 @@
         </div>
       </div>
       <div style="margin-right: 5px;">
-        <button (click)='onSaveClub()' mat-stroked-button color="primary" [disabled]="(!clubForm.dirty || !clubForm.valid) && !dayChanged">
+        <button (click)='onSaveClub()' mat-stroked-button color="primary" [disabled]="(!formEdit.dirty || !formEdit.valid) && !dayChanged">
           <mat-icon matSuffix color='primary'>done</mat-icon>Save
         </button>
       </div>
     </div>
   </div>
-  <form novalidate class='reactive-form' [formGroup]="clubForm" (ngSubmit)="onSubmit()">
+  <form novalidate class='reactive-form' [formGroup]="formEdit" (ngSubmit)="onSubmit()">
     <div class="form_section">
       <div class="flex_row_col">
         <div class="control">
@@ -23,7 +23,7 @@
             <input matInput placeholder="Club Name" formControlName="clubName" autocomplete="off">
             <mat-icon matSuffix color='primary'>description</mat-icon>
           </mat-form-field>
-          <val-msg [invalid]='clubName.invalid && clubName.touched'>
+          <val-msg [invalid]='getValidate("clubName")'>
             Club Name is required
           </val-msg>
         </div>
@@ -41,7 +41,7 @@
               <input matInput placeholder="Contact Name" formControlName="contactName" autocomplete="off">
               <mat-icon matSuffix color='primary'>person</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='contactName.invalid && contactName.touched'>
+            <val-msg [invalid]='getValidate("contactName")'>
               Contact Name is required
             </val-msg>
           </div>
@@ -50,7 +50,7 @@
               <input matInput placeholder="Code(4 Capital letters)" formControlName="clubCode" autocomplete="off">
               <mat-icon matSuffix color='primary'>vpn_key</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='clubCode.invalid && clubCode.dirty'>
+            <val-msg [invalid]='getValidate("clubCode")'>
               Code format is invalid or Code is taken
             </val-msg>
           </div>
@@ -61,7 +61,7 @@
               <input matInput placeholder="Email" formControlName="email" autocomplete="off">
               <mat-icon matSuffix color='primary'>email</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='email.invalid && email.touched'>
+            <val-msg [invalid]='getValidate("email")'>
               Email format is invalid
             </val-msg>
           </div>
@@ -70,7 +70,7 @@
               <input matInput placeholder="Phone Number" formControlName="phone1" autocomplete="off">
               <mat-icon matSuffix color='primary'>phone</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='phone1.invalid && phone1.touched'>
+            <val-msg [invalid]='getValidate("phone1")'>
               Phone number is invalid
             </val-msg>
           </div>
@@ -97,7 +97,7 @@
               <input matInput placeholder="Email" formControlName="email" autocomplete="off">
               <mat-icon matSuffix color='primary'>email</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='email.invalid && email.touched'>
+            <val-msg [invalid]='getValidate("email")'>
               Email format is invalid
             </val-msg>
           </div>
@@ -106,7 +106,7 @@
               <input matInput placeholder="Max Player Amount" formControlName="maxPlayers" autocomplete="off">
               <mat-icon matSuffix color='primary'>supervisor_account</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='maxPlayers.invalid && maxPlayers.touched'>
+            <val-msg [invalid]='getValidate("maxPlayers")'>
               required
             </val-msg>
           </div>

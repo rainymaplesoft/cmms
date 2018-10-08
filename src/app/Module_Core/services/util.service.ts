@@ -9,8 +9,10 @@ export interface IUtilService {
   isNumber(value: any, decimalNumber: number): boolean;
   isNullOrEmptyObject(obj): boolean;
   sanitizeUrl(url): string;
+  getUrlParam(parameter, defaultvalue): string;
   weekDays(): KeyValue[];
   sort(): any[];
+  paring();
 }
 export interface IGetLeftResult {
   textLeft: string;
@@ -124,19 +126,25 @@ export class UtilService {
   public sort(list: any[], prop?: string, direction?: string) {
     // direction = 'desc'
     if (prop) {
-      return list.sort((a, b) => {
+      const r1 = list.sort((a, b) => {
         if (!direction) {
           return a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0;
         } else {
           return a[prop] < b[prop] ? 1 : a[prop] > b[prop] ? -1 : 0;
         }
       });
+      return r1;
     }
     if (!direction) {
       return list.sort((a, b) => (a > b ? 1 : a < b ? -1 : 0));
     } else {
       list.sort((a, b) => (a < b ? 1 : a > b ? -1 : 0));
     }
+  }
+
+  public paginate(array: any[], page_size: number, pageIndex: number) {
+    // pageIndex starts with 0
+    return array.slice(pageIndex * page_size, (pageIndex + 1) * page_size);
   }
 
   public keysToUpperCase(obj) {
@@ -162,10 +170,11 @@ export class UtilService {
     return obj;
   }
 
-  getUrlParam(url, parameter, defaultvalue = '') {
-    let urlparameter = defaultvalue;
-    if (url && url.indexOf(parameter) > -1) {
-      urlparameter = this.getUrlVars(url)[parameter];
+  getUrlParam(parameter, url = '') {
+    const _url = url ? url : location.href;
+    let urlparameter = '';
+    if (_url && _url.indexOf(parameter) > -1) {
+      urlparameter = this.getUrlVars(_url)[parameter];
     }
     return urlparameter;
   }

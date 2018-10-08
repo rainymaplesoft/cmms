@@ -55,21 +55,8 @@ export class ClientComponent
   ) {}
 
   ngOnInit() {
-    /*
-    this.router.events
-      .pipe(
-        filter(e => {
-          return !!e['navigationTrigger'];
-        })
-      )
-      .subscribe(event => {
-        if (this.cmpRef && this.metaService.LoggedInUser) {
-          this.cmpRef.instance['loggedInUser'] = this.metaService.LoggedInUser;
-        }
-      });
-      */
     this.originUrl = this.router.url;
-    this.clubId = this.metaService.getUrlClubId(this.router.url);
+    this.clubId = this.metaService.getUrlClubId();
     if (
       this.clubId &&
       this.metaService.clubId &&
@@ -82,6 +69,10 @@ export class ClientComponent
 
   chooseClubPComponent() {
     this.metaService.getClubById(this.clubId).subscribe((club: IClub) => {
+      if (!club) {
+        this.router.navigate([RouteName.Home]);
+        return;
+      }
       this.cmpType = this.clubTypes[club.clubCode];
       if (!this.cmpType) {
         this.router.navigate([RouteName.Home]);

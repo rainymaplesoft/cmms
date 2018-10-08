@@ -15,7 +15,7 @@
                     <input matInput placeholder="Email" formControlName="email" autocomplete="off">
                     <mat-icon matSuffix color='primary'>email</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='email.invalid && email.dirty'>
+                  <val-msg [invalid]='getValidate("email")'>
                     Email format is invalid
                   </val-msg>
                 </div>
@@ -26,7 +26,7 @@
                     <input matInput placeholder="Password" formControlName="password" type='password' autocomplete="off">
                     <mat-icon matSuffix color='accent'>visibility</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='password.invalid && password.touched'>
+                  <val-msg [invalid]='getValidate("password")'>
                     Password is required (6-25 characters)
                   </val-msg>
                   <val-msg [invalid]='notSamePassword'>
@@ -39,7 +39,7 @@
                       autocomplete="off">
                     <mat-icon matSuffix color='accent'>visibility</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='passwordConfirm.invalid && passwordConfirm.touched'>
+                  <val-msg [invalid]='getValidate("passwordConfirm")'>
                     Password is required (6-25 characters)
                   </val-msg>
                 </div>
@@ -50,7 +50,7 @@
                     <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
                     <mat-icon matSuffix color='primary'>person</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='firstName.invalid && firstName.touched'>
+                  <val-msg [invalid]='getValidate("firstName")'>
                     First Name is required
                   </val-msg>
                 </div>
@@ -59,7 +59,7 @@
                     <input matInput placeholder="Last Name" formControlName="lastName" autocomplete="off">
                     <mat-icon matSuffix color='primary'>person</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='lastName.invalid && lastName.touched'>
+                  <val-msg [invalid]='getValidate("lastName")'>
                     Last Name is required
                   </val-msg>
                 </div>
@@ -70,7 +70,7 @@
                     <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
                     <mat-icon matSuffix color='primary'>phone_android</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='cellPhone.invalid && cellPhone.touched'>
+                  <val-msg [invalid]='getValidate("cellPhone")'>
                     Phone Number is required
                   </val-msg>
                 </div>
@@ -87,7 +87,7 @@
                   <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !signupForm.valid">Sign
                     Up</button>
                 </div>
-                <div class="alternative" (click)='toggleSign()'>
+                <div class="alternative" (click)='onToggleSign()'>
                   <div class='prompt'>Or I already have account</div>
                   <div class="icon">
                     <i class="material-icons">forward</i></div>
@@ -112,7 +112,7 @@
               <div class="flex_row">
                 <div class="control">
                   <mat-form-field>
-                    <input matInput placeholder="Password" [(ngModel)]="loginInfo.password" name='login_password'
+                    <input matInput placeholder="Password" type='password' [(ngModel)]="loginInfo.password" name='login_password'
                       autocomplete="off">
                     <mat-icon matSuffix color='accent'>visibility</mat-icon>
                   </mat-form-field>
@@ -123,7 +123,7 @@
                   <button mat-stroked-button color="primary" (click)='onLogin()' [disabled]="!loginInfo.email || !loginInfo.password">Sign
                     In</button>
                 </div>
-                <div class="alternative" (click)='toggleSign()'>
+                <div class="alternative" (click)='onToggleSign()'>
                   <div class='prompt'>Or I want to sign up</div>
                   <div class="icon">
                     <i class="material-icons">forward</i></div>

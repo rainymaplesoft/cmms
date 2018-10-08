@@ -22,6 +22,7 @@ export interface IUser {
   role: IRole;
   isMember?: boolean;
   isAdmin?: boolean;
+  isActive?: boolean;
   gender?: number; // 1 => male
   password?: string;
   passwordConfirm?: string;

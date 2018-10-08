@@ -90,7 +90,9 @@ export class FirebaseDataService {
       .pipe(
         map(action => {
           const data = action.payload.data() as T;
-          data['_id'] = action.payload.id;
+          if (data) {
+            data['_id'] = action.payload.id;
+          }
           return data;
         })
       );

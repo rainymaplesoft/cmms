@@ -11,6 +11,7 @@ import * as firebase from 'firebase';
 import { IUser, CollectionPath, IClub, StorageItem } from './models';
 import { ToastrService } from '../Module_Core/services/toastr.service';
 import { StorageService } from '../Module_Core';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class FireAuthService {
@@ -25,21 +26,6 @@ export class FireAuthService {
 
   get authState() {
     return this.afAuth.authState;
-  }
-  // Returns true if user is logged in
-  get isAuthenticated(): boolean {
-    return this.firebaseUser !== null;
-  }
-
-  getCurrentUser(): Observable<IUser> {
-    // Get auth data, then get firestore user document || null
-    const userId = this.storage.getItem(StorageItem.USER_ID);
-    const clubId = this.storage.getItem(StorageItem.CLUB_ID);
-    if (!userId || !this.isAuthenticated) {
-      return of(null);
-    }
-    const docPath = this.getDocPathUser(clubId, userId);
-    return this.afs.doc<IUser>(docPath).valueChanges();
   }
 
   signupWithEmailPassword(clubId: string, userInfo: IUser) {
@@ -80,6 +66,25 @@ export class FireAuthService {
     );
   }
 
+  getCurrentUser(): Observable<IUser> {
+    // Get auth data, then get firestore user document || null
+    const userId = this.storage.getItem(StorageItem.USER_ID);
+    const clubId = this.storage.getItem(StorageItem.CLUB_ID);
+    const docPath = this.getDocPathUser(clubId, userId);
+    return this.afs
+      .doc<IUser>(docPath)
+      .snapshotChanges()
+      .pipe(
+        map(action => {
+          const user = action.payload.data() as IUser;
+          if (user) {
+            user['loggedInClubId'] = clubId;
+          }
+          return user;
+        })
+      );
+  }
+
   private saveLoginStatus(clubId: string, userId: string) {
     this.storage.setItem(StorageItem.USER_ID, userId);
     this.storage.setItem(StorageItem.CLUB_ID, clubId);
@@ -89,24 +94,18 @@ export class FireAuthService {
     // Sets user data to firestore on login
     const docPath = this.getDocPathUser(clubId, userInfo._id);
     const userRef: AngularFirestoreDocument<IUser> = this.afs.doc(docPath);
+    userInfo.isMember = false;
+    userInfo.isActive = true;
     userInfo.role = {
       subscriber: true
     };
     return userRef.set(userInfo, { merge: true });
   }
 
-  getDocPathClub(clubId: string) {
-    return `${CollectionPath.CLUBS}/${clubId}`;
-  }
-
-  getDocPathUser(clubId: string, userId: string) {
+  private getDocPathUser(clubId: string, userId: string) {
     return `${CollectionPath.CLUBS}/${clubId}/${
       CollectionPath.USERS
     }/${userId}`;
-  }
-
-  getDocPathUsers(clubId: string) {
-    return `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
   }
 
   /*

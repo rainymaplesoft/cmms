@@ -34,7 +34,10 @@
   max-width: 1000px;
   width: 100%;
   margin: 0 auto;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  min-height: 580px;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  background-color: #f5f5f5;
   .section-img {
     display: table-cell;
     width: auto;
@@ -43,7 +46,16 @@
   .section-form {
     display: table-cell;
     width: 560px;
-    background-color: #ffffff;
+    background-color: #f5f5f5;
     color: #505e6c;
+  }
+}
+.sign-section {
+  justify-content: center;
+  margin-top: 30px;
+  .sign-button {
+    display: flex;
+    min-width: 200px;
+    justify-content: space-between;
   }
 }

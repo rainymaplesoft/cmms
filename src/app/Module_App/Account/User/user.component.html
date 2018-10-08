@@ -6,7 +6,7 @@
         <!-- <img [src]="clubImage" /> -->
       </div>
       <div class="section-form">
-        <form novalidate class='reactive-form' [formGroup]="formEdit">
+        <form novalidate class='reactive-form' [formGroup]="formEdit" *ngIf="formUser">
           <div class="form_section">
             <div class="form_content">
               <div class="flex_1">
@@ -34,7 +34,7 @@
                     <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
                     <mat-icon matSuffix color='primary'>person</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='firstName.invalid && firstName.touched'>
+                  <val-msg [invalid]='getValidate("firstName")'>
                     First Name is required
                   </val-msg>
                 </div>
@@ -43,7 +43,7 @@
                     <input matInput placeholder="Last Name" formControlName="lastName" autocomplete="off">
                     <mat-icon matSuffix color='primary'>person</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='lastName.invalid && lastName.touched'>
+                  <val-msg [invalid]='getValidate("lastName")'>
                     Last Name is required
                   </val-msg>
                 </div>
@@ -54,7 +54,7 @@
                     <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
                     <mat-icon matSuffix color='primary'>phone_android</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='cellPhone.invalid && cellPhone.touched'>
+                  <val-msg [invalid]='getValidate("cellPhone")'>
                     Phone Number is required
                   </val-msg>
                 </div>
@@ -69,6 +69,7 @@
               <div class="flex_row sign-section">
                 <div class='sign-button'>
                   <button type='submit' mat-stroked-button color="primary" (click)='onSave()' [disabled]="!formEdit.valid">Save</button>
+                  <button type='button' mat-stroked-button color="warn" (click)='onClose()' [disabled]="!formEdit.valid">Close</button>
                 </div>
               </div>
             </div>

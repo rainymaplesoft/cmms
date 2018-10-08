@@ -1,12 +1,12 @@
 import { Component, OnInit, Host } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import RouteName from '../../routename';
 import { EventService, UtilService } from '../../Module_Core';
-import { IClub, IMetaInfo } from '../../Module_Firebase/models';
+import { IClub, IMetaInfo, IUser } from '../../Module_Firebase';
 import { Subscription } from 'rxjs';
 import { MetaService } from '../meta.service';
 import { EventName } from '../config';
-import { IUser } from 'src/app/Module_Firebase';
+import { filter, tap } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
   showTimings = 'hide';
   isLoggedIn = false;
   navClub: IClub;
-  clubId = '';
+  loggedInUser: IUser;
   clubName = 'Sport Center';
 
   r_selected = RouteName.Home;
@@ -33,6 +33,12 @@ export class HeaderComponent implements OnInit {
   loginBadge = '?';
   sub: Subscription;
 
+  get clubId() {
+    const clubId = this.metaService.getUrlClubId(this.router.url);
+    // const clubId = this.utilService.getUrlParam('clubId');
+    return clubId;
+  }
+
   constructor(
     private router: Router,
     private eventService: EventService,
@@ -41,45 +47,65 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.eventService
-      .on<IMetaInfo>(EventName.Event_MetaInfoChanged)
-      .subscribe((metaInfo: IMetaInfo) => {
-        this.isLoggedIn = !!metaInfo.loggedinUser;
-        // if (!metaInfo.navClub) {
-        //   this.router.navigate([RouteName.Home]);
-        // }
-        this.navClub = metaInfo.navClub || {
-          clubName: 'Sport Center',
-          clubCode: '',
-          mapLink: ''
-        };
-        this.clubName = this.navClub.clubName;
-        this.navClub.mapLink = this.navClub.mapLink
-          ? this.utilService.sanitizeUrl(this.navClub.mapLink)
-          : '';
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationStart))
+      .subscribe(event => {
+        this.updateStatus(this.clubId);
       });
   }
 
+  private updateStatus(navClubId: string) {
+    this.navClub = {
+      clubName: 'Sport Center',
+      clubCode: '',
+      mapLink: ''
+    };
+    // update login status
+    this.metaService.getLoggedInUser.subscribe(u => {
+      this.isLoggedIn = !!u;
+      this.loggedInUser = u;
+    });
+    if (!navClubId) {
+      return;
+    }
+    // update navigated club status
+    this.metaService.getClubById(navClubId).subscribe(club => {
+      if (!club) {
+        return;
+      }
+      this.navClub = club;
+      this.clubName = this.navClub.clubName;
+      this.navClub.mapLink = this.navClub.mapLink
+        ? this.utilService.sanitizeUrl(this.navClub.mapLink)
+        : '';
+    });
+  }
+
   onShowContact() {
+    if (!this.clubId) {
+      return;
+    }
     this.showTimings = 'hide';
     this.showContact = this.showContact === 'hide' ? 'show' : 'hide';
   }
 
   onShowTimings() {
+    if (!this.clubId) {
+      return;
+    }
     this.showContact = 'hide';
     this.showTimings = this.showTimings === 'hide' ? 'show' : 'hide';
   }
 
-  nav(route: string, withClubId?: false) {
+  nav(route: string, withClubId?: boolean) {
     this.hideHeaderInfo();
-    const clubId = this.metaService.getUrlClubId(this.router.url);
     if (route) {
       this.r_selected = route;
       if (withClubId) {
-        if (!clubId) {
+        if (!this.clubId) {
           return;
         }
-        this.router.navigate([route], { queryParams: { clubId: clubId } });
+        this.router.navigate([route], { queryParams: { clubId: this.clubId } });
       } else {
         this.router.navigate([route]);
       }

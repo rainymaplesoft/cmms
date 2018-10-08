@@ -8,6 +8,8 @@ import { rotateAnimate, pullUpDownAnimate } from '../../Module_Core';
 import { AccountEditComponent } from './AccountEdit/accountEdit.component';
 import { MetaService } from '../meta.service';
 import { IUser, CollectionPath } from '../../Module_Firebase/models';
+import { Config } from '../config';
+import { UtilService } from '../../Module_Core/services/util.service';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'account-list',
@@ -34,16 +36,12 @@ export class AccountListComponent implements OnInit, OnChanges {
     return this.recordCount;
   }
 
-  pageConfig = {
-    length: 0,
-    pageSize: 5,
-    pageIndex: 0,
-    pageSizeOptions: [5, 10, 20]
-  };
+  pageConfig = Config.PageConfig;
 
   constructor(
     private dbService: FirebaseDataService,
-    private metaServie: MetaService
+    private metaServie: MetaService,
+    private util: UtilService
   ) {}
 
   ngOnInit() {
@@ -72,8 +70,15 @@ export class AccountListComponent implements OnInit, OnChanges {
     return this.dbService
       .getCollection<IClub>(pathUsers, [], ['firstName', 'asc'])
       .pipe(
-        tap((item: any[]) => {
+        map((item: IClub[]) => {
           this.pageConfig.length = item.length;
+          const array_sorted = this.util.sort(item, 'isMember');
+          const array_paged = this.util.paginate(
+            array_sorted,
+            this.pageConfig.pageSize,
+            this.pageConfig.pageIndex
+          );
+          return array_paged;
         })
       );
   }
@@ -87,6 +92,7 @@ export class AccountListComponent implements OnInit, OnChanges {
   onPageChange($event: PageEvent) {
     this.pageConfig.pageIndex = $event.pageIndex;
     this.pageConfig.pageSize = $event.pageSize;
+    this.accounts = this.getAllAccounts();
   }
 
   onRecordClick(user: IUser) {

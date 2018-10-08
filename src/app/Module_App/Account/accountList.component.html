@@ -34,8 +34,7 @@
         </div>
       </div>
       <div class="table_content" [@pullUpDownAnimate]='tableContentState'>
-        <div class='t_row' *ngFor="let account of accounts | async as accountList; index as i; last as islast"
-          [ngClass]='{selected:checkSelected(account),hideByPage:hideByPage(i)}' (click)='onRecordClick(account)'>
+        <div class='t_row' *ngFor="let account of accounts | async as accountList; index as i; last as islast" (click)='onRecordClick(account)'>
           <div class="t_col flex_3">{{account.firstName }} {{account.lastName}}</div>
           <div class="t_col flex_2 mobile_hide">{{ account.email }}</div>
           <div class="t_col flex_1 mobile_hide">{{ account.cellPhone }}</div>
