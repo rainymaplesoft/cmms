@@ -66,6 +66,10 @@ export class FireAuthService {
     );
   }
 
+  resetPassword() {
+    return of(null);
+  }
+
   getCurrentUser(): Observable<IUser> {
     // Get auth data, then get firestore user document || null
     const userId = this.storage.getItem(StorageItem.USER_ID);

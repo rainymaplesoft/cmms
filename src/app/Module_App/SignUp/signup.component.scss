@@ -65,6 +65,17 @@
   flex-direction: column;
   justify-content: center;
   margin-top: 1.5em;
+  .forget {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    .forget_pass {
+      margin-left: 10px;
+      text-decoration: underline;
+      cursor: pointer;
+      color: saddlebrown;
+    }
+  }
   .sign-button {
     display: flex;
     justify-content: center;
@@ -81,9 +92,9 @@
     cursor: pointer;
     .prompt {
       margin: 0 1em;
+      padding-top: 2px;
     }
     .icon {
-      padding-top: 2px;
       color: teal;
     }
   }

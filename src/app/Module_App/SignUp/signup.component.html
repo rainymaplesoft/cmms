@@ -119,6 +119,10 @@
                 </div>
               </div>
               <div class="sign-section">
+                <div class="forget">
+                  <i class="fas fa-key"></i>
+                  <div class="forget_pass" (click)='onForget()'>I forgot my password</div>
+                </div>
                 <div class='sign-button'>
                   <button mat-stroked-button color="primary" (click)='onLogin()' [disabled]="!loginInfo.email || !loginInfo.password">Sign
                     In</button>

@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { KeyValue } from '../enums';
 
 export interface IUtilService {
+  validateEmail(email);
   isNarrowView(): boolean;
   isMobile(): boolean;
   isNumber(value: any, decimalNumber: number): boolean;
@@ -30,6 +31,12 @@ export class UtilService {
   translate(...messages: string[]) {
     // returns a observable
     return this.translateService.get(messages);
+  }
+
+  validateEmail(email) {
+    // tslint:disable-next-line:max-line-length
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
   }
 
   public isNarrowView = (): boolean => window.innerWidth < this.widthNarrow;

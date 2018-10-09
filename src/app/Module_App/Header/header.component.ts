@@ -19,6 +19,7 @@ export class HeaderComponent implements OnInit {
   showTimings = 'hide';
   isLoggedIn = false;
   navClub: IClub;
+  navClubId: string;
   loggedInUser: IUser;
   clubName = 'Sport Center';
 
@@ -33,11 +34,11 @@ export class HeaderComponent implements OnInit {
   loginBadge = '?';
   sub: Subscription;
 
-  get clubId() {
-    const clubId = this.metaService.getUrlClubId(this.router.url);
-    // const clubId = this.utilService.getUrlParam('clubId');
-    return clubId;
-  }
+  // get clubId() {
+  //   const clubId = this.metaService.getUrlClubId(this.router.url);
+  //   // const clubId = this.utilService.getUrlParam('clubId');
+  //   return clubId;
+  // }
 
   constructor(
     private router: Router,
@@ -50,7 +51,8 @@ export class HeaderComponent implements OnInit {
     this.router.events
       .pipe(filter(e => e instanceof NavigationStart))
       .subscribe(event => {
-        this.updateStatus(this.clubId);
+        this.navClubId = this.metaService.getUrlClubId(event['url']);
+        this.updateStatus(this.navClubId);
       });
   }
 
@@ -82,7 +84,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onShowContact() {
-    if (!this.clubId) {
+    if (!this.navClubId) {
       return;
     }
     this.showTimings = 'hide';
@@ -90,7 +92,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onShowTimings() {
-    if (!this.clubId) {
+    if (!this.navClubId) {
       return;
     }
     this.showContact = 'hide';
@@ -102,10 +104,12 @@ export class HeaderComponent implements OnInit {
     if (route) {
       this.r_selected = route;
       if (withClubId) {
-        if (!this.clubId) {
+        if (!this.navClubId) {
           return;
         }
-        this.router.navigate([route], { queryParams: { clubId: this.clubId } });
+        this.router.navigate([route], {
+          queryParams: { clubId: this.navClubId }
+        });
       } else {
         this.router.navigate([route]);
       }

@@ -3,15 +3,18 @@ import { Router } from '@angular/router';
 import {
   KeyValue,
   pullLeftRightAnimate,
-  ToastrService
+  ToastrService,
+  DialogYesNoComponent,
+  DialogConfirm,
+  UtilService
 } from '../../Module_Core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FireAuthService, IUser, IClub } from '../../Module_Firebase';
 import { Observable, Subscription, of } from 'rxjs';
 import RouteName from '../../routename';
 import { MetaService } from '../meta.service';
-import { switchMap, tap } from 'rxjs/operators';
 import { Config } from '../config';
+import { MatDialog } from '@angular/material';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -26,7 +29,9 @@ export class SignUpComponent implements OnInit {
     private fb: FormBuilder,
     private authService: FireAuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public dialog: MatDialog,
+    private util: UtilService
   ) {}
 
   club: IClub;
@@ -51,7 +56,6 @@ export class SignUpComponent implements OnInit {
     this.metaService.getClubById(this.clubId).subscribe((club: IClub) => {
       if (!club) {
         this.router.navigate([RouteName.Home]);
-        console.warn('signup: clubId is null or club is null');
         return;
       }
       this.club = club;
@@ -60,8 +64,6 @@ export class SignUpComponent implements OnInit {
   }
 
   onSubmit() {
-    // TODO: Use EventEmitter with form value
-    console.log('submitted');
     this.signUp(null);
   }
 
@@ -70,6 +72,25 @@ export class SignUpComponent implements OnInit {
     this.authService
       .login(this.clubId, this.loginInfo.email, this.loginInfo.password)
       .then(user => this.afterSignIn(user));
+  }
+
+  onForget() {
+    const email = this.loginInfo.email;
+    if (!email || !this.util.validateEmail(email)) {
+      this.toastr.warning('Please enter valid email address');
+      return;
+    }
+    const msg = 'Do you really want to reset you passwor?';
+    const dialogRef = this.dialog.open(DialogYesNoComponent, {
+      data: { message: msg }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === DialogConfirm.Yes) {
+        this.authService.resetPassword().subscribe(r => {
+          this.toastr.success('Reset password request sent successfully');
+        });
+      }
+    });
   }
 
   private signUp(p: any) {
@@ -82,6 +103,7 @@ export class SignUpComponent implements OnInit {
       .signupWithEmailPassword(this.clubId, userInfo)
       .then(user => this.afterSignIn(user));
   }
+
   private afterSignIn = (user: Observable<IUser>) => {
     user.subscribe(u => {
       if (u) {
