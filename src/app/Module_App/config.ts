@@ -17,6 +17,14 @@ export class Config {
     pageIndex: 0,
     pageSizeOptions: [5, 10, 20]
   };
+
+  static ValidatorError = {
+    emailExists: { emailExists: true }
+  };
+}
+
+export enum ValidatorError {
+  EMAIL_EXIST = 'EMAIL_EXIST'
 }
 
 export enum ClubClient {

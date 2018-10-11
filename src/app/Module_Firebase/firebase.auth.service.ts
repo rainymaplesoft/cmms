@@ -35,6 +35,7 @@ export class FireAuthService {
         userInfo._id = credential.user.uid;
         this.saveLoginStatus(clubId, credential.user.uid);
         this.updateUserData(clubId, userInfo);
+        this.addSignedUpUser(userInfo);
         return this.getCurrentUser();
       })
       .catch(error => {
@@ -106,10 +107,25 @@ export class FireAuthService {
     return userRef.set(userInfo, { merge: true });
   }
 
+  private addSignedUpUser(userInfo: IUser) {
+    this.afs
+      .collection('users')
+      .doc(userInfo._id)
+      .set({
+        ...userInfo,
+        updatedAt: this.timestamp,
+        createdAt: this.timestamp
+      });
+  }
+
   private getDocPathUser(clubId: string, userId: string) {
     return `${CollectionPath.CLUBS}/${clubId}/${
       CollectionPath.USERS
     }/${userId}`;
+  }
+
+  get timestamp() {
+    return firebase.firestore.FieldValue.serverTimestamp();
   }
 
   /*

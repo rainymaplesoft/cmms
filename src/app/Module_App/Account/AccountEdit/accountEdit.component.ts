@@ -10,7 +10,6 @@ import { FirebaseDataService } from '../../../Module_Firebase';
 import { CollectionPath, IUser } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ToastrService } from '../../../Module_Core';
 import { Images } from '../../Images/image';
 import { UtilService } from '../../../Module_Core/services/util.service';
 import { MetaService } from '../../meta.service';
@@ -120,44 +119,9 @@ export class AccountEditComponent implements OnInit, OnChanges {
     if (!!imageUrl) {
       return this.utilService.sanitizeUrl(imageUrl);
     }
-    imageUrl = this.gender.value === 1 ? Images.Male : Images.Female;
+    const gen = this.formEdit.get('gender');
+    imageUrl = gen.value === 1 ? Images.Male : Images.Female;
     return this.utilService.sanitizeUrl(imageUrl);
-  }
-
-  get firstName() {
-    return this.formEdit.get('firstName');
-  }
-
-  get lastName() {
-    return this.formEdit.get('lastName');
-  }
-
-  get email() {
-    return this.formEdit.get('email');
-  }
-
-  get gender() {
-    return this.formEdit.get('gender');
-  }
-
-  get isMember() {
-    return this.formEdit.get('isMember');
-  }
-
-  get isAdmin() {
-    return this.formEdit.get('isAdmin');
-  }
-
-  get cellPhone() {
-    return this.formEdit.get('cellPhone');
-  }
-
-  get imageUrl() {
-    return this.formEdit.get('imageUrl');
-  }
-
-  get isActive() {
-    return this.formEdit.get('isActive');
   }
   //#endregion
 }

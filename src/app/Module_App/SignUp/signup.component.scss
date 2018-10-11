@@ -1,7 +1,6 @@
 .reactive-form {
   .form_section {
     padding-left: 10px;
-    min-height: 700px;
     .row_col {
       display: flex;
       flex-direction: row;
@@ -23,6 +22,11 @@
   }
 }
 
+.sign-title {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 10px 0;
+}
 .hide_sign {
   display: none !important;
 }

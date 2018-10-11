@@ -13,10 +13,12 @@ import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DocumentReference } from '@angular/fire/firestore';
 import { ToastrService, UtilService } from '../../../Module_Core';
-import { ClubValidator } from '../club.validator';
 import { tap } from 'rxjs/operators';
 import { KeyValue } from '../../../Module_Core/enums';
-import { DaySelectorComponent } from 'src/app/Module_App/_shared';
+import {
+  DaySelectorComponent,
+  CustomValidator
+} from 'src/app/Module_App/_shared';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -139,7 +141,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
       clubCode: [
         '',
         [Validators.pattern('^[A-Z]{4}$')],
-        [ClubValidator.clubCode(this.dbService.afs, this.clubId)]
+        [CustomValidator.clubCode(this.dbService.afs, this.clubId)]
       ],
       maxPlayers: [20, Validators.required],
       email: ['', Validators.required],

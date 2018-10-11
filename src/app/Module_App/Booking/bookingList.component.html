@@ -39,7 +39,8 @@
             </div>
           </div>
           <div class="section-detail" [@pullUpDownAnimate]='chipState[booking._id]'>
-            <booked-players [bookingId]='booking._id' [selectedBookingId]='selectedBookingId' [bookedPlayers]='bookedPlayers'></booked-players>
+            <booked-players [clubId]='clubId' [date]='booking.dateName' [bookingId]='booking._id' [selectedBookingId]='selectedBookingId'
+              [bookedPlayers]='bookedPlayers'></booked-players>
           </div>
         </div>
         <div class="footer">

@@ -68,9 +68,9 @@ export class AccountListComponent implements OnInit, OnChanges {
     }
     const pathUsers = this.metaServie.getDocPathUsers(this.clubId);
     return this.dbService
-      .getCollection<IClub>(pathUsers, [], ['firstName', 'asc'])
+      .getCollection<IUser>(pathUsers, [], ['firstName', 'asc'])
       .pipe(
-        map((item: IClub[]) => {
+        map((item: IUser[]) => {
           this.pageConfig.length = item.length;
           const array_sorted = this.util.sort(item, 'isMember');
           const array_paged = this.util.paginate(

@@ -15,6 +15,8 @@ import RouteName from '../../routename';
 import { MetaService } from '../meta.service';
 import { Config } from '../config';
 import { MatDialog } from '@angular/material';
+import { CustomValidator } from '../_shared';
+import { FirebaseDataService } from '../../Module_Firebase/firebase.data.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -26,6 +28,7 @@ import { MatDialog } from '@angular/material';
 export class SignUpComponent implements OnInit {
   constructor(
     private metaService: MetaService,
+    private dbService: FirebaseDataService,
     private fb: FormBuilder,
     private authService: FireAuthService,
     private router: Router,
@@ -125,7 +128,11 @@ export class SignUpComponent implements OnInit {
 
   private buildForm() {
     this.signupForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [
+        '',
+        [Validators.required, Validators.email]
+        // [CustomValidator.ExistingEmail(this.dbService)]
+      ],
       password: [
         '',
         [Validators.minLength(6), Validators.maxLength(25), Validators.required]
@@ -147,6 +154,10 @@ export class SignUpComponent implements OnInit {
       return true;
     }
     return ctrl.invalid && ctrl.dirty;
+  }
+
+  get email() {
+    return this.signupForm.get('email');
   }
 
   get notSamePassword() {

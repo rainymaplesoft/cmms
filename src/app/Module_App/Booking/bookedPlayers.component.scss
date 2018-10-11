@@ -1,0 +1,28 @@
+.player-chip {
+  padding: 15px 10px 10px 10px;
+}
+.member {
+  background-color: skyblue !important;
+}
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  .chip {
+    display: flex;
+    background-color: gainsboro;
+    height: 32px;
+    border-radius: 16px;
+    padding: 5px;
+    margin: 0 5px;
+    .text {
+      font-size: 14px;
+      margin: 3px 3px;
+      color: darkslateblue;
+    }
+    &:hover {
+      i {
+        color: chocolate;
+      }
+    }
+  }
+}

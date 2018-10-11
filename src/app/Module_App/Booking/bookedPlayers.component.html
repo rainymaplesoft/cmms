@@ -1,6 +1,8 @@
 <div class='player-chip'>
-  <mat-chip-list>
-    <mat-chip [ngClass]="{member: player.isMember}" *ngFor="let player of players">{{player.firstName}}
-      {{player.lastName}}</mat-chip>
-  </mat-chip-list>
+  <div class='chip-list'>
+    <div class='chip' [ngClass]="{member: player.isMember}" *ngFor="let player of players" (click)='onDelete(player)'>
+      <i class="material-icons">account_circle</i>
+      <div class='text'>{{player.firstName}} {{player.lastName}}</div>
+    </div>
+  </div>
 </div>

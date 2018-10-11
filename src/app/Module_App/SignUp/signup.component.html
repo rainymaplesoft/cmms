@@ -6,6 +6,9 @@
         <!-- <img [src]="clubImage" /> -->
       </div>
       <div [ngClass]='{hide_sign:showLogin}' class="signup-form" *ngIf='club'>
+        <div class='sign-title'>
+          <img src='assets/img/signup-icon.png' style='height: 50px;' />
+        </div>
         <form novalidate class='reactive-form' [formGroup]="signupForm" *ngIf="signupForm" (ngSubmit)="onSubmit()">
           <div class="form_section">
             <div class="form_content">
@@ -15,9 +18,13 @@
                     <input matInput placeholder="Email" formControlName="email" autocomplete="off">
                     <mat-icon matSuffix color='primary'>email</mat-icon>
                   </mat-form-field>
-                  <val-msg [invalid]='getValidate("email")'>
+                  <val-msg [invalid]='email.invalid && email.dirty && !email.errors["emailExists"]'>
                     Email format is invalid
                   </val-msg>
+                  <val-msg [invalid]='email.invalid && email.dirty && email.errors["emailExists"]'>
+                    Email already exists
+                  </val-msg>
+                  {{email.errors|json}}
                 </div>
               </div>
               <div class="row_col">
@@ -98,6 +105,9 @@
         </form>
       </div>
       <div [ngClass]='{hide_sign:!showLogin}' class="login-form" *ngIf='club'>
+        <div class='sign-title'>
+          <img src='assets/img/login-icon.png' style='height: 50px;' />
+        </div>
         <form novalidate class='reactive-form'>
           <div class="form_section">
             <div class="form_content">
