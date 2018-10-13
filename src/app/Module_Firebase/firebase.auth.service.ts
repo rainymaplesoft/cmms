@@ -28,15 +28,13 @@ export class FireAuthService {
     return this.afAuth.authState;
   }
 
-  signupWithEmailPassword(clubId: string, userInfo: IUser) {
+  signupWithEmailPassword(userInfo: IUser) {
     return this.afAuth.auth
       .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
       .then(credential => {
         userInfo._id = credential.user.uid;
-        this.saveLoginStatus(clubId, credential.user.uid);
-        this.updateUserData(clubId, userInfo);
         this.addSignedUpUser(userInfo);
-        return this.getCurrentUser();
+        this.toastr.success('Sign up successfully');
       })
       .catch(error => {
         const errorCode = error.code;
@@ -45,7 +43,6 @@ export class FireAuthService {
         if (errorCode === 'auth/email-already-in-use') {
           this.toastr.error('This Email Address is already in use');
         }
-        return of(null);
       });
   }
 
@@ -58,7 +55,9 @@ export class FireAuthService {
   login(clubId: string, email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
       credential => {
-        this.saveLoginStatus(clubId, credential.user.uid);
+        const userId = credential.user.uid;
+        this.saveLoginStatus(clubId, userId);
+        this.updateUserData(clubId, userId, email);
         return this.getCurrentUser();
       },
       e => {
@@ -95,14 +94,18 @@ export class FireAuthService {
     this.storage.setItem(StorageItem.CLUB_ID, clubId);
   }
 
-  private updateUserData(clubId: string, userInfo: IUser) {
+  private updateUserData(clubId: string, userId: string, email: string) {
     // Sets user data to firestore on login
-    const docPath = this.getDocPathUser(clubId, userInfo._id);
+    const docPath = this.getDocPathUser(clubId, userId);
     const userRef: AngularFirestoreDocument<IUser> = this.afs.doc(docPath);
-    userInfo.isMember = false;
-    userInfo.isActive = true;
-    userInfo.role = {
-      subscriber: true
+    const userInfo: IUser = {
+      _id: userId,
+      email: email,
+      isMember: false,
+      isActive: true,
+      role: {
+        subscriber: true
+      }
     };
     return userRef.set(userInfo, { merge: true });
   }
@@ -112,10 +115,12 @@ export class FireAuthService {
       .collection('users')
       .doc(userInfo._id)
       .set({
-        ...userInfo,
+        _id: userInfo._id,
+        email: userInfo.email,
         updatedAt: this.timestamp,
         createdAt: this.timestamp
-      });
+      })
+      .then(c => this.signOut());
   }
 
   private getDocPathUser(clubId: string, userId: string) {

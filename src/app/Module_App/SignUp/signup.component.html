@@ -1,57 +1,53 @@
 <view-header [title]='title'></view-header>
 <div class="page_view">
   <div class='page_content'>
-    <div class="table-container">
-      <div class="club-img" [ngStyle]="{'background-image': clubImage}">
-        <!-- <img [src]="clubImage" /> -->
+    <div class="signup-form">
+      <div class='sign-title'>
+        <img src='assets/img/signup-icon.png' style='height: 60px;' />
       </div>
-      <div [ngClass]='{hide_sign:showLogin}' class="signup-form" *ngIf='club'>
-        <div class='sign-title'>
-          <img src='assets/img/signup-icon.png' style='height: 50px;' />
-        </div>
-        <form novalidate class='reactive-form' [formGroup]="signupForm" *ngIf="signupForm" (ngSubmit)="onSubmit()">
-          <div class="form_section">
-            <div class="form_content">
-              <div class="row_col">
-                <div class="control">
-                  <mat-form-field>
-                    <input matInput placeholder="Email" formControlName="email" autocomplete="off">
-                    <mat-icon matSuffix color='primary'>email</mat-icon>
-                  </mat-form-field>
-                  <val-msg [invalid]='email.invalid && email.dirty && !email.errors["emailExists"]'>
-                    Email format is invalid
-                  </val-msg>
-                  <val-msg [invalid]='email.invalid && email.dirty && email.errors["emailExists"]'>
-                    Email already exists
-                  </val-msg>
-                  {{email.errors|json}}
-                </div>
+      <form novalidate class='reactive-form' [formGroup]="signupForm" *ngIf="signupForm" (ngSubmit)="onSubmit()">
+        <div class="form_section">
+          <div class="form_content">
+            <div class="row_col">
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="Email" formControlName="email" autocomplete="off">
+                  <mat-icon matSuffix color='primary'>email</mat-icon>
+                </mat-form-field>
+                <val-msg [invalid]='email.invalid && email.dirty && !email.errors["emailExists"]'>
+                  Email format is invalid
+                </val-msg>
+                <val-msg [invalid]='email.invalid && email.dirty && email.errors["emailExists"]'>
+                  Email already exists
+                </val-msg>
+                {{email.errors|json}}
               </div>
-              <div class="row_col">
-                <div class="control">
-                  <mat-form-field>
-                    <input matInput placeholder="Password" formControlName="password" type='password' autocomplete="off">
-                    <mat-icon matSuffix color='accent'>visibility</mat-icon>
-                  </mat-form-field>
-                  <val-msg [invalid]='getValidate("password")'>
-                    Password is required (6-25 characters)
-                  </val-msg>
-                  <val-msg [invalid]='notSamePassword'>
-                    The 2 passwords are not the same
-                  </val-msg>
-                </div>
-                <div class="control">
-                  <mat-form-field>
-                    <input matInput placeholder="Confirm Password" formControlName="passwordConfirm" type='password'
-                      autocomplete="off">
-                    <mat-icon matSuffix color='accent'>visibility</mat-icon>
-                  </mat-form-field>
-                  <val-msg [invalid]='getValidate("passwordConfirm")'>
-                    Password is required (6-25 characters)
-                  </val-msg>
-                </div>
+            </div>
+            <div class="row_col">
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="Password" formControlName="password" type='password' autocomplete="off">
+                  <mat-icon matSuffix color='accent'>visibility</mat-icon>
+                </mat-form-field>
+                <val-msg [invalid]='getValidate("password")'>
+                  Password is required (6-25 characters)
+                </val-msg>
+                <val-msg [invalid]='notSamePassword'>
+                  The 2 passwords are not the same
+                </val-msg>
               </div>
-              <div class="row_col">
+              <div class="control">
+                <mat-form-field>
+                  <input matInput placeholder="Confirm Password" formControlName="passwordConfirm" type='password'
+                    autocomplete="off">
+                  <mat-icon matSuffix color='accent'>visibility</mat-icon>
+                </mat-form-field>
+                <val-msg [invalid]='getValidate("passwordConfirm")'>
+                  Password is required (6-25 characters)
+                </val-msg>
+              </div>
+            </div>
+            <!-- <div class="row_col">
                 <div class="control">
                   <mat-form-field>
                     <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
@@ -88,65 +84,22 @@
                     </mat-radio-button>
                   </mat-radio-group>
                 </div>
+              </div> -->
+            <div class="flex_row sign-section">
+              <div class='sign-button'>
+                <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !signupForm.valid">Sign
+                  Up</button>
               </div>
-              <div class="flex_row sign-section">
-                <div class='sign-button'>
-                  <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !signupForm.valid">Sign
-                    Up</button>
-                </div>
-                <div class="alternative" (click)='onToggleSign()'>
-                  <div class='prompt'>Or I already have account</div>
-                  <div class="icon">
-                    <i class="material-icons">forward</i></div>
-                </div>
+              <div class="alternative" (click)='onToggleSign()'>
+                <div class='prompt'>Or I already have account</div>
+                <div class="icon">
+                  <i class="material-icons">forward</i></div>
               </div>
             </div>
           </div>
-        </form>
-      </div>
-      <div [ngClass]='{hide_sign:!showLogin}' class="login-form" *ngIf='club'>
-        <div class='sign-title'>
-          <img src='assets/img/login-icon.png' style='height: 50px;' />
         </div>
-        <form novalidate class='reactive-form'>
-          <div class="form_section">
-            <div class="form_content">
-              <div class="flex_row">
-                <div class="control">
-                  <mat-form-field>
-                    <input matInput placeholder="Email" [(ngModel)]="loginInfo.email" name='login_email' autocomplete="off">
-                    <mat-icon matSuffix color='primary'>email</mat-icon>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="flex_row">
-                <div class="control">
-                  <mat-form-field>
-                    <input matInput placeholder="Password" type='password' [(ngModel)]="loginInfo.password" name='login_password'
-                      autocomplete="off">
-                    <mat-icon matSuffix color='accent'>visibility</mat-icon>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="sign-section">
-                <div class="forget">
-                  <i class="fas fa-key"></i>
-                  <div class="forget_pass" (click)='onForget()'>I forgot my password</div>
-                </div>
-                <div class='sign-button'>
-                  <button mat-stroked-button color="primary" (click)='onLogin()' [disabled]="!loginInfo.email || !loginInfo.password">Sign
-                    In</button>
-                </div>
-                <div class="alternative" (click)='onToggleSign()'>
-                  <div class='prompt'>Or I want to sign up</div>
-                  <div class="icon">
-                    <i class="material-icons">forward</i></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
+      </form>
     </div>
+
   </div>
 </div>

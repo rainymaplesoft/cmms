@@ -1,0 +1,54 @@
+<view-header [title]='title'></view-header>
+<div class="page_view">
+  <div class='page_content'>
+    <div class="table-container">
+      <div class="club-img" [ngStyle]="{'background-image': clubImage}">
+        <!-- <img [src]="clubImage" /> -->
+      </div>
+
+      <div class="login-form" *ngIf='club'>
+        <div class='sign-title'>
+          <img src='assets/img/login-icon.png' style='height: 50px;' />
+        </div>
+        <form novalidate class='reactive-form'>
+          <div class="form_section">
+            <div class="form_content">
+              <div class="flex_row">
+                <div class="control">
+                  <mat-form-field>
+                    <input matInput placeholder="Email" [(ngModel)]="loginInfo.email" name='login_email' autocomplete="off">
+                    <mat-icon matSuffix color='primary'>email</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="flex_row">
+                <div class="control">
+                  <mat-form-field>
+                    <input matInput placeholder="Password" type='password' [(ngModel)]="loginInfo.password" name='login_password'
+                      autocomplete="off">
+                    <mat-icon matSuffix color='accent'>visibility</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="sign-section">
+                <div class="forget">
+                  <i class="fas fa-key"></i>
+                  <div class="forget_pass" (click)='onForget()'>I forgot my password</div>
+                </div>
+                <div class='sign-button'>
+                  <button mat-stroked-button color="primary" (click)='onLogin()' [disabled]="!loginInfo.email || !loginInfo.password">Sign
+                    In</button>
+                </div>
+                <div class="alternative" (click)='onToggleSign()'>
+                  <div class='prompt'>Or I want to sign up</div>
+                  <div class="icon">
+                    <i class="material-icons">forward</i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

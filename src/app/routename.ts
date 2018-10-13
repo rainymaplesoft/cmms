@@ -6,7 +6,8 @@ export class RouteName {
   }
   static Home = 'home';
   static Club = 'club';
-  static Sign = `${RouteName.Club}/sign`;
+  static SignIn = `signin`;
+  static SignUp = `signup`;
   static Event = 'event';
   static ClubSetting = 'setting/club';
   static AccountSetting = 'setting/account';

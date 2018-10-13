@@ -35,11 +35,11 @@ export class MetaService {
     private storageService: StorageService
   ) {}
 
-  get clubId() {
+  get loggedInclubId() {
     return this.storageService.getItem(StorageItem.CLUB_ID);
   }
 
-  get userId() {
+  get loggedInUserId() {
     return this.storageService.getItem(StorageItem.USER_ID);
   }
 
@@ -48,10 +48,10 @@ export class MetaService {
   }
 
   get loggedInClub(): Observable<IClub> {
-    if (!this.clubId) {
+    if (!this.loggedInclubId) {
       return of(null);
     }
-    return this.getClubById(this.clubId);
+    return this.getClubById(this.loggedInclubId);
   }
 
   get getLoggedInUser() {

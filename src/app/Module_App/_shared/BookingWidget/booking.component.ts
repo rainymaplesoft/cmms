@@ -37,7 +37,6 @@ export class BookingComponent implements OnInit {
   navClub: IClub;
   isLoggedIn: boolean;
   user: IUser;
-  bookings: IBooking[];
   bookingList: IBooking[];
   constructor(
     private eventService: EventService,
@@ -68,7 +67,15 @@ export class BookingComponent implements OnInit {
     return this.navClub._id;
   }
 
-  getBookingList(clubId: string) {
+  private getBookingInfo() {
+    if (!this.navClub) {
+      return;
+    }
+    this.addBookings();
+    this.getBookingList(this.navClub._id);
+  }
+
+  private getBookingList(clubId: string) {
     this.bookingService
       .getBookings(clubId)
       .subscribe((bookings: IBooking[]) => {
@@ -87,27 +94,36 @@ export class BookingComponent implements OnInit {
       });
   }
 
-  private getBookingInfo() {
-    if (!this.navClub) {
-      return;
+  private addBookings() {
+    const comingTwoBookings = this.getComingTwoDays();
+    for (const booking of comingTwoBookings) {
+      this.bookingService
+        .getBookingsByDateName(this.clubId, booking.dateName)
+        .subscribe(r => {
+          if (!r || r.length === 0) {
+            // add booking only if not existing
+            this.bookingService.addBooking(this.navClub._id, booking);
+          }
+        });
     }
-    this.getBookingList(this.navClub._id);
+  }
 
+  private getComingTwoDays() {
     const openDays = this.navClub.openDays.split('');
-    const today = new Date();
-    const weekDay = today.getDay(); // 0-6
+    const today = new Date().getDay(); // 0-6
     // let days = Date[];
     const bb = openDays
       .map(d => {
         const day = +d;
-        return day < weekDay
-          ? this.addDay(day + 7 - weekDay)
-          : this.addDay(day - weekDay);
+        return day < today
+          ? this.addDay(day + 7 - today)
+          : this.addDay(day - today);
       })
       .sort((a, b) => {
         return a > b ? 1 : a < b ? -1 : 0;
       });
-    this.bookings = bb.slice(0, 2).map(d => {
+    // take only most recent 2 days
+    const comingTwoBookings = bb.slice(0, 2).map(d => {
       const newBooking: IBooking = {
         dateName: d.toDateString(),
         bookingDate: d,
@@ -117,23 +133,12 @@ export class BookingComponent implements OnInit {
       };
       return newBooking;
     });
+    return comingTwoBookings;
   }
 
   private addDay(days: number) {
     const someDate = new Date();
     someDate.setDate(someDate.getDate() + days);
     return someDate;
-  }
-
-  private addBookings() {
-    for (const booking of this.bookings) {
-      this.bookingService
-        .getBookingsByDateName(this.clubId, booking.dateName)
-        .subscribe(r => {
-          if (!r || r.length === 0) {
-            this.bookingService.addBooking(this.navClub._id, booking);
-          }
-        });
-    }
   }
 }

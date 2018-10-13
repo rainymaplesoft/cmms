@@ -17,7 +17,6 @@ export enum StorageItem {
 
 export interface IUser {
   _id?: string;
-  uid: string;
   email: string;
   role: IRole;
   isMember?: boolean;

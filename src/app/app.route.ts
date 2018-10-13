@@ -15,7 +15,7 @@ import {
 import { UserComponent } from './Module_App/Account/User/user.component';
 import { EventLatestComponent } from './Module_App/Events';
 import { PricingComponent } from './Module_App/Pricing';
-import { SignUpComponent } from './Module_App/SignUp';
+import { SignUpComponent, SignInComponent } from './Module_App/SignUp';
 import { ViewHeaderComponent } from './Module_App/ViewHeader';
 import { ClientComponent } from './Module_App/_Clients/client.component';
 import {
@@ -47,6 +47,8 @@ export const AppRoutes: Route[] = [
   { path: 'setting/account', component: AccountListComponent, canActivate: [] },
   { path: 'setting/booking', component: BookingListComponent, canActivate: [] },
   { path: 'setting/user', component: UserComponent, canActivate: [] },
+  { path: 'signin', component: SignInComponent, canActivate: [] },
+  { path: 'signup', component: SignUpComponent, canActivate: [] },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
   {
     path: 'club',
@@ -75,6 +77,7 @@ export const AppComponents: any = [
   EventLatestComponent,
   PricingComponent,
   SignUpComponent,
+  SignInComponent,
   ViewHeaderComponent,
   ClientComponent,
   MainLPBCComponent,

@@ -33,45 +33,20 @@ export class CustomValidator {
   static ExistingEmail(db: FirebaseDataService) {
     return (control: AbstractControl) => {
       const email = control.value;
-      const pathClubs = `${CollectionPath.CLUBS}`;
-      const result = db.getCollection<IClub[]>(pathClubs).pipe(
-        debounceTime(1000),
-        take(1),
-        switchMap((clubs: IClub[]) => {
-          const users$: Observable<IUser[]>[] = [];
-          // for (const club of clubs) {
-          //   const clubId = club._id;
-          //   const pathClubUsers = `${CollectionPath.CLUBS}/${clubId}/${
-          //     CollectionPath.USERS
-          //   }`;
-          const pathClubUsers = 'clubs/D82si39pqPY6EqEix8yy/users';
-          const user$ = db.getCollection<IUser>(pathClubUsers, [
-            'email',
-            '==',
-            email
-          ]);
-          //   users$.push(user$);
-          // }
-          // users$.push(user$);
-          users$.push(user$);
-          // return from(user$).pipe(
-          return user$.pipe(
-            // switchMap(u => u),
-            switchMap(results => {
-              const invalid = !!results ? { emailExists: true } : null;
-
-              console.log(control);
-              return of(invalid);
-            })
-          );
-        })
-        // map(results => {
-        //   const invalid = results.some(c => c && c.length > 0)
-        //     ? { invalid: true }
-        //     : null;
-        //   return invalid;
-        // })
-      );
+      const result = db
+        .getCollection(CollectionPath.USERS, ['email', '==', email])
+        .pipe(
+          debounceTime(500),
+          take(1),
+          map(arr => {
+            /* truthy: invalid; falsy: valid */
+            if (arr && arr.length > 0) {
+              return { invalid: true };
+            } else {
+              return null;
+            }
+          })
+        );
       return result;
     };
   }

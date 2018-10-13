@@ -12,7 +12,6 @@
       }
     }
     .control {
-      max-width: 17em !important;
       min-width: auto;
       @media (max-width: 570px) {
         width: 90%;
@@ -22,13 +21,18 @@
   }
 }
 
+.signup-form {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
 .sign-title {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   padding: 10px 10px 0;
-}
-.hide_sign {
-  display: none !important;
 }
 
 .table-container {
@@ -42,14 +46,11 @@
     width: auto;
     background-size: cover;
   }
-  .signup-form,
   .login-form {
     display: table-cell;
     width: 560px;
     background-color: #ffffff;
     color: #505e6c;
-  }
-  .login-form {
     width: 400px;
     .form_section {
       padding-left: 0;

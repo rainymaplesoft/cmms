@@ -13,7 +13,7 @@ import {
   ComponentFactory
 } from '@angular/core';
 import { MainLPBCComponent } from './LPBC/main-lpbc.component';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MainLVBCComponent } from './LVBC/main-lvbc.component';
 import { MainWIBCComponent } from './WIBC/main-wibc.component';
@@ -21,6 +21,7 @@ import { IUser, IClub } from '../../Module_Firebase';
 import { MetaService } from '../meta.service';
 import { UtilService } from '../../Module_Core/services/util.service';
 import { RouteName } from '../../routename';
+import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-client',
   templateUrl: 'client.component.html',
@@ -42,7 +43,7 @@ export class ClientComponent
     WIBC: MainWIBCComponent
   };
   loggedInUser: IUser;
-  originUrl = '';
+  url = '';
   isOutletActivated = false;
   get showClubMain() {
     return !this.isOutletActivated;
@@ -55,13 +56,10 @@ export class ClientComponent
   ) {}
 
   ngOnInit() {
-    this.originUrl = this.router.url;
-    this.clubId = this.metaService.getUrlClubId();
-    if (
-      this.clubId &&
-      this.metaService.clubId &&
-      this.metaService.clubId !== this.clubId
-    ) {
+    this.url = this.router.url;
+    this.clubId = this.metaService.getUrlClubId(this.url);
+    const loggedInClubId = this.metaService.loggedInclubId;
+    if (loggedInClubId && loggedInClubId !== this.clubId) {
       this.metaService.signOut();
     }
     this.chooseClubPComponent();
@@ -99,13 +97,14 @@ export class ClientComponent
     this.isOutletActivated = true;
     const outletComponentName = $event.constructor.name;
   }
+
   onOutletDeactivate($event) {
-    // navigate away the club page, log out anyway
-    if (this.originUrl !== this.router.url) {
-      return;
-    }
-    this.isOutletActivated = false;
-    this.chooseClubPComponent();
+    //// navigate away the club page, log out anyway
+    // if (this.originUrl !== this.router.url) {
+    //   return;
+    // }
+    // this.isOutletActivated = false;
+    // this.chooseClubPComponent();
   }
 
   ngOnChanges() {}

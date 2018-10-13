@@ -16,7 +16,7 @@ export class ClientBase implements OnInit {
   }
 
   onLogin() {
-    this.router.navigate([RouteName.Sign], {
+    this.router.navigate([RouteName.SignIn], {
       queryParams: { clubId: this.__clubId }
     });
   }

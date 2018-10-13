@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
 
   r_selected = RouteName.Home;
   r_home = RouteName.Home;
-  r_signup = RouteName.Sign;
+  r_signup = RouteName.SignUp;
   r_event = RouteName.Event;
   r_clubs = RouteName.ClubSetting;
   r_user = RouteName.User;
@@ -62,14 +62,14 @@ export class HeaderComponent implements OnInit {
       clubCode: '',
       mapLink: ''
     };
+    if (!navClubId) {
+      return;
+    }
     // update login status
     this.metaService.getLoggedInUser.subscribe(u => {
       this.isLoggedIn = !!u;
       this.loggedInUser = u;
     });
-    if (!navClubId) {
-      return;
-    }
     // update navigated club status
     this.metaService.getClubById(navClubId).subscribe(club => {
       if (!club) {
