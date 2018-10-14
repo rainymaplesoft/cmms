@@ -30,20 +30,29 @@
                   </mat-form-field>
                 </div>
               </div>
+              <div class="agree-section">
+                <div class="checkbox">
+                  <mat-checkbox [(ngModel)]="loginInfo.isJoinClub" name='login_isJoinClub'>I want to join this club</mat-checkbox>
+                </div>
+                <div class="checkbox">
+                  <mat-checkbox [(ngModel)]="loginInfo.isFollowPolicy" name='login_isFollowPolicy'>I agree to the Club
+                    Terms and Conditions</mat-checkbox>
+                </div>
+              </div>
               <div class="sign-section">
                 <div class="forget">
                   <i class="fas fa-key"></i>
                   <div class="forget_pass" (click)='onForget()'>I forgot my password</div>
                 </div>
                 <div class='sign-button'>
-                  <button mat-stroked-button color="primary" (click)='onLogin()' [disabled]="!loginInfo.email || !loginInfo.password">Sign
+                  <button mat-stroked-button color="primary" (click)='onLogin()' [disabled]='disableSign()'>Sign
                     In</button>
                 </div>
-                <div class="alternative" (click)='onToggleSign()'>
+                <!-- <div class="alternative" (click)='onToggleSign()'>
                   <div class='prompt'>Or I want to sign up</div>
                   <div class="icon">
                     <i class="material-icons">forward</i></div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

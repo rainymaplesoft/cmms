@@ -5,8 +5,11 @@
     <div class="intro-heading text-uppercase"><span>It's Nice To PLAY BADMINTON</span></div>
   </div>
   <div class='sign-button' *ngIf='!__loggedInUser'>
-    <button mat-flat-button color="accent" (click)='onLogin()'>Sign In / Sign Up</button>
+    <button mat-flat-button color="accent" (click)='onLogin()'>Sign In</button>
   </div>
+  <!-- <div class='sign-button' *ngIf='__loggedInUser'>
+    <button mat-flat-button color="accent" (click)='onProfile()'>Update My Profile</button>
+  </div> -->
   <!-- {{this.loggedInUser|json}} -->
 </div>
 <div class="page_view">

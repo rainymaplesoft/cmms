@@ -7,11 +7,18 @@ import {
   DialogConfirm,
   UtilService
 } from '../../Module_Core';
-import { FireAuthService, IUser, IClub } from '../../Module_Firebase';
+import {
+  FireAuthService,
+  IUser,
+  IClub,
+  FirebaseDataService
+} from '../../Module_Firebase';
 import { Observable, Subscription, of } from 'rxjs';
 import RouteName from '../../routename';
 import { MetaService } from '../meta.service';
 import { MatDialog } from '@angular/material';
+import { CustomValidator } from '../_shared/validators';
+import { take, map } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -26,12 +33,18 @@ export class SignInComponent implements OnInit {
     private authService: FireAuthService,
     private router: Router,
     private toastr: ToastrService,
+    private dbService: FirebaseDataService,
     public dialog: MatDialog,
     private util: UtilService
   ) {}
 
   club: IClub;
-  loginInfo = { email: '', password: '' };
+  loginInfo = {
+    email: '',
+    password: '',
+    isJoinClub: false,
+    isFollowPolicy: false
+  };
   showLogin = true;
   title = 'Sign In';
   clubImage: string;
@@ -52,10 +65,24 @@ export class SignInComponent implements OnInit {
   }
 
   onLogin() {
-    this.authService.signOut();
-    this.authService
-      .login(this.clubId, this.loginInfo.email, this.loginInfo.password)
-      .then(user => this.afterSignIn(user));
+    this.getUserInClub(this.clubId, this.loginInfo.email).subscribe(
+      (existingUser: IUser) => {
+        const isNew = !existingUser;
+        if (existingUser && !existingUser.isActive) {
+          this.toastr.warning('Sorry, this email is invalid for this club');
+          return;
+        }
+        this.authService.signOut();
+        this.authService
+          .login(
+            this.clubId,
+            this.loginInfo.email,
+            this.loginInfo.password,
+            isNew
+          )
+          .then(user => this.afterSignIn(user));
+      }
+    );
   }
 
   onForget() {
@@ -64,7 +91,21 @@ export class SignInComponent implements OnInit {
       this.toastr.warning('Please enter valid email address');
       return;
     }
-    const msg = 'Do you really want to reset you passwor?';
+    CustomValidator.CheckEmailExisting(this.dbService, email).subscribe(
+      isExisting => {
+        if (!isExisting) {
+          this.toastr.warning(
+            'No account with this email address, please verify'
+          );
+          return;
+        }
+        this.sendForgetEmailRequest(email);
+      }
+    );
+  }
+
+  private sendForgetEmailRequest(email: string) {
+    const msg = 'Do you really want to reset you password?';
     const dialogRef = this.dialog.open(DialogYesNoComponent, {
       data: { message: msg }
     });
@@ -78,7 +119,7 @@ export class SignInComponent implements OnInit {
   }
 
   private afterSignIn = (user: Observable<IUser>) => {
-    user.subscribe(u => {
+    user.pipe(take(1)).subscribe(u => {
       if (u) {
         // navigate to club page after login successfully
         this.router.navigate([RouteName.Club], {
@@ -89,4 +130,30 @@ export class SignInComponent implements OnInit {
       }
     });
   };
+
+  private getUserInClub(clubId: string, email: string) {
+    const path = this.metaService.getPathClubUsers(clubId);
+    const result = this.dbService
+      .getCollection(path, ['email', '==', email])
+      .pipe(
+        take(1),
+        map(arr => {
+          if (arr && arr.length > 0) {
+            return arr[0];
+          } else {
+            return null;
+          }
+        })
+      );
+    return result;
+  }
+
+  disableSign() {
+    return (
+      !this.loginInfo.email ||
+      !this.loginInfo.password ||
+      !this.loginInfo.isJoinClub ||
+      !this.loginInfo.isFollowPolicy
+    );
+  }
 }

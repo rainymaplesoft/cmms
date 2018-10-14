@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { EventService } from 'src/app/Module_Core';
 import { IMetaInfo, IUser } from 'src/app/Module_Firebase';
 import { EventName } from '../../config';
 import { IClub, IBooking } from '../../../Module_Firebase/models';
@@ -7,6 +6,7 @@ import { BookingService } from '../booking.service';
 import { tap, take, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MetaService } from '../../meta.service';
+import { UtilService } from '../../../Module_Core';
 
 @Component({
   selector: 'app-booking',
@@ -39,8 +39,7 @@ export class BookingComponent implements OnInit {
   user: IUser;
   bookingList: IBooking[];
   constructor(
-    private eventService: EventService,
-    private router: Router,
+    private util: UtilService,
     private metaService: MetaService,
     private bookingService: BookingService
   ) {}
@@ -79,15 +78,10 @@ export class BookingComponent implements OnInit {
     this.bookingService
       .getBookings(clubId)
       .subscribe((bookings: IBooking[]) => {
-        this.bookingList = bookings
-          .sort((a, b) => {
-            return a.bookingDate > b.bookingDate
-              ? 1
-              : a.bookingDate < b.bookingDate
-                ? -1
-                : 0;
-          })
-          .slice(0, 2);
+        this.bookingList = this.util
+          .sort(bookings, 'bookingDate', 'desc')
+          .slice(0, 2)
+          .reverse();
         for (const booking of this.bookingList) {
           booking.maxPlayers = this.navClub.maxPlayers;
         }

@@ -23,6 +23,8 @@ import { MetaService } from '../../meta.service';
 export class AccountEditComponent implements OnInit, OnChanges {
   @Input()
   clubId: string;
+  @Input()
+  showSuperOption: boolean;
   @Output()
   showList = new EventEmitter<boolean>();
 
@@ -40,7 +42,7 @@ export class AccountEditComponent implements OnInit, OnChanges {
   ) {}
 
   get userDocPath() {
-    return this.metaService.getDocPathUser(this.clubId, this.userId);
+    return this.metaService.getPathClubUser(this.clubId, this.userId);
   }
 
   set selectRecordId(recordId: string) {
@@ -87,7 +89,7 @@ export class AccountEditComponent implements OnInit, OnChanges {
     this.dbService
       .updateDocument<IUser>(this.userDocPath, data)
       .then((r: boolean) => {
-        this.getRecordById();
+        // this.getRecordById();
       });
   }
 
@@ -109,7 +111,7 @@ export class AccountEditComponent implements OnInit, OnChanges {
       gender: { value: 1, disabled: true },
       isMember: { value: false, disabled: false },
       isAdmin: { value: false, disabled: false },
-      isActive: { value: '', disabled: false }
+      isActive: { value: false, disabled: false }
     });
     this.hideEdit = false;
   }

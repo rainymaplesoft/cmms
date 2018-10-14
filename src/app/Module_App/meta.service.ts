@@ -59,9 +59,11 @@ export class MetaService {
   }
 
   signOut() {
-    this.authService.signOut();
-    this.eventService.pub(EventName.Event_SignOut);
-    this.router.navigate([RouteName.Home]);
+    return this.authService.signOut().then(c => {
+      this.eventService.pub(EventName.Event_SignOut);
+      this.router.navigate([RouteName.Home]);
+      return 0;
+    });
   }
 
   getUrlClubId(url?: string) {
@@ -98,13 +100,13 @@ export class MetaService {
     return `${CollectionPath.CLUBS}/${clubId}`;
   }
 
-  getDocPathUser(clubId: string, userId: string) {
+  getPathClubUser(clubId: string, userId: string) {
     return `${CollectionPath.CLUBS}/${clubId}/${
       CollectionPath.USERS
     }/${userId}`;
   }
 
-  getDocPathUsers(clubId: string) {
+  getPathClubUsers(clubId: string) {
     return `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
   }
 

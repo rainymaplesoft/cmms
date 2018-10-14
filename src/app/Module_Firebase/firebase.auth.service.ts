@@ -15,7 +15,7 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class FireAuthService {
-  private firebaseUser: firebase.User;
+  private _firebaseUser: firebase.User;
 
   constructor(
     private afs: AngularFirestore,
@@ -26,6 +26,10 @@ export class FireAuthService {
 
   get authState() {
     return this.afAuth.authState;
+  }
+
+  get firebaseUser() {
+    return this.afAuth.user;
   }
 
   signupWithEmailPassword(userInfo: IUser) {
@@ -47,17 +51,20 @@ export class FireAuthService {
   }
 
   signOut() {
-    this.afAuth.auth.signOut();
     this.storage.removeItem(StorageItem.CLUB_ID);
     this.storage.removeItem(StorageItem.USER_ID);
+    return this.afAuth.auth.signOut();
   }
 
-  login(clubId: string, email: string, password: string) {
+  login(clubId: string, email: string, password: string, isNew: boolean) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
       credential => {
         const userId = credential.user.uid;
         this.saveLoginStatus(clubId, userId);
-        this.updateUserData(clubId, userId, email);
+        const isSuper = this.isSuper(userId);
+        if (isNew && !isSuper) {
+          this.addUserToClub(clubId, userId, email);
+        }
         return this.getCurrentUser();
       },
       e => {
@@ -70,9 +77,28 @@ export class FireAuthService {
     return of(null);
   }
 
+  isSuper(uid) {
+    if (uid === 'CRilEJC0CvUyL2HgNtIbfk7YDqn1') {
+      // && email === 'super@123.com'
+      return true;
+    }
+    return false;
+  }
+
   getCurrentUser(): Observable<IUser> {
     // Get auth data, then get firestore user document || null
+
     const userId = this.storage.getItem(StorageItem.USER_ID);
+    const isSuper = this.isSuper(userId);
+    if (isSuper) {
+      const superUser: IUser = {
+        email: 'email',
+        _id: userId,
+        isSuperAdmin: true,
+        role: { superUser: true }
+      };
+      return of(superUser);
+    }
     const clubId = this.storage.getItem(StorageItem.CLUB_ID);
     const docPath = this.getDocPathUser(clubId, userId);
     return this.afs
@@ -94,7 +120,7 @@ export class FireAuthService {
     this.storage.setItem(StorageItem.CLUB_ID, clubId);
   }
 
-  private updateUserData(clubId: string, userId: string, email: string) {
+  private addUserToClub(clubId: string, userId: string, email: string) {
     // Sets user data to firestore on login
     const docPath = this.getDocPathUser(clubId, userId);
     const userRef: AngularFirestoreDocument<IUser> = this.afs.doc(docPath);
@@ -139,7 +165,7 @@ export class FireAuthService {
       .signInWithPopup(new auth.GoogleAuthProvider())
       .then(
         credential => {
-          this.updateUserData(clubId, credential.user);
+          this.addUserToClub(clubId, credential.user);
           this.router.navigate([routeOk]);
         },
         error => {

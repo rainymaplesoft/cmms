@@ -1,12 +1,12 @@
 <view-header [title]='title'></view-header>
 <div class="page_view">
   <div class='page_content'>
-    <div class="selection">
+    <div class="selection" *ngIf='showSuperOption()'>
       <form>
         <div class="selectClub">
           <mat-form-field style="width: 320px;">
-            <mat-select placeholder="Select Club" (selectionChange)='onChangeClub(club)' [(ngModel)]='club' name='club'>
-              <mat-option *ngFor="let club of clubs" [value]="club">
+            <mat-select placeholder="Select Club" (selectionChange)='onChangeClub()' [(ngModel)]='club' name='clu'>
+              <mat-option *ngFor="let club of clubs | async" [value]="club">
                 {{club.clubName}}
               </mat-option>
             </mat-select>
@@ -25,8 +25,8 @@
         </div>
       </div>
       <div class="table_content">
-        <div class='t_row' *ngFor="let booking of bookingList; index as i; last as islast" [ngClass]='{hideByPage:hideByPage(i)}'
-          (click)='onRecordClick(booking)'>
+        <div class='t_row' *ngFor="let booking of bookingList; index as i; last as islast" (click)='
+          onRecordClick(booking)'>
           <div class="row-section">
             <div class="t_col flex_3">{{booking.dateName }}</div>
             <div class="t_col flex_2 mobile_hide">{{ booking.maxPlayers }}</div>

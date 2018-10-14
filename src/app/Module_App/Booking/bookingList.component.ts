@@ -7,15 +7,16 @@ import {
   IBooking
 } from '../../Module_Firebase';
 import { MetaService } from 'src/app/Module_App/meta.service';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { map, tap, switchMap } from 'rxjs/operators';
 import {
   rotateAnimate,
   pullUpDownAnimate,
   UtilService
 } from '../../Module_Core';
 import { PageEvent } from '@angular/material';
-import { BookingService } from '../_shared';
+import { BookingService, ClubService } from '../_shared';
+import { Config } from '../config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,8 +26,9 @@ import { BookingService } from '../_shared';
   animations: [rotateAnimate, pullUpDownAnimate]
 })
 export class BookingListComponent implements OnInit {
+  private _loggedInUser: IUser;
   clubId: string;
-  clubs: IClub[];
+  clubs: Observable<IClub[]>;
   club: IClub;
   bookingList: IBooking[];
   bookedPlayers: IUser[];
@@ -37,46 +39,57 @@ export class BookingListComponent implements OnInit {
   selectedRecordId = '';
   arrowState = 'right'; // right/down
   chipState = {}; // hide/show
+  maxPlayers: number;
   get pageLength() {
     return this.recordCount;
   }
 
-  pageConfig = {
-    length: 0,
-    pageSize: 5,
-    pageIndex: 0,
-    pageSizeOptions: [5, 10, 20]
-  };
+  pageConfig = Config.PageConfig;
 
   constructor(
     private dbService: FirebaseDataService,
     private bookingService: BookingService,
+    private clubservice: ClubService,
+    private metaServie: MetaService,
     private util: UtilService
   ) {}
   ngOnInit() {
-    this.getAllClubs();
+    this.metaServie.getLoggedInUser.subscribe(u => {
+      this._loggedInUser = u;
+      if (u.isAdmin) {
+        this.clubId = this._loggedInUser.loggedInClubId;
+        this.clubservice.getClubById(this.clubId).subscribe(club => {
+          this.maxPlayers = club.maxPlayers;
+          this.getAllBookings(this.clubId);
+        });
+        return;
+      }
+      if (u.isSuperAdmin) {
+        this.clubs = this.getAllClubs();
+      }
+    });
   }
 
   getAllClubs() {
-    this.dbService
+    return this.dbService
       .getCollection<IClub>(CollectionPath.CLUBS, [], ['clubName', 'asc'])
       .pipe(
         map((items: IClub[]) => {
           return items.filter(i => i.isActive);
         })
-      )
-      .subscribe(clubs => (this.clubs = clubs));
+      );
   }
 
   onChangeClub(event: any) {
-    // this.club = club;
     this.clubId = this.club._id;
+    this.maxPlayers = this.club.maxPlayers;
     this.getAllBookings(this.clubId);
   }
 
   onPageChange($event: PageEvent) {
     this.pageConfig.pageIndex = $event.pageIndex;
     this.pageConfig.pageSize = $event.pageSize;
+    this.getAllBookings(this.clubId);
   }
 
   onRecordClick(booking: IBooking) {
@@ -85,6 +98,7 @@ export class BookingListComponent implements OnInit {
       .subscribe(u => (this.bookedPlayers = u));
     this.selectedBookingId = booking._id;
 
+    // toggle the chips panel
     for (const key in this.chipState) {
       if (this.chipState.hasOwnProperty(key)) {
         this.chipState[key] = 'hide';
@@ -101,22 +115,21 @@ export class BookingListComponent implements OnInit {
     this.bookingService
       .getBookings(clubId)
       .subscribe((bookings: IBooking[]) => {
-        // get bookingList
-        this.bookingList = this.util.sort(bookings, 'bookingDate', 'desc');
+        this.pageConfig.length = bookings.length;
+        const array_sorted = this.util.sort(bookings, 'bookingDate', 'desc');
+        this.bookingList = this.util.paginate(
+          array_sorted,
+          this.pageConfig.pageSize,
+          this.pageConfig.pageIndex
+        );
         for (const booking of this.bookingList) {
-          booking.maxPlayers = this.club.maxPlayers;
+          booking.maxPlayers = this.maxPlayers;
           this.chipState[booking._id] = 'hide';
         }
-        this.pageConfig.length = this.bookingList.length;
       });
   }
 
-  hideByPage(i: number) {
-    const index = i + 1;
-    const pageNumber = this.pageConfig.pageIndex + 1;
-    const hide =
-      index > this.pageConfig.pageSize * pageNumber ||
-      index <= this.pageConfig.pageSize * (pageNumber - 1);
-    return hide;
+  showSuperOption() {
+    return this._loggedInUser && this._loggedInUser.isSuperAdmin;
   }
 }

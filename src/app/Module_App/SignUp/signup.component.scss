@@ -64,12 +64,23 @@
     }
   }
 }
-
+.agree-section {
+  display: flex;
+  flex-direction: column;
+  .checkbox {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1em 3em;
+    position: relative;
+    min-height: 3em;
+  }
+}
 .sign-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 1.5em;
+  padding-top: 2em;
   .forget {
     display: flex;
     justify-content: center;

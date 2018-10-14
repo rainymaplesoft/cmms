@@ -21,6 +21,8 @@ export class BookingWidgetComponent implements OnInit {
   @Input()
   loggedinUser: IUser;
 
+  showBookingAction = false;
+
   monthes = Config.Monthes;
   weekdays = Config.Weekdays;
 
@@ -44,6 +46,8 @@ export class BookingWidgetComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.showBookingAction =
+      this.loggedinUser && !this.loggedinUser.isSuperAdmin;
     this.initDateInfo();
     this.setBookingStatus();
   }
@@ -96,12 +100,6 @@ export class BookingWidgetComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === DialogConfirm.Yes) {
-        // this.bookingService
-        //   .deleteBooking(this.booking.clubId, this.booking._id)
-        //   .then(
-        //     _ => console.log('deleted successfully'),
-        //     _ => console.log('failed to delete')
-        //   );
         this.bookingService
           .cancelBooking(
             this.booking.clubId,

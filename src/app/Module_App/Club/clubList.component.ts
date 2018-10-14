@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
-import { FirebaseDataService, IClub } from '../../Module_Firebase';
-import { CollectionPath } from '../../Module_Firebase/models';
+import { CollectionPath, IUser, IClub } from '../../Module_Firebase/models';
 import { ClubEditComponent } from './ClubEdit';
 import { rotateAnimate, pullUpDownAnimate } from '../../Module_Core';
 import { Config } from '../config';
+import { MetaService } from '../meta.service';
+import { ClubService } from '../_shared/club.service';
+import { UtilService } from '../../Module_Core/services/util.service';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'club-list',
@@ -19,42 +21,58 @@ export class ClubListComponent implements OnInit, OnChanges {
   @ViewChild(ClubEditComponent)
   clubEdit: ClubEditComponent;
 
+  private _loggedInUser: IUser;
   showClubList = true;
   clubCount = 0;
   alreadyCounted = false;
-  clubs: Observable<any[]>;
+  clubs: Observable<IClub[]>;
   title = 'Club Settings';
   selectedClubId = '';
   arrowState = 'right'; // right/down
   tableContentState = 'show'; // hide/show
 
-  get pageLength() {
-    return this.clubCount;
-  }
-
   pageConfig = Config.PageConfig;
 
-  constructor(private dbService: FirebaseDataService) {}
+  constructor(
+    private metaServie: MetaService,
+    private clubservice: ClubService,
+    private util: UtilService
+  ) {}
 
   ngOnInit() {
-    this.clubs = this.getAllClubs();
+    this.metaServie.getLoggedInUser.subscribe(u => {
+      this._loggedInUser = u;
+      if (u.isAdmin) {
+        this.selectedClubId = this._loggedInUser.loggedInClubId;
+        this.clubEdit.selectClub = this.selectedClubId;
+        return;
+      }
+      if (u.isSuperAdmin) {
+        this.clubs = this.getAllClubs();
+      }
+    });
   }
 
   ngOnChanges() {}
 
   getAllClubs() {
-    return this.dbService
-      .getCollection<IClub>(CollectionPath.CLUBS, [], ['clubName', 'asc'])
-      .pipe(
-        tap((item: any[]) => {
-          this.pageConfig.length = item.length;
-        })
-      );
+    return this.clubservice.getAllClubs().pipe(
+      map((clubs: IClub[]) => {
+        this.pageConfig.length = clubs.length;
+        const array_paged = this.util.paginate(
+          clubs,
+          this.pageConfig.pageSize,
+          this.pageConfig.pageIndex
+        );
+        return array_paged;
+      })
+    );
   }
 
   onPageChange($event: PageEvent) {
     this.pageConfig.pageIndex = $event.pageIndex;
     this.pageConfig.pageSize = $event.pageSize;
+    this.getAllClubs();
   }
 
   onClubClick(club: IClub) {
@@ -83,12 +101,7 @@ export class ClubListComponent implements OnInit, OnChanges {
     this.showClubList = true;
   }
 
-  hideByPage(i: number) {
-    const index = i + 1;
-    const pageNumber = this.pageConfig.pageIndex + 1;
-    const hide =
-      index > this.pageConfig.pageSize * pageNumber ||
-      index <= this.pageConfig.pageSize * (pageNumber - 1);
-    return hide;
+  showSuperOption() {
+    return this._loggedInUser && this._loggedInUser.isSuperAdmin;
   }
 }

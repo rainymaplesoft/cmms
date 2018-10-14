@@ -17,7 +17,7 @@
             <div class="item_wrap">Home</div>
           </div>
         </div>
-        <div class='menu_item' [matMenuTriggerFor]="menuSetting" [ngClass]="{selected: r_clubs===r_selected}">
+        <div class='menu_item' *ngIf='checkShowSettings()' [matMenuTriggerFor]="menuSetting" [ngClass]="{selected: r_clubs===r_selected}">
           <div class="menu_content">
             <i class="material-icons">settings</i>
           </div>
@@ -68,23 +68,23 @@
       </div>
       <div class="pulldown_menu">
         <div class='menu_item' *ngIf="navClubId">
-          <div class="icon_wrap" (click)='onShowContact()'>
+          <div class="icon_wrap" matTooltip="Contact & Location" (click)='onShowContact()'>
             <i class="material-icons">location_on</i>
           </div>
         </div>
         <div class='menu_item' *ngIf="navClubId">
-          <div class="icon_wrap" (click)='onShowTimings()'>
+          <div class="icon_wrap" matTooltip="Schedule" (click)='onShowTimings()'>
             <i class="material-icons">access_time</i>
           </div>
         </div>
-        <div class='menu_item' *ngIf="isLoggedIn">
-          <div class="icon_wrap" (click)='nav(r_user,true)'>
+        <div class='menu_item' *ngIf="checkShowProfile()">
+          <div class="icon_wrap" matTooltip="My Profile" (click)='nav(r_user,true)'>
             <!-- <i class="material-icons" [matBadge]="loginBadge" matBadgeColor="warn">account_circle</i> -->
             <i class="material-icons">account_circle</i>
           </div>
         </div>
         <div class='menu_item' *ngIf="isLoggedIn">
-          <div class="icon_wrap" (click)='onSignOut()'>
+          <div class="icon_wrap" matTooltip="Sign Out" (click)='onSignOut()'>
             <i class="material-icons">exit_to_app</i>
           </div>
         </div>

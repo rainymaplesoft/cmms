@@ -20,7 +20,6 @@
                 <val-msg [invalid]='email.invalid && email.dirty && email.errors["emailExists"]'>
                   Email already exists
                 </val-msg>
-                {{email.errors|json}}
               </div>
             </div>
             <div class="row_col">
@@ -47,53 +46,15 @@
                 </val-msg>
               </div>
             </div>
-            <!-- <div class="row_col">
-                <div class="control">
-                  <mat-form-field>
-                    <input matInput placeholder="First Name" formControlName="firstName" autocomplete="off">
-                    <mat-icon matSuffix color='primary'>person</mat-icon>
-                  </mat-form-field>
-                  <val-msg [invalid]='getValidate("firstName")'>
-                    First Name is required
-                  </val-msg>
-                </div>
-                <div class="control">
-                  <mat-form-field>
-                    <input matInput placeholder="Last Name" formControlName="lastName" autocomplete="off">
-                    <mat-icon matSuffix color='primary'>person</mat-icon>
-                  </mat-form-field>
-                  <val-msg [invalid]='getValidate("lastName")'>
-                    Last Name is required
-                  </val-msg>
-                </div>
+            <div class="agree-section">
+              <div class="checkbox">
+                <mat-checkbox formControlName="agreePolicy">I agree to the Club Terms and Conditions</mat-checkbox>
               </div>
-              <div class="row_col">
-                <div class="control">
-                  <mat-form-field>
-                    <input matInput placeholder="Phone Number" formControlName="cellPhone" autocomplete="off">
-                    <mat-icon matSuffix color='primary'>phone_android</mat-icon>
-                  </mat-form-field>
-                  <val-msg [invalid]='getValidate("cellPhone")'>
-                    Phone Number is required
-                  </val-msg>
-                </div>
-                <div class="control" style='align-items: flex-start'>
-                  <mat-radio-group style="padding-top:1em;" formControlName="gender">
-                    <mat-radio-button style="width: 6em;" *ngFor="let gender of genders" [value]="gender.key">
-                      {{gender.value}}
-                    </mat-radio-button>
-                  </mat-radio-group>
-                </div>
-              </div> -->
+            </div>
             <div class="flex_row sign-section">
               <div class='sign-button'>
-                <button type='submit' mat-stroked-button color="primary" [disabled]="notSamePassword || !signupForm.valid">Sign
+                <button type='submit' mat-stroked-button color="primary" [disabled]="!isAgreePolicy || notSamePassword || !signupForm.valid">Sign
                   Up</button>
-              </div>
-              <div class="alternative" (click)='onToggleSign()'>
-                <div class='prompt'>Or I already have account</div>
-                <div class="icon">
-                  <i class="material-icons">forward</i></div>
               </div>
             </div>
           </div>

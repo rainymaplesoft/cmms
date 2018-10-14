@@ -1,7 +1,7 @@
 <view-header [title]='title'></view-header>
 <div class="page_view">
   <div class='page_content'>
-    <div class="club_table" [ngClass]='{"hide_list":!showClubList}'>
+    <div class="club_table" *ngIf='showSuperOption()' [ngClass]='{"hide_list":!showClubList}'>
       <div class='header'>
         <div class="t_col flex_3">Club Name</div>
         <div class="t_col flex_2 mobile_hide">Email</div>
@@ -22,7 +22,7 @@
       </div>
       <div class="table_content" [@pullUpDownAnimate]='tableContentState'>
         <div class='t_row' *ngFor="let club of clubs | async as clubList; index as i; last as islast trackBy: clubTrack"
-          [ngClass]='{selected:checkSelected(club),hideByPage:hideByPage(i)}' (click)='onClubClick(club)'>
+          [ngClass]='{selected:checkSelected(club)}' (click)='onClubClick(club)'>
           <div class="t_col flex_3">{{ club.clubName }}</div>
           <div class="t_col flex_2 mobile_hide">{{ club.email }}</div>
           <div class="t_col flex_1 mobile_hide">{{ club.clubCode }}</div>
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="club_edit">
-      <club-edit [clubId]='selectedClubId' (showList)='showList()'></club-edit>
+      <club-edit [clubId]='selectedClubId' [showSuperOption]='showSuperOption()' (showList)='showList()'></club-edit>
     </div>
   </div>
 </div>

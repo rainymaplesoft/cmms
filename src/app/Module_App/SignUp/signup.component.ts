@@ -6,6 +6,8 @@ import { FireAuthService, IUser, IClub } from '../../Module_Firebase';
 import RouteName from '../../routename';
 import { MetaService } from '../meta.service';
 import { MatDialog } from '@angular/material';
+import { CustomValidator } from '../_shared';
+import { FirebaseDataService } from '../../Module_Firebase/firebase.data.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -18,6 +20,7 @@ export class SignUpComponent implements OnInit {
   constructor(
     private metaService: MetaService,
     private fb: FormBuilder,
+    private dbService: FirebaseDataService,
     private authService: FireAuthService,
     private router: Router,
     public dialog: MatDialog
@@ -57,8 +60,8 @@ export class SignUpComponent implements OnInit {
     this.signupForm = this.fb.group({
       email: [
         '',
-        [Validators.required, Validators.email]
-        // [CustomValidator.ExistingEmail(this.dbService)]
+        [Validators.required, Validators.email],
+        [CustomValidator.ExistingEmail(this.dbService)]
       ],
       password: [
         '',
@@ -67,12 +70,13 @@ export class SignUpComponent implements OnInit {
       passwordConfirm: [
         '',
         [Validators.minLength(6), Validators.maxLength(25), Validators.required]
-      ]
-      // firstName: ['', [Validators.required]],
-      // lastName: ['', [Validators.required]],
-      // cellPhone: ['', [Validators.required]],
-      // gender: 1
+      ],
+      agreePolicy: [false]
     });
+  }
+
+  isAgreePolicy() {
+    return this.signupForm.get('agreePolicy').value;
   }
 
   getValidate(control: string) {

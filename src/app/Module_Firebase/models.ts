@@ -21,6 +21,7 @@ export interface IUser {
   role: IRole;
   isMember?: boolean;
   isAdmin?: boolean;
+  isSuperAdmin?: boolean;
   isActive?: boolean;
   gender?: number; // 1 => male
   password?: string;
@@ -60,7 +61,7 @@ export interface IBooking {
 }
 
 export interface IRole {
-  subscriber: boolean;
+  subscriber?: boolean;
   editor?: boolean;
   admin?: boolean;
   superUser?: boolean;

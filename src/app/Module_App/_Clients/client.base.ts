@@ -21,9 +21,21 @@ export class ClientBase implements OnInit {
     });
   }
 
+  onProfile() {
+    this.router.navigate([RouteName.User], {
+      queryParams: { clubId: this.__clubId }
+    });
+  }
+
   get welcome() {
-    return this.__loggedInUser
-      ? `${this.__loggedInUser.firstName} ${this.__loggedInUser.lastName}`
-      : ' To Our Badminton Club';
+    let name = 'To Our Club';
+    if (
+      this.__loggedInUser &&
+      this.__loggedInUser.firstName &&
+      this.__loggedInUser.lastName
+    ) {
+      name = `${this.__loggedInUser.firstName} ${this.__loggedInUser.lastName}`;
+    }
+    return name;
   }
 }

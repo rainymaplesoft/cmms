@@ -48,7 +48,7 @@ export class UserComponent implements OnInit {
   }
 
   get userDocPath() {
-    return this.metaService.getDocPathUser(this.clubId, this.userId);
+    return this.metaService.getPathClubUser(this.clubId, this.userId);
   }
 
   private getRecordById() {
@@ -74,7 +74,7 @@ export class UserComponent implements OnInit {
     this.dbService
       .updateDocument<IUser>(this.userDocPath, data)
       .then((r: boolean) => {
-        this.getRecordById();
+        // this.getRecordById();
       });
   }
 

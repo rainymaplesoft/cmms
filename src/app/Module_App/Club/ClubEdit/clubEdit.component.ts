@@ -17,7 +17,8 @@ import { tap } from 'rxjs/operators';
 import { KeyValue } from '../../../Module_Core/enums';
 import {
   DaySelectorComponent,
-  CustomValidator
+  CustomValidator,
+  ClubService
 } from 'src/app/Module_App/_shared';
 
 @Component({
@@ -29,6 +30,8 @@ import {
 export class ClubEditComponent implements OnInit, OnChanges {
   @Input()
   clubId: string;
+  @Input()
+  showSuperOption: boolean;
   @Output()
   showList = new EventEmitter<boolean>();
   @ViewChild(DaySelectorComponent)
@@ -58,11 +61,15 @@ export class ClubEditComponent implements OnInit, OnChanges {
   constructor(
     private dbService: FirebaseDataService,
     private fb: FormBuilder,
-    private util: UtilService
+    private clubService: ClubService
   ) {}
 
-  ngOnInit() {}
-  ngOnChanges() {}
+  ngOnInit() {
+    console.log(this.clubId);
+  }
+  ngOnChanges() {
+    console.log(this.clubId);
+  }
 
   onDayChanged(e) {
     this.dayChanged = true;
@@ -75,14 +82,11 @@ export class ClubEditComponent implements OnInit, OnChanges {
   //#region data functions
 
   private getClubById() {
-    this.club = this.dbService
-      .getSimpleDocument<IClub>(this.docPathClub)
-      .valueChanges()
-      .pipe(
-        tap((club: IClub) => {
-          this.disableCode = club && club.clubCode.length === 4;
-        })
-      );
+    this.club = this.clubService.getClubById(this.clubId).pipe(
+      tap((club: IClub) => {
+        this.disableCode = club && club.clubCode.length === 4;
+      })
+    );
     this.buildForm();
     this.club.subscribe(club => {
       this.formEdit.patchValue(club);
@@ -112,7 +116,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
     this.dbService
       .updateDocument<IClub>(this.docPathClub, data)
       .then((r: boolean) => {
-        this.getClubById();
+        // this.getClubById();
       });
   }
 
@@ -123,7 +127,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
     );
     newClub$.then((club: DocumentReference) => {
       this.clubId = club.id;
-      this.getClubById();
+      // this.getClubById();
     });
   }
 

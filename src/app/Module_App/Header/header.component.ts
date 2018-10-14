@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { MetaService } from '../meta.service';
 import { EventName } from '../config';
 import { filter, tap } from 'rxjs/operators';
+import { FireAuthService } from '../../Module_Firebase/firebase.auth.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -44,7 +45,8 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private eventService: EventService,
     private utilService: UtilService,
-    private metaService: MetaService
+    private metaService: MetaService,
+    private authService: FireAuthService
   ) {}
 
   ngOnInit() {
@@ -62,14 +64,16 @@ export class HeaderComponent implements OnInit {
       clubCode: '',
       mapLink: ''
     };
+
+    // update login status
+    this.authService.getCurrentUser().subscribe(u => {
+      this.isLoggedIn = !!u;
+      this.loggedInUser = u ? u : null;
+    });
+
     if (!navClubId) {
       return;
     }
-    // update login status
-    this.metaService.getLoggedInUser.subscribe(u => {
-      this.isLoggedIn = !!u;
-      this.loggedInUser = u;
-    });
     // update navigated club status
     this.metaService.getClubById(navClubId).subscribe(club => {
       if (!club) {
@@ -117,8 +121,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onSignOut() {
-    this.metaService.signOut();
-    this.router.navigate([RouteName.Home]);
+    this.metaService.signOut().then(c => this.updateStatus(''));
   }
 
   toggleMobileMenu() {
@@ -129,8 +132,15 @@ export class HeaderComponent implements OnInit {
     this.showTimings = 'hide';
     this.showContact = 'hide';
   }
-  //#region logo image data
-  // tslint:disable-next-line:member-ordering
-  logo = '';
-  //#endregion
+
+  checkShowSettings() {
+    return (
+      this.loggedInUser &&
+      (this.loggedInUser.isSuperAdmin || this.loggedInUser.isAdmin)
+    );
+  }
+
+  checkShowProfile() {
+    return this.isLoggedIn && this.navClubId && !this.loggedInUser.isSuperAdmin;
+  }
 }

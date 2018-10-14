@@ -1,9 +1,8 @@
-import { map, take, debounceTime, switchMap, tap, every } from 'rxjs/operators';
+import { map, take, debounceTime } from 'rxjs/operators';
 import { AbstractControl } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { CollectionPath, IClub, IUser } from '../../Module_Firebase';
+import { CollectionPath } from '../../Module_Firebase';
 import { FirebaseDataService } from '../../Module_Firebase/firebase.data.service';
-import { pipe, of, Subscriber, Observable, forkJoin, from } from 'rxjs';
 
 export class CustomValidator {
   static clubCode(afs: AngularFirestore, clubId: string) {
@@ -30,24 +29,29 @@ export class CustomValidator {
       return result;
     };
   }
+
   static ExistingEmail(db: FirebaseDataService) {
     return (control: AbstractControl) => {
       const email = control.value;
-      const result = db
-        .getCollection(CollectionPath.USERS, ['email', '==', email])
-        .pipe(
-          debounceTime(500),
-          take(1),
-          map(arr => {
-            /* truthy: invalid; falsy: valid */
-            if (arr && arr.length > 0) {
-              return { invalid: true };
-            } else {
-              return null;
-            }
-          })
-        );
-      return result;
+      return this.CheckEmailExisting(db, email);
     };
+  }
+
+  static CheckEmailExisting(db: FirebaseDataService, email: string) {
+    const result = db
+      .getCollection(CollectionPath.USERS, ['email', '==', email])
+      .pipe(
+        debounceTime(500),
+        take(1),
+        map(arr => {
+          /* truthy: invalid; falsy: valid */
+          if (arr && arr.length > 0) {
+            return { emailExists: true };
+          } else {
+            return null;
+          }
+        })
+      );
+    return result;
   }
 }

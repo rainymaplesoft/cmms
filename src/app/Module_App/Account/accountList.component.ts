@@ -21,6 +21,7 @@ export class AccountListComponent implements OnInit, OnChanges {
   @ViewChild(AccountEditComponent)
   accountEdit: AccountEditComponent;
 
+  private _loggedInUser: IUser;
   clubId: string;
   clubs: Observable<IClub[]>;
   showListSection = true;
@@ -45,9 +46,17 @@ export class AccountListComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
-    this.clubs = this.getAllClubs();
-    // this.clubId = 'D82si39pqPY6EqEix8yy';
-    this.accounts = this.getAllAccounts();
+    this.metaServie.getLoggedInUser.subscribe(u => {
+      this._loggedInUser = u;
+      if (u.isAdmin) {
+        this.clubId = this._loggedInUser.loggedInClubId;
+        this.accounts = this.getAllAccounts();
+        return;
+      }
+      if (u.isSuperAdmin) {
+        this.clubs = this.getAllClubs();
+      }
+    });
   }
 
   ngOnChanges() {}
@@ -66,9 +75,9 @@ export class AccountListComponent implements OnInit, OnChanges {
     if (!this.clubId) {
       return;
     }
-    const pathUsers = this.metaServie.getDocPathUsers(this.clubId);
+    const pathUsers = this.metaServie.getPathClubUsers(this.clubId);
     return this.dbService
-      .getCollection<IUser>(pathUsers, [], ['firstName', 'asc'])
+      .getCollection<IUser>(pathUsers, [], ['isMember', 'asc'])
       .pipe(
         map((item: IUser[]) => {
           this.pageConfig.length = item.length;
@@ -101,18 +110,13 @@ export class AccountListComponent implements OnInit, OnChanges {
     // this.showListSection = false;
   }
 
-  // onAddClubClick() {
-  //   this.clubEdit.addNewClub = true;
-  //   this.showListSection = false;
-  // }
-
   onArrowClick() {
     this.arrowState = this.arrowState === 'right' ? 'down' : 'right';
     this.tableContentState = this.arrowState === 'down' ? 'hide' : 'show';
   }
 
-  checkSelected(club: IClub) {
-    return this.selectedRecordId === club._id;
+  checkSelected(row: IUser) {
+    return this.selectedRecordId === row._id;
   }
 
   clubTrack = (index, item) => {};
@@ -121,12 +125,7 @@ export class AccountListComponent implements OnInit, OnChanges {
     this.showListSection = true;
   }
 
-  hideByPage(i: number) {
-    const index = i + 1;
-    const pageNumber = this.pageConfig.pageIndex + 1;
-    const hide =
-      index > this.pageConfig.pageSize * pageNumber ||
-      index <= this.pageConfig.pageSize * (pageNumber - 1);
-    return hide;
+  showSuperOption() {
+    return this._loggedInUser && this._loggedInUser.isSuperAdmin;
   }
 }

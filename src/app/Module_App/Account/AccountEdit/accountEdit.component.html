@@ -2,11 +2,11 @@
   <div class="header">
     <div class="flex_row">
       <div class='flex_1 flex_start'>
-        <div class="back_button">
+        <!-- <div class="back_button">
           <button mat-icon-button color="primary" (click)='backToList()'>
             <mat-icon aria-label="Example icon-button with a heart icon">navigate_before</mat-icon>
           </button>
-        </div>
+        </div> -->
       </div>
       <div style="margin-right: 5px;">
         <button (click)='onSave()' mat-stroked-button color="primary" [disabled]="!formEdit.dirty || !formEdit.valid">
@@ -17,7 +17,7 @@
   </div>
   <form novalidate class='reactive-form' [formGroup]="formEdit" (ngSubmit)="onSubmit()">
     <div class="form_section">
-      <div class="flex_1">
+      <div class="flex_1 avatar_wrap">
         <div class="avatar">
           <img [src]="avatar" alt="">
         </div>
@@ -60,7 +60,7 @@
           </mat-form-field>
         </div>
         <div class="row_col_sm">
-          <div class="control checkbox">
+          <div class="control checkbox" *ngIf='showSuperOption'>
             <mat-checkbox formControlName="isAdmin">Club Admin?</mat-checkbox>
           </div>
           <div class="control checkbox">
