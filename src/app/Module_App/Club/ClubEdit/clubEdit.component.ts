@@ -12,9 +12,7 @@ import { CollectionPath, IClub } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DocumentReference } from '@angular/fire/firestore';
-import { ToastrService, UtilService } from '../../../Module_Core';
 import { tap } from 'rxjs/operators';
-import { KeyValue } from '../../../Module_Core/enums';
 import {
   DaySelectorComponent,
   CustomValidator,
@@ -113,18 +111,13 @@ export class ClubEditComponent implements OnInit, OnChanges {
   }
 
   private updateClub(data: any) {
-    this.dbService
-      .updateDocument<IClub>(this.docPathClub, data)
-      .then((r: boolean) => {
-        // this.getClubById();
-      });
+    this.clubService.updateClub(this.clubId, data).then((r: boolean) => {
+      // this.getClubById();
+    });
   }
 
   private addClub(data: any) {
-    const newClub$ = this.dbService.addDocument(
-      `${CollectionPath.CLUBS}`,
-      data
-    );
+    const newClub$ = this.clubService.addClub(data);
     newClub$.then((club: DocumentReference) => {
       this.clubId = club.id;
       // this.getClubById();

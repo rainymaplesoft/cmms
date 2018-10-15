@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import RouteName from '../../../routename';
+import { Router } from '@angular/router';
+import { EventService } from 'src/app/Module_Core';
 
 export interface IMenuItem {
   menu_text: string;
@@ -16,8 +17,12 @@ export interface IMenuItem {
 export class MobileMenuComponent implements OnInit {
   @Input()
   menu: IMenuItem[];
+  @Input()
+  isShowSettings: boolean;
 
-  constructor() {}
+  constructor(private router: Router, private eventService: EventService) {}
 
   ngOnInit() {}
+
+  nav(route: string, withClubId?: boolean) {}
 }

@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  suid: 'CRilEJC0CvUyL2HgNtIbfk7YDqn1',
   cmmsFireConfig: {
     apiKey: 'AIzaSyAsoRw9oA2tl_6-njotntbKfVIAHJdD1Gk',
     authDomain: 'cmms-e8ecf.firebaseapp.com',

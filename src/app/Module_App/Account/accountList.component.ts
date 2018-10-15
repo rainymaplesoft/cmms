@@ -1,15 +1,17 @@
 import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { PageEvent } from '@angular/material';
 import { Observable } from 'rxjs';
-import { tap, filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
-import { FirebaseDataService, IClub } from '../../Module_Firebase';
+import { IClub } from '../../Module_Firebase';
 import { rotateAnimate, pullUpDownAnimate } from '../../Module_Core';
 import { AccountEditComponent } from './AccountEdit/accountEdit.component';
 import { MetaService } from '../meta.service';
 import { IUser, CollectionPath } from '../../Module_Firebase/models';
 import { Config } from '../config';
 import { UtilService } from '../../Module_Core/services/util.service';
+import { AccountService } from '../_shared';
+import { ClubService } from '../_shared/club.service';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'account-list',
@@ -40,8 +42,9 @@ export class AccountListComponent implements OnInit, OnChanges {
   pageConfig = Config.PageConfig;
 
   constructor(
-    private dbService: FirebaseDataService,
     private metaServie: MetaService,
+    private accountService: AccountService,
+    private clubService: ClubService,
     private util: UtilService
   ) {}
 
@@ -62,34 +65,25 @@ export class AccountListComponent implements OnInit, OnChanges {
   ngOnChanges() {}
 
   getAllClubs() {
-    return this.dbService
-      .getCollection<IClub>(CollectionPath.CLUBS, [], ['clubName', 'asc'])
-      .pipe(
-        map((items: IClub[]) => {
-          return items.filter(i => i.isActive);
-        })
-      );
+    return this.clubService.getAllClubs();
   }
 
   getAllAccounts() {
     if (!this.clubId) {
       return;
     }
-    const pathUsers = this.metaServie.getPathClubUsers(this.clubId);
-    return this.dbService
-      .getCollection<IUser>(pathUsers, [], ['isMember', 'asc'])
-      .pipe(
-        map((item: IUser[]) => {
-          this.pageConfig.length = item.length;
-          const array_sorted = this.util.sort(item, 'isMember');
-          const array_paged = this.util.paginate(
-            array_sorted,
-            this.pageConfig.pageSize,
-            this.pageConfig.pageIndex
-          );
-          return array_paged;
-        })
-      );
+    return this.accountService.getClubUsers(this.clubId).pipe(
+      map((item: IUser[]) => {
+        this.pageConfig.length = item.length;
+        const array_sorted = this.util.sort(item, 'isMember');
+        const array_paged = this.util.paginate(
+          array_sorted,
+          this.pageConfig.pageSize,
+          this.pageConfig.pageIndex
+        );
+        return array_paged;
+      })
+    );
   }
 
   onChangeClub() {

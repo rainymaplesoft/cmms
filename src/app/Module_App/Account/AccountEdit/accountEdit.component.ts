@@ -6,13 +6,12 @@ import {
   EventEmitter,
   Output
 } from '@angular/core';
-import { FirebaseDataService } from '../../../Module_Firebase';
-import { CollectionPath, IUser } from '../../../Module_Firebase/models';
+import { IUser } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Images } from '../../Images/image';
 import { UtilService } from '../../../Module_Core/services/util.service';
-import { MetaService } from '../../meta.service';
+import { AccountService } from '../../_shared/account.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -35,15 +34,10 @@ export class AccountEditComponent implements OnInit, OnChanges {
   formEdit: FormGroup;
 
   constructor(
-    private dbService: FirebaseDataService,
     private utilService: UtilService,
-    private metaService: MetaService,
+    private accountService: AccountService,
     private fb: FormBuilder
   ) {}
-
-  get userDocPath() {
-    return this.metaService.getPathClubUser(this.clubId, this.userId);
-  }
 
   set selectRecordId(recordId: string) {
     if (!recordId) {
@@ -65,9 +59,7 @@ export class AccountEditComponent implements OnInit, OnChanges {
   //#region data functions
 
   private getRecordById() {
-    this.user = this.dbService
-      .getSimpleDocument<IUser>(this.userDocPath)
-      .valueChanges();
+    this.user = this.accountService.getClubUserById(this.clubId, this.userId);
     this.buildForm();
     this.user.subscribe(user => {
       this.formEdit.patchValue(user);
@@ -86,8 +78,8 @@ export class AccountEditComponent implements OnInit, OnChanges {
   }
 
   private updateRecord(data: any) {
-    this.dbService
-      .updateDocument<IUser>(this.userDocPath, data)
+    this.accountService
+      .updateClubUser(this.clubId, this.userId, data)
       .then((r: boolean) => {
         // this.getRecordById();
       });

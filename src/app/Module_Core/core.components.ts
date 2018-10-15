@@ -1,9 +1,7 @@
 import {
   ExceptionComponent,
   ValMsgComponent,
-  SpinnerComponent,
-  MobileMenuComponent,
-  MenuItemComponent
+  SpinnerComponent
 } from './components';
 import { SafeHtmlPipe, FilterOutPipe, FilterPipe } from './pipes';
 
@@ -13,10 +11,9 @@ export const ExportComponents = [
   FilterOutPipe,
   FilterPipe,
   SpinnerComponent,
-  ValMsgComponent,
-  MobileMenuComponent
+  ValMsgComponent
 ];
 
-const Declarations = [MenuItemComponent];
+const Declarations = [];
 
 export const DeclarationComponents = [...ExportComponents, ...Declarations];

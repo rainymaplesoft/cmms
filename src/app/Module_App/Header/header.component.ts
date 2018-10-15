@@ -1,13 +1,14 @@
-import { Component, OnInit, Host } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import RouteName from '../../routename';
 import { EventService, UtilService } from '../../Module_Core';
-import { IClub, IMetaInfo, IUser } from '../../Module_Firebase';
+import { IClub, IUser } from '../../Module_Firebase';
 import { Subscription } from 'rxjs';
 import { MetaService } from '../meta.service';
 import { EventName } from '../config';
 import { filter, tap } from 'rxjs/operators';
 import { FireAuthService } from '../../Module_Firebase/firebase.auth.service';
+import { ClubService } from '../_shared/club.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -35,17 +36,12 @@ export class HeaderComponent implements OnInit {
   loginBadge = '?';
   sub: Subscription;
 
-  // get clubId() {
-  //   const clubId = this.metaService.getUrlClubId(this.router.url);
-  //   // const clubId = this.utilService.getUrlParam('clubId');
-  //   return clubId;
-  // }
-
   constructor(
     private router: Router,
     private eventService: EventService,
     private utilService: UtilService,
     private metaService: MetaService,
+    private clubService: ClubService,
     private authService: FireAuthService
   ) {}
 
@@ -69,13 +65,18 @@ export class HeaderComponent implements OnInit {
     this.authService.getCurrentUser().subscribe(u => {
       this.isLoggedIn = !!u;
       this.loggedInUser = u ? u : null;
+      // pub to mobile menu
+      this.eventService.pub<IUser>(
+        EventName.Event_LoggedInUserChanged,
+        this.loggedInUser
+      );
     });
 
     if (!navClubId) {
       return;
     }
     // update navigated club status
-    this.metaService.getClubById(navClubId).subscribe(club => {
+    this.clubService.getClubById(navClubId).subscribe(club => {
       if (!club) {
         return;
       }

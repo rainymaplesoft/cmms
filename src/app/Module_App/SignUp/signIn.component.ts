@@ -19,6 +19,8 @@ import { MetaService } from '../meta.service';
 import { MatDialog } from '@angular/material';
 import { CustomValidator } from '../_shared/validators';
 import { take, map } from 'rxjs/operators';
+import { ClubService } from '../_shared';
+import { AccountService } from '../_shared/account.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -31,6 +33,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private metaService: MetaService,
     private authService: FireAuthService,
+    private clubService: ClubService,
+    private accountService: AccountService,
     private router: Router,
     private toastr: ToastrService,
     private dbService: FirebaseDataService,
@@ -54,7 +58,7 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.metaService.getClubById(this.clubId).subscribe((club: IClub) => {
+    this.clubService.getClubById(this.clubId).subscribe((club: IClub) => {
       if (!club) {
         this.router.navigate([RouteName.Home]);
         return;
@@ -65,8 +69,9 @@ export class SignInComponent implements OnInit {
   }
 
   onLogin() {
-    this.getUserInClub(this.clubId, this.loginInfo.email).subscribe(
-      (existingUser: IUser) => {
+    this.accountService
+      .getClubUserByEmail(this.clubId, this.loginInfo.email)
+      .subscribe((existingUser: IUser) => {
         const isNew = !existingUser;
         if (existingUser && !existingUser.isActive) {
           this.toastr.warning('Sorry, this email is invalid for this club');
@@ -81,8 +86,7 @@ export class SignInComponent implements OnInit {
             isNew
           )
           .then(user => this.afterSignIn(user));
-      }
-    );
+      });
   }
 
   onForget() {
@@ -130,23 +134,6 @@ export class SignInComponent implements OnInit {
       }
     });
   };
-
-  private getUserInClub(clubId: string, email: string) {
-    const path = this.metaService.getPathClubUsers(clubId);
-    const result = this.dbService
-      .getCollection(path, ['email', '==', email])
-      .pipe(
-        take(1),
-        map(arr => {
-          if (arr && arr.length > 0) {
-            return arr[0];
-          } else {
-            return null;
-          }
-        })
-      );
-    return result;
-  }
 
   disableSign() {
     return (

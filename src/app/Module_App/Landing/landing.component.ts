@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FirebaseDataService,
-  IClub,
-  CollectionPath
-} from '../../Module_Firebase';
+import { IClub } from '../../Module_Firebase';
 import { tap, filter, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { ClubService } from '../_shared/club.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -23,21 +20,15 @@ export class LandingComponent implements OnInit {
   );
   images = [1, 2, 3].map(i => `assets/img/car_${i}.jpg`);
 
-  constructor(private dbService: FirebaseDataService) {}
+  constructor(private clubService: ClubService) {}
 
   getAllClubs() {
-    return this.dbService
-      .getCollection<IClub>(CollectionPath.CLUBS, [], ['clubName', 'asc'])
-      .pipe(
-        map((clubs: IClub[]) => {
-          const bb = clubs.filter(c => c.isActive);
-          return bb;
-        }),
-        tap((item: IClub[]) => {
-          const plus = 3 - (item.length % 3);
-          this.clubPlus = [...Array(plus)];
-        })
-      );
+    return this.clubService.getAllActiveClubs().pipe(
+      tap((item: IClub[]) => {
+        const plus = 3 - (item.length % 3);
+        this.clubPlus = [...Array(plus)];
+      })
+    );
   }
   ngOnInit() {
     this.clubs = this.getAllClubs();

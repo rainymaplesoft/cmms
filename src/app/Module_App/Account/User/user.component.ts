@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { UtilService, KeyValue } from '../../../Module_Core';
+import { UtilService } from '../../../Module_Core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Images } from '../../Images/image';
 import { IUser } from '../../../Module_Firebase/models';
 import { Observable } from 'rxjs';
-import { FirebaseDataService } from '../../../Module_Firebase';
 import { MetaService } from '../../meta.service';
 import { Router } from '../../../../../node_modules/@angular/router';
 import RouteName from 'src/app/routename';
 import { take } from 'rxjs/operators';
+import { AccountService } from '../../_shared/account.service';
+import { Config } from '../../config';
 
 @Component({
   selector: 'app-user',
@@ -17,23 +18,19 @@ import { take } from 'rxjs/operators';
 })
 export class UserComponent implements OnInit {
   user: Observable<IUser>;
-  formUser: IUser;
   formEdit: FormGroup;
   clubId: string;
   userId: string;
   title = 'Edit My Account';
   themeImage = `url(assets/img/edit_01.jpg)`;
 
-  genders: KeyValue[] = [
-    { key: 1, value: 'Male' },
-    { key: 2, value: 'Female' }
-  ];
+  genders = Config.Gender;
 
   constructor(
-    private dbService: FirebaseDataService,
     private router: Router,
     private utilService: UtilService,
     private metaService: MetaService,
+    private accountService: AccountService,
     private fb: FormBuilder
   ) {}
 
@@ -43,22 +40,14 @@ export class UserComponent implements OnInit {
       this.clubId = u.loggedInClubId;
       this.getRecordById();
     });
-    // this.userId = this.metaService.userId;
-    // this.clubId = this.metaService.clubId;
-  }
-
-  get userDocPath() {
-    return this.metaService.getPathClubUser(this.clubId, this.userId);
   }
 
   private getRecordById() {
-    this.user = this.dbService
-      .getSimpleDocument<IUser>(this.userDocPath)
-      .valueChanges()
+    this.user = this.accountService
+      .getClubUserById(this.clubId, this.userId)
       .pipe(take(1));
     this.buildForm();
     this.user.subscribe(user => {
-      this.formUser = user;
       this.formEdit.patchValue(user);
     });
   }
@@ -71,8 +60,8 @@ export class UserComponent implements OnInit {
   }
 
   private updateRecord(data: any) {
-    this.dbService
-      .updateDocument<IUser>(this.userDocPath, data)
+    this.accountService
+      .updateClubUser(this.clubId, this.userId, data)
       .then((r: boolean) => {
         // this.getRecordById();
       });
@@ -83,6 +72,7 @@ export class UserComponent implements OnInit {
       queryParams: { clubId: this.clubId }
     });
   }
+
   //#region reactive form and field getters
 
   private buildForm() {

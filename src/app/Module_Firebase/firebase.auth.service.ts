@@ -12,6 +12,7 @@ import { IUser, CollectionPath, IClub, StorageItem } from './models';
 import { ToastrService } from '../Module_Core/services/toastr.service';
 import { StorageService } from '../Module_Core';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class FireAuthService {
@@ -78,8 +79,7 @@ export class FireAuthService {
   }
 
   isSuper(uid) {
-    if (uid === 'CRilEJC0CvUyL2HgNtIbfk7YDqn1') {
-      // && email === 'super@123.com'
+    if (uid === environment.suid) {
       return true;
     }
     return false;

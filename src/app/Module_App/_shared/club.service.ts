@@ -4,8 +4,9 @@ import {
   IClub,
   CollectionPath
 } from 'src/app/Module_Firebase';
-import { map } from 'rxjs/operators';
+import { map, debounceTime, take, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { AbstractControl } from '@angular/forms';
 
 @Injectable()
 export class ClubService {
@@ -13,7 +14,7 @@ export class ClubService {
 
   getAllClubs(): Observable<IClub[]> {
     return this.dbService.getCollection<IClub>(
-      CollectionPath.CLUBS,
+      this.pathClubs,
       [],
       ['clubName', 'asc']
     );
@@ -30,10 +31,37 @@ export class ClubService {
   getClubById(clubId: string): Observable<IClub> {
     return this.dbService
       .getSimpleDocument<IClub>(this.docPathClub(clubId))
-      .valueChanges();
+      .valueChanges()
+      .pipe(
+        map(club => {
+          club._id = clubId;
+          return club;
+        })
+      );
+  }
+
+  getClubByCode(clubCode: string) {
+    const club = this.dbService.getCollection<IClub>(this.pathClubs, [
+      'clubCode',
+      '==',
+      clubCode.toUpperCase()
+    ]);
+    return club;
+  }
+
+  updateClub(clubId: string, data: any) {
+    return this.dbService.updateDocument<IClub>(this.docPathClub(clubId), data);
+  }
+
+  addClub(data: any) {
+    return this.dbService.addDocument(this.pathClubs, data);
   }
 
   private docPathClub(clubId: string) {
     return `${CollectionPath.CLUBS}/${clubId}`;
+  }
+
+  private get pathClubs() {
+    return `${CollectionPath.CLUBS}`;
   }
 }

@@ -1,4 +1,4 @@
-import { IMenuItem } from './Module_Core';
+import { IMenuItem } from './Module_App/_shared';
 
 export class RouteName {
   get default() {
@@ -25,23 +25,3 @@ export class RouteName {
   static DefaultRoute = RouteName.Home;
 }
 export default RouteName;
-
-export const MobileMenu: IMenuItem[] = [
-  { menu_text: 'Home', action: RouteName.Home },
-  {
-    menu_text: 'Settings',
-    action: '',
-    sub_menu: [
-      { menu_text: 'Club Settings', action: RouteName.ClubSetting },
-      { menu_text: 'Account Settings', action: RouteName.AccountSetting }
-    ]
-  },
-  { menu_text: 'Gallery', action: RouteName.Home },
-  {
-    menu_text: 'Events',
-    sub_menu: [
-      { menu_text: 'Event-1', action: RouteName.Event },
-      { menu_text: 'Event-2', action: 'wrong route name!' }
-    ]
-  }
-];

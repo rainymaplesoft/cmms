@@ -1,26 +1,16 @@
 import { Injectable } from '@angular/core';
-import {
-  FirebaseDataService,
-  FireAuthService,
-  IClub,
-  CollectionPath,
-  IUser,
-  StorageItem,
-  IMetaInfo
-} from '../Module_Firebase';
-import { Observable, of } from 'rxjs';
-import { Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { FireAuthService, IClub, IUser, StorageItem } from '../Module_Firebase';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { StorageService } from '../Module_Core/services/storage.service';
 import { UtilService } from '../Module_Core';
 import { RouteName } from '../routename';
 import { EventService } from '../Module_Core/services/pubsub.service';
 import { EventName } from './config';
-import { filter, switchMap, tap, take, delay } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 @Injectable()
 export class MetaService {
-  private _firebaseUser: firebase.User;
-  private _clubId: string;
   _loggedInUser: IUser;
   navClubCode: string;
   _navClub: IClub;
@@ -31,7 +21,6 @@ export class MetaService {
     private utilService: UtilService,
     private eventService: EventService,
     private authService: FireAuthService,
-    private dbService: FirebaseDataService,
     private storageService: StorageService
   ) {}
 
@@ -41,17 +30,6 @@ export class MetaService {
 
   get loggedInUserId() {
     return this.storageService.getItem(StorageItem.USER_ID);
-  }
-
-  get IsLogIn(): boolean {
-    return !!this._firebaseUser;
-  }
-
-  get loggedInClub(): Observable<IClub> {
-    if (!this.loggedInclubId) {
-      return of(null);
-    }
-    return this.getClubById(this.loggedInclubId);
   }
 
   get getLoggedInUser() {
@@ -68,53 +46,5 @@ export class MetaService {
 
   getUrlClubId(url?: string) {
     return this.utilService.getUrlParam('clubId', url);
-  }
-
-  getClubById(clubId: string) {
-    const path = `${CollectionPath.CLUBS}/${clubId}`;
-    const club = this.dbService.getDocument<IClub>(path);
-    return club;
-  }
-
-  getClubByCode(clubCode: string) {
-    const path = `${CollectionPath.CLUBS}`;
-    const club = this.dbService.getCollection<IClub>(path, [
-      'clubCode',
-      '==',
-      clubCode.toUpperCase()
-    ]);
-    return club;
-  }
-
-  getNavClub(clubCode: string) {
-    const path = `${CollectionPath.CLUBS}`;
-    const club = this.dbService.getCollection<IClub>(path, [
-      'clubCode',
-      '==',
-      clubCode.toUpperCase()
-    ]); // .pipe(take(1));
-    return club;
-  }
-
-  getDocPathClub(clubId: string) {
-    return `${CollectionPath.CLUBS}/${clubId}`;
-  }
-
-  getPathClubUser(clubId: string, userId: string) {
-    return `${CollectionPath.CLUBS}/${clubId}/${
-      CollectionPath.USERS
-    }/${userId}`;
-  }
-
-  getPathClubUsers(clubId: string) {
-    return `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
-  }
-
-  extractClubCode(url: string) {
-    if (url.indexOf('/club/') !== 0) {
-      this.navClubCode = '';
-      return '';
-    }
-    return url.replace('/club/', '').substr(0, 4);
   }
 }

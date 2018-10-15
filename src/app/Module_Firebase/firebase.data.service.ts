@@ -7,7 +7,6 @@ import {
   DocumentSnapshotExists
 } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { map, catchError, take } from 'rxjs/operators';
 import { IClub } from './models';
 import { ToastrService } from '../Module_Core/services/toastr.service';
@@ -15,11 +14,7 @@ import { ToastrService } from '../Module_Core/services/toastr.service';
 @Injectable()
 export class FirebaseDataService {
   afs: AngularFirestore;
-  constructor(
-    private db: AngularFirestore,
-    private afAuth: AngularFireAuth,
-    private toastr: ToastrService
-  ) {
+  constructor(private db: AngularFirestore, private toastr: ToastrService) {
     this.afs = this.db;
   }
 

@@ -8,8 +8,8 @@ import {
 } from '@angular/animations';
 import { EventService } from './Module_Core';
 import { Route, Router } from '@angular/router';
-import { MobileMenu } from './routename';
-import { EventName } from './Module_App/config';
+import { EventName, Config } from './Module_App/config';
+import { IUser } from './Module_Firebase';
 
 const menuSlideAnimate =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax
@@ -37,7 +37,8 @@ export class AppComponent {
   title = 'cmms';
   mobileMenuState = 'hide'; // hide/show
   containerState = 'normal'; // normal/right
-  mobileMenu = MobileMenu;
+  mobileMenu = Config.MobileMenu;
+  isShowSettings = false;
 
   constructor(private eventService: EventService, private router: Router) {
     this.eventSubscripe();
@@ -59,6 +60,20 @@ export class AppComponent {
       .subscribe(r => {
         this.toggleMobileMenu();
       });
+    // from header
+    this.eventService
+      .on<IUser>(EventName.Event_LoggedInUserChanged)
+      .subscribe(loggedInUser => this.checkShowSettings(loggedInUser));
+  }
+
+  checkShowSettings(loggedInUser: IUser) {
+    this.isShowSettings =
+      loggedInUser && (loggedInUser.isSuperAdmin || loggedInUser.isAdmin);
+    if (!this.isShowSettings) {
+      this.mobileMenu = Config.MobileMenu.filter(m => m.action !== 'settings');
+    } else {
+      this.mobileMenu = Config.MobileMenu;
+    }
   }
 
   toggleMobileMenu() {

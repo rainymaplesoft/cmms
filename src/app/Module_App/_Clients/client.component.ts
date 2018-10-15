@@ -22,6 +22,7 @@ import { MetaService } from '../meta.service';
 import { UtilService } from '../../Module_Core/services/util.service';
 import { RouteName } from '../../routename';
 import { filter } from 'rxjs/operators';
+import { ClubService } from '../_shared';
 @Component({
   selector: 'app-client',
   templateUrl: 'client.component.html',
@@ -52,6 +53,7 @@ export class ClientComponent
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private router: Router,
+    private clubService: ClubService,
     private metaService: MetaService
   ) {}
 
@@ -66,7 +68,7 @@ export class ClientComponent
   }
 
   chooseClubPComponent() {
-    this.metaService.getClubById(this.clubId).subscribe((club: IClub) => {
+    this.clubService.getClubById(this.clubId).subscribe((club: IClub) => {
       if (!club) {
         this.router.navigate([RouteName.Home]);
         return;

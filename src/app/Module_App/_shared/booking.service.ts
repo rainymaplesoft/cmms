@@ -6,6 +6,7 @@ import {
   IUser
 } from '../../Module_Firebase';
 import { DocumentReference } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class BookingService {
@@ -35,7 +36,7 @@ export class BookingService {
     return this.dbService.delete(path);
   }
 
-  getBookingUsers(clubId: string, bookingId: string) {
+  getBookingUsers(clubId: string, bookingId: string): Observable<IUser[]> {
     const path = this.bookingPath(clubId, bookingId, 'all');
     const bookingUsers$ = this.dbService.getCollection<IUser>(path);
     return bookingUsers$;

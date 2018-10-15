@@ -7,6 +7,7 @@ import { tap, take, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MetaService } from '../../meta.service';
 import { UtilService } from '../../../Module_Core';
+import { ClubService } from '../club.service';
 
 @Component({
   selector: 'app-booking',
@@ -41,6 +42,7 @@ export class BookingComponent implements OnInit {
   constructor(
     private util: UtilService,
     private metaService: MetaService,
+    private clubService: ClubService,
     private bookingService: BookingService
   ) {}
 
@@ -52,13 +54,12 @@ export class BookingComponent implements OnInit {
           this.user = u;
         }),
         switchMap(u => {
-          return this.metaService.getClubById(clubId);
+          return this.clubService.getClubById(clubId);
         })
       )
       .subscribe(club => {
         this.navClub = club;
         this.getBookingInfo();
-        this.addBookings();
       });
   }
 

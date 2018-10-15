@@ -1,11 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FirebaseDataService,
-  IClub,
-  CollectionPath,
-  IUser,
-  IBooking
-} from '../../Module_Firebase';
+import { IClub, IUser, IBooking } from '../../Module_Firebase';
 import { MetaService } from 'src/app/Module_App/meta.service';
 import { Observable, pipe } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
@@ -17,6 +11,7 @@ import {
 import { PageEvent } from '@angular/material';
 import { BookingService, ClubService } from '../_shared';
 import { Config } from '../config';
+import { AccountService } from '../_shared/account.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -47,12 +42,13 @@ export class BookingListComponent implements OnInit {
   pageConfig = Config.PageConfig;
 
   constructor(
-    private dbService: FirebaseDataService,
     private bookingService: BookingService,
+    private accountService: AccountService,
     private clubservice: ClubService,
     private metaServie: MetaService,
     private util: UtilService
   ) {}
+
   ngOnInit() {
     this.metaServie.getLoggedInUser.subscribe(u => {
       this._loggedInUser = u;
@@ -71,13 +67,11 @@ export class BookingListComponent implements OnInit {
   }
 
   getAllClubs() {
-    return this.dbService
-      .getCollection<IClub>(CollectionPath.CLUBS, [], ['clubName', 'asc'])
-      .pipe(
-        map((items: IClub[]) => {
-          return items.filter(i => i.isActive);
-        })
-      );
+    return this.clubservice.getAllClubs().pipe(
+      map((items: IClub[]) => {
+        return items.filter(i => i.isActive);
+      })
+    );
   }
 
   onChangeClub(event: any) {
@@ -95,7 +89,15 @@ export class BookingListComponent implements OnInit {
   onRecordClick(booking: IBooking) {
     this.bookingService
       .getBookingUsers(this.clubId, booking._id)
-      .subscribe(u => (this.bookedPlayers = u));
+      .pipe(
+        switchMap(users => {
+          const userIds = users.map(u => u._id);
+          return this.accountService.getClubUserByIds(this.clubId, userIds);
+        })
+      )
+      .subscribe(u => {
+        this.bookedPlayers = u;
+      });
     this.selectedBookingId = booking._id;
 
     // toggle the chips panel

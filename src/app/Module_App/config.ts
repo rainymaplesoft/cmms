@@ -1,4 +1,6 @@
 import { KeyValue } from '../Module_Core/enums';
+import { IMenuItem } from './_shared';
+import RouteName from '../routename';
 
 export class Config {
   static Gender: KeyValue[] = [
@@ -21,6 +23,28 @@ export class Config {
   static ValidatorError = {
     emailExists: { emailExists: true }
   };
+
+  static MobileMenu: IMenuItem[] = [
+    { menu_text: 'Home', action: RouteName.Home },
+    {
+      menu_text: 'Settings',
+      action: 'settings',
+      sub_menu: [
+        { menu_text: 'Club', action: RouteName.ClubSetting },
+        { menu_text: 'Member', action: RouteName.AccountSetting },
+        { menu_text: 'Booking', action: RouteName.BookingSetting }
+      ]
+    },
+    { menu_text: 'Gallery', action: RouteName.Home },
+    {
+      menu_text: 'Events',
+      action: 'events',
+      sub_menu: [
+        { menu_text: 'Event-1', action: RouteName.Event },
+        { menu_text: 'Event-2', action: 'wrong route name!' }
+      ]
+    }
+  ];
 }
 
 export enum ValidatorError {
@@ -50,6 +74,7 @@ export enum EventName {
   Event_HideClubMainContent = 'Event_HideClubMainContent',
   Event_MobileToggleClicked = 'Event_MobileToggleClicked',
   Event_MenuItemClicked = 'Event_MenuItemClicked',
+  Event_LoggedInUserChanged = 'Event_LoggedInUserChanged',
   Event_SignIn = 'Event_SignIn',
   Event_SignOut = 'Event_SignOut'
 }

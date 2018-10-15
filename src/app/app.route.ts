@@ -1,7 +1,6 @@
 import { Route } from '@angular/router';
 
-import RouteName from './routename';
-import { ExceptionComponent, IMenuItem } from './Module_Core';
+import { ExceptionComponent } from './Module_Core';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './Module_App/Landing/landing.component';
 import { HeaderComponent } from './Module_App/Header/header.component';
@@ -27,7 +26,9 @@ import { FooterComponent } from './Module_App/Footer/footer.component';
 import {
   DaySelectorComponent,
   BookingWidgetComponent,
-  BookingComponent
+  BookingComponent,
+  MobileMenuComponent,
+  MenuItemComponent
 } from 'src/app/Module_App/_shared';
 import {
   BookedPlaysComponent,
@@ -65,6 +66,8 @@ export const AppRoutes: Route[] = [
 
 export const AppComponents: any = [
   AppComponent,
+  MobileMenuComponent,
+  MenuItemComponent,
   LandingComponent,
   HeaderComponent,
   HeaderInfoComponent,
