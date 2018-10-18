@@ -51,6 +51,17 @@ export class AccountService {
     return this.dbService.updateDocument<IUser>(pathClubUser, data);
   }
 
+  updateUserLoginInfo(u: IUser) {
+    const pathUser = `users/${u._id}`;
+    const data = {
+      isAdmin: u.isAdmin ? u.isAdmin : false,
+      isMember: u.isMember ? u.isMember : false,
+      isSuperAdmin: u.isSuperAdmin ? u.isSuperAdmin : false,
+      clubId: u.loggedInClubId ? u.loggedInClubId : ''
+    };
+    return this.dbService.updateSetDocument<IUser>(pathUser, data);
+  }
+
   private getPathClubUsers(clubId: string) {
     return `${CollectionPath.CLUBS}/${clubId}/${CollectionPath.USERS}`;
   }

@@ -125,6 +125,7 @@ export class SignInComponent implements OnInit {
   private afterSignIn = (user: Observable<IUser>) => {
     user.pipe(take(1)).subscribe(u => {
       if (u) {
+        this.accountService.updateUserLoginInfo(u);
         // navigate to club page after login successfully
         this.router.navigate([RouteName.Club], {
           queryParams: { clubId: this.clubId }
