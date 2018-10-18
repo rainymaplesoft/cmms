@@ -3,7 +3,7 @@ import {
   FirebaseDataService,
   IClub,
   CollectionPath
-} from 'src/app/Module_Firebase';
+} from '../../Module_Firebase';
 import { map, debounceTime, take, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AbstractControl } from '@angular/forms';

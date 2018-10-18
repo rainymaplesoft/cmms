@@ -1,16 +1,7 @@
-import {
-  CanDeactivate,
-  CanActivate,
-  Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  ActivatedRoute
-} from '@angular/router';
+import { CanDeactivate, CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { UtilService } from '../Module_Core/services';
-import { ErrorCode } from '../Module_Core';
 
 export class AppClaim {
   claimId: number;

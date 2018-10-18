@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { EventService } from 'src/app/Module_Core';
+import { EventService } from '../../../Module_Core';
 
 export interface IMenuItem {
   menu_text: string;

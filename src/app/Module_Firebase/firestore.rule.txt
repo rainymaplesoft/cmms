@@ -1,0 +1,90 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // match /{document=**} {
+    //   allow read, write;
+    // }
+
+  	// functions must be located before the rules that invoke them
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isSignedIn() {
+      return request.auth == null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isSuperAdmin(){
+      return request.auth.uid == 'CRilEJC0CvUyL2HgNtIbfk7YDqn1';
+    }
+
+    function isAdmin(){
+      return getUserData()['isAdmin'] == true;
+    }
+    
+    function isOwnerOrAdmin(userId){
+      return isOwner(userId) || isAdmin();
+    }
+    
+    // matching rules
+    
+    match /users/{userId}{
+    	allow read		: if	true;
+    	allow list 		: if	true;
+      allow create	:	if	isSignedIn();
+      allow write		:	if	isOwnerOrAdmin(userId);
+    }
+    
+    match /clubs/{clubId}{
+    	allow read		: if	true;
+    	allow write 	: if 	isAdmin() || isSuperAdmin();
+      
+      
+      match /users/{userId}{
+      	allow read	:	if	true;
+        allow	write	:	if	isOwnerOrAdmin(userId);
+      }
+      
+      match /bookings/{booking}{
+      	allow read	:	if	true;
+        allow	write	:	if	isAdmin() || isSuperAdmin();
+        allow create:	if 	true;
+        match /users/{userId}{
+        	allow read	:	if	true;
+        	allow	write	:	if	isOwnerOrAdmin(userId);
+        }
+      }
+    }
+  }
+
+
+
+function userHasRole(role) {
+  return getUserData().roles[role] == true;
+}
+
+function userHasAnyRole(roles) {
+  return getUserData().roles.keys().hasAny(roles);
+}
+
+function userHasAllRoles(roles) {
+  return getUserData().roles.keys().hasAll(roles);
+}
+
+function existingData() {
+  return resource.data;
+}
+
+function incomingData() {
+  return request.resource.data;
+}
+
+function currentUser() {
+  return request.auth;
+}
+  
+}

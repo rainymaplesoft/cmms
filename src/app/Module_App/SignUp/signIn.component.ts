@@ -115,9 +115,8 @@ export class SignInComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result === DialogConfirm.Yes) {
-        this.authService.resetPassword().subscribe(r => {
-          this.toastr.success('Reset password request sent successfully');
-        });
+        this.authService.resetPassword(email);
+        this.toastr.success('Reset password request sent successfully');
       }
     });
   }

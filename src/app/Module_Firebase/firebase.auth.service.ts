@@ -74,8 +74,8 @@ export class FireAuthService {
     );
   }
 
-  resetPassword() {
-    return of(null);
+  resetPassword(email: string) {
+    return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
   isSuper(uid) {

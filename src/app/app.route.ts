@@ -29,11 +29,16 @@ import {
   BookingComponent,
   MobileMenuComponent,
   MenuItemComponent
-} from 'src/app/Module_App/_shared';
+} from './Module_App/_shared';
 import {
   BookedPlaysComponent,
   BookingListComponent
 } from './Module_App/Booking';
+import {
+  AuthSuperMemberGuard,
+  AuthAdminGuard,
+  AuthGuard
+} from './Module_App/_shared/guard.service';
 
 // RouteName.DefaultRoute
 /* to avoid any error in production (ng build --prod)
@@ -44,10 +49,22 @@ import {
 export const AppRoutes: Route[] = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: LandingComponent },
-  { path: 'setting/club', component: ClubListComponent, canActivate: [] },
-  { path: 'setting/account', component: AccountListComponent, canActivate: [] },
-  { path: 'setting/booking', component: BookingListComponent, canActivate: [] },
-  { path: 'setting/user', component: UserComponent, canActivate: [] },
+  {
+    path: 'setting/club',
+    component: ClubListComponent,
+    canActivate: [AuthAdminGuard]
+  },
+  {
+    path: 'setting/account',
+    component: AccountListComponent,
+    canActivate: [AuthAdminGuard]
+  },
+  {
+    path: 'setting/booking',
+    component: BookingListComponent,
+    canActivate: [AuthAdminGuard, AuthSuperMemberGuard]
+  },
+  { path: 'setting/user', component: UserComponent, canActivate: [AuthGuard] },
   { path: 'signin', component: SignInComponent, canActivate: [] },
   { path: 'signup', component: SignUpComponent, canActivate: [] },
   { path: 'exception', component: ExceptionComponent, canActivate: [] },
@@ -55,13 +72,11 @@ export const AppRoutes: Route[] = [
     path: 'club',
     component: ClientComponent,
     canActivate: [],
-    children: [
-      { path: 'sign', component: SignUpComponent }
-      // { path: 'user', component: UserComponent }
-    ]
+    children: [{ path: 'sign', component: SignUpComponent }]
   },
   { path: '**', redirectTo: '/home' }
 ];
+// { path: 'user', component: UserComponent }
 // { path: '**', component: ExceptionComponent }
 
 export const AppComponents: any = [

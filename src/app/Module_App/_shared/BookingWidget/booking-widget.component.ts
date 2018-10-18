@@ -84,7 +84,6 @@ export class BookingWidgetComponent implements OnInit {
   }
 
   onBook() {
-    console.log(this.booking);
     this.bookingService.addBookingUser(
       this.booking.clubId,
       this.booking._id,
@@ -93,7 +92,6 @@ export class BookingWidgetComponent implements OnInit {
   }
 
   onCancel(callback: any) {
-    console.log(this.booking._id);
     const msg = 'Do you really want to cancel this booking?';
     const dialogRef = this.dialog.open(DialogYesNoComponent, {
       data: { message: msg }

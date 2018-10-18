@@ -21,45 +21,7 @@ import { Component, OnInit } from '@angular/core';
                 </div>
             </div>
             </div>`,
-  styles: [
-    `
-      .footer {
-        display: flex;
-        width: 100 %;
-        margin-top: 20px;
-        padding-top: 20px;
-        background-color: rgba(12, 12, 12, 0.8);
-        @media (max - width: 780px) {
-          flex-direction: column;
-        }
-      }
-
-      .footer .section {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      .footer .section .item {
-        display: flex;
-        justify-content: center;
-        font-size: 17px;
-        line-height: 40px;
-        text-transform: none;
-        font-family: Montserrat, Helvetica Neue, Helvetica, Arial, sans - serif;
-      }
-      .footer .section .item button {
-        font-size: 24px;
-        background-color: black;
-        color: wheat;
-        margin-right: 5px;
-      }
-      .footer .section .item a {
-        margin: 0 5px;
-        color: yellowgreen;
-      }
-    `
-  ]
+  styleUrls: ['footer.component.scss']
 })
 export class FooterComponent implements OnInit {
   constructor() {}

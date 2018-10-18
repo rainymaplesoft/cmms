@@ -1,8 +1,8 @@
 import { Router } from '@angular/router';
-import { MetaService } from 'src/app/Module_App';
-import { IUser } from 'src/app/Module_Firebase';
+import { MetaService } from '..';
+import { IUser } from '../../Module_Firebase';
 import { OnInit } from '@angular/core';
-import RouteName from 'src/app/routename';
+import RouteName from '../../routename';
 export class ClientBase implements OnInit {
   __clubId: string;
   __loggedInUser: IUser;

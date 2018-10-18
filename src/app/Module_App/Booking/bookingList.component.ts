@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IClub, IUser, IBooking } from '../../Module_Firebase';
-import { MetaService } from 'src/app/Module_App/meta.service';
+import { MetaService } from '../meta.service';
 import { Observable, pipe } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
 import {

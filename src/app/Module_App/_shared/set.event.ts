@@ -1,3 +1,4 @@
+export class EventConfig {}
 /*
 export class EventConfig {
   setEvents() {

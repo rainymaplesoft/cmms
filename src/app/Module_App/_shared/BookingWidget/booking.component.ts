@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IMetaInfo, IUser } from 'src/app/Module_Firebase';
+import { IMetaInfo, IUser } from '../../../Module_Firebase';
 import { EventName } from '../../config';
 import { IClub, IBooking } from '../../../Module_Firebase/models';
 import { BookingService } from '../booking.service';

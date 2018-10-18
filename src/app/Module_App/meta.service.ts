@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { StorageService } from '../Module_Core/services/storage.service';
 import { UtilService } from '../Module_Core';
 import { RouteName } from '../routename';
-import { EventService } from '../Module_Core/services/pubsub.service';
+import { EventService } from '../Module_Core/services/event.service';
 import { EventName } from './config';
 import { take } from 'rxjs/operators';
 

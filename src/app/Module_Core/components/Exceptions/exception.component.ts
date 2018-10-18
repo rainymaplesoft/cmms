@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { slideInDownAnimation } from '../../animation/';
+import { slideInDownAnimation } from '../../animation';
 import { ErrorCode } from '../../enums';
 
 @Component({

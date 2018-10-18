@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IMenuItem } from '../mobile-menu.component';
-import { EventName } from '../../../../Module_App/config';
+import { EventName } from '../../../config';
 import {
   rotateAnimate,
   pullUpDownAnimate,
   EventService
-} from 'src/app/Module_Core';
+} from '../../../../Module_Core';
 
 @Component({
   // tslint:disable-next-line:component-selector

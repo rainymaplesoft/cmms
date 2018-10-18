@@ -4,7 +4,7 @@ import {
   slideUpDownAnimation,
   pullUpDownAnimate
 } from '../../Module_Core/animation/animation.common';
-import { DialogYesNoComponent, DialogConfirm } from 'src/app/Module_Core';
+import { DialogYesNoComponent, DialogConfirm } from '../../Module_Core';
 import { MatDialog } from '@angular/material';
 import { BookingService } from '../_shared';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientBase } from '../client.base';
-import { MetaService } from 'src/app/Module_App/meta.service';
+import { MetaService } from '../../meta.service';
 
 @Component({
   // tslint:disable-next-line:component-selector

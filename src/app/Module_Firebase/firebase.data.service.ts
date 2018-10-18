@@ -198,6 +198,11 @@ export class FirebaseDataService {
     console.error('=== Failed to request HTTP service with URL below === ');
     const errorMessage = JSON.stringify(error);
     console.log(error);
+    if (caught) {
+      caught.pipe(take(1)).subscribe(c => {
+        console.log(c);
+      });
+    }
     return Observable.throw(error);
   }
 }

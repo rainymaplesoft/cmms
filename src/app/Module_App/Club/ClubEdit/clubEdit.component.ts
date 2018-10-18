@@ -17,7 +17,7 @@ import {
   DaySelectorComponent,
   CustomValidator,
   ClubService
-} from 'src/app/Module_App/_shared';
+} from '../../_shared';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -62,12 +62,8 @@ export class ClubEditComponent implements OnInit, OnChanges {
     private clubService: ClubService
   ) {}
 
-  ngOnInit() {
-    console.log(this.clubId);
-  }
-  ngOnChanges() {
-    console.log(this.clubId);
-  }
+  ngOnInit() {}
+  ngOnChanges() {}
 
   onDayChanged(e) {
     this.dayChanged = true;

@@ -3,7 +3,7 @@ import {
   FirebaseDataService,
   IUser,
   CollectionPath
-} from 'src/app/Module_Firebase';
+} from '../../Module_Firebase';
 import { filter, map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
