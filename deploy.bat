@@ -1,2 +1,2 @@
-ng build --prod
-firebase deploy
+call ng build --prod
+call firebase deploy

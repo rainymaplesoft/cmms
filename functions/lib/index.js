@@ -8,6 +8,7 @@ admin.initializeApp();
 // firebase serve --only functions
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
+// https://cloud.google.com/functions/docs/writing/http
 exports.helloWorld = functions.https.onRequest((request, response) => {
     response.send('Hello every from Firebase!');
 });
