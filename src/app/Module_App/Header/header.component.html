@@ -52,6 +52,14 @@
         </div>
         <!-- <div class='menu_item'>
           <div class="menu_content">
+            <i class="material-icons fas fa-sign-in-alt"></i>
+          </div>
+          <div class="menu_content">
+            <div class="item_wrap">Login</div>
+          </div>
+        </div> -->
+        <!-- <div class='menu_item'>
+          <div class="menu_content">
             <i class="material-icons">photo</i>
           </div>
           <div class="menu_content">
@@ -85,7 +93,12 @@
         </div>
         <div class='menu_item' *ngIf="isLoggedIn">
           <div class="icon_wrap" matTooltip="Sign Out" (click)='onSignOut()'>
-            <i class="material-icons">exit_to_app</i>
+            <i class="material-icons fas fa-sign-out-alt"></i>
+          </div>
+        </div>
+        <div class='menu_item' *ngIf="!isLoggedIn && navClubId">
+          <div class="icon_wrap" matTooltip="Login" (click)='nav(r_signin,true)'>
+            <i class="material-icons fas fa-sign-in-alt"></i>
           </div>
         </div>
       </div>

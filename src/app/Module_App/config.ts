@@ -35,7 +35,8 @@ export class Config {
         { menu_text: 'Booking', action: RouteName.BookingSetting }
       ]
     },
-    { menu_text: 'Gallery', action: RouteName.Home },
+    // { menu_text: 'Gallery', action: RouteName.Home },
+    { menu_text: 'Sign Up', action: RouteName.SignUp },
     {
       menu_text: 'Events',
       action: 'events',

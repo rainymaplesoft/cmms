@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
   r_selected = RouteName.Home;
   r_home = RouteName.Home;
   r_signup = RouteName.SignUp;
+  r_signin = RouteName.SignIn;
   r_event = RouteName.Event;
   r_clubs = RouteName.ClubSetting;
   r_user = RouteName.User;
