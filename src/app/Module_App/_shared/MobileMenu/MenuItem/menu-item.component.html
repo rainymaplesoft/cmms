@@ -1,7 +1,7 @@
-<div class="item-wrap">
-  <div class="item" (click)='onItemClick()'>{{menuItem.menu_text}}
+<div class="item-wrap" (click)='onItemClick()'>
+  <div class="item">{{menuItem.menu_text}}
   </div>
-  <div [@rotateAnimate]='arrowState' class="indicator" *ngIf="menuItem.sub_menu" (click)='onArrowClick()'>
+  <div [@rotateAnimate]='arrowState' class="indicator" *ngIf="menuItem.sub_menu">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </div>
 </div>

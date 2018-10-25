@@ -129,6 +129,8 @@ export class FireAuthService {
       email: email,
       isMember: false,
       isActive: true,
+      firstName: '',
+      lastName: '',
       role: {
         subscriber: true
       }
@@ -143,6 +145,8 @@ export class FireAuthService {
       .set({
         _id: userInfo._id,
         email: userInfo.email,
+        firstName: '',
+        lastName: '',
         updatedAt: this.timestamp,
         createdAt: this.timestamp
       })

@@ -34,6 +34,8 @@ export class AccountListComponent implements OnInit, OnChanges {
   selectedRecordId = '';
   arrowState = 'right'; // right/down
   tableContentState = 'show'; // hide/show
+  sortField = 'lastName'; // lastName/isMember
+  sortDir = ''; // ''/'desc'
 
   get pageLength() {
     return this.recordCount;
@@ -73,9 +75,13 @@ export class AccountListComponent implements OnInit, OnChanges {
       return;
     }
     return this.accountService.getClubUsers(this.clubId).pipe(
-      map((item: IUser[]) => {
-        this.pageConfig.length = item.length;
-        const array_sorted = this.util.sort(item, 'isMember');
+      map((items: IUser[]) => {
+        this.pageConfig.length = items.length;
+        const array_sorted = this.util.sort(
+          items,
+          this.sortField,
+          this.sortDir
+        );
         const array_paged = this.util.paginate(
           array_sorted,
           this.pageConfig.pageSize,
@@ -101,12 +107,22 @@ export class AccountListComponent implements OnInit, OnChanges {
   onRecordClick(user: IUser) {
     this.selectedRecordId = user._id;
     this.accountEdit.selectRecordId = this.selectedRecordId;
-    // this.showListSection = false;
+    this.showListSection = false;
   }
 
   onArrowClick() {
     this.arrowState = this.arrowState === 'right' ? 'down' : 'right';
     this.tableContentState = this.arrowState === 'down' ? 'hide' : 'show';
+  }
+
+  onSort(sortField: string) {
+    if (sortField !== this.sortField) {
+      this.sortField = sortField;
+      this.sortDir = '';
+    } else {
+      this.sortDir = this.sortDir === 'desc' ? '' : 'desc';
+    }
+    this.accounts = this.getAllAccounts();
   }
 
   checkSelected(row: IUser) {

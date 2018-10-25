@@ -16,10 +16,10 @@
     </div>
     <div class="record_table" [ngClass]='{"hide_list":!showListSection}'>
       <div class='header'>
-        <div class="t_col flex_3">Name</div>
+        <div class="t_col flex_3 sort-field" (click)='onSort("lastName")' [ngClass]="{'sort-field-up': sortField=='lastName' && !sortDir,'sort-field-down': sortField=='lastName' && sortDir}">Name</div>
         <div class="t_col flex_2 mobile_hide">Email</div>
         <div class="t_col flex_1 mobile_hide">Phone</div>
-        <div class="t_col flex_1">Member</div>
+        <div class="t_col flex_1 sort-field" (click)='onSort("isMember")' [ngClass]="{'sort-field-up': sortField=='isMember' && !sortDir,'sort-field-down': sortField=='isMember' && sortDir}">Member</div>
         <div class="t_col control">
           <!-- <div>
             <button mat-button (click)='onAddaccountClick()'>

@@ -19,6 +19,7 @@ import {
       }
       .day-checkbox .day {
         margin-right: 8px;
+        width: 4em;
       }
     `
   ]

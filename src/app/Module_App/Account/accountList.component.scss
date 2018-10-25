@@ -10,6 +10,7 @@
 
   margin-top: 10px;
   margin-bottom: 20px;
+  transition: all 0.2s;
   .t_row,
   .header {
     height: 50px;
@@ -32,6 +33,7 @@
     }
   }
   .t_row {
+    transition: all 0.2s;
     cursor: pointer;
     &.selected {
       background-color: aliceblue;
@@ -45,6 +47,27 @@
     padding: 6px 12px;
     .t_col {
       padding-top: 6px;
+      transition: all 0.5s;
+      &.sort-field {
+        cursor: pointer;
+        &:hover {
+          font-weight: bold;
+        }
+      }
+      &.sort-field-down {
+        &::after {
+          //content: '\25bc';
+          content: '\2193';
+          padding-left: 0.5em;
+        }
+      }
+      &.sort-field-up {
+        &::after {
+          //content: '\25b2';
+          content: '\2191';
+          padding-left: 0.5em;
+        }
+      }
     }
     .control {
       padding-top: 0;

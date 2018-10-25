@@ -26,10 +26,14 @@ export class MenuItemComponent implements OnInit {
   ngOnInit() {}
 
   onItemClick() {
-    this.eventService.pub<string>(
-      EventName.Event_MenuItemClicked,
-      this.menuItem.action
-    );
+    if (this.menuItem.sub_menu) {
+      this.onArrowClick();
+    } else {
+      this.eventService.pub<string>(
+        EventName.Event_MenuItemClicked,
+        this.menuItem.action
+      );
+    }
   }
 
   onArrowClick() {
