@@ -59,7 +59,11 @@ export class HeaderComponent implements OnInit {
     this.navClub = {
       clubName: 'Sport Center',
       clubCode: '',
-      mapLink: ''
+      mapLink: '',
+      address: '',
+      phone1: '',
+      email: '',
+      contactName: ''
     };
 
     // update login status

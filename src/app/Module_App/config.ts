@@ -12,6 +12,11 @@ export class Config {
   static Weekdays = 'Sunday-Monday-Tuesday-Wednesday-Thursday-Friday-Saturday'.split(
     '-'
   );
+  static ShortWeekdays = 'Sun-Mon-Tue-Wed-Thur-Fri-Sat'.split('-');
+
+  static WeekdayObjects = Config.Weekdays.map((d, i) => {
+    return { index: i.toString(), name: d };
+  });
 
   static PageConfig = {
     length: 0,

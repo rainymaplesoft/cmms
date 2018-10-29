@@ -77,12 +77,32 @@
         </div>
       </div>
       <div class="flex_row_col">
-        <div class="day-selection">
+        <div class="row_col_sm">
+          <div class="control">
+            <mat-form-field>
+              <mat-select placeholder="Open day" [formControl]="openDays">
+                <mat-option *ngFor="let weekDay of weekDays" [value]="weekDay.index">
+                  {{weekDay.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Time" formControlName="time" autocomplete="off">
+              <mat-icon matSuffix color='primary'>access_time</mat-icon>
+            </mat-form-field>
+            <val-msg [invalid]='getValidate("time")'>
+              Time is required
+            </val-msg>
+          </div>
+        </div>
+        <!-- <div class="day-selection">
           <div class='day-label'>Open days</div>
           <div class="day-control">
             <day-selector [days]='selectedDays' (dayChanged)='onDayChanged($event)'></day-selector>
           </div>
-        </div>
+        </div>-->
         <div class="control">
           <mat-form-field>
             <input matInput placeholder="Google map link" formControlName="mapLink" autocomplete="off">

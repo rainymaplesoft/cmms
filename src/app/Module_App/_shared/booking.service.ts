@@ -15,9 +15,10 @@ export class BookingService {
   addBooking(clubId: string, data: IBooking) {
     const path = this.bookingPath(clubId);
     const newBooking$ = this.dbService.addDocument(path, data);
-    newBooking$.then((booking: DocumentReference) => {
-      this.getBookingById(clubId, booking.id);
-    });
+    return newBooking$;
+    // newBooking$.then((booking: DocumentReference) => {
+    //   this.getBookingById(clubId, booking.id);
+    // });
   }
 
   updateBooking(clubId: string, data: IBooking) {

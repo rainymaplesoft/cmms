@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FirebaseDataService } from '../../../Module_Firebase';
 import { CollectionPath, IClub } from '../../../Module_Firebase/models';
-import { Observable } from 'rxjs';
+import { Observable, config } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DocumentReference } from '@angular/fire/firestore';
 import { tap } from 'rxjs/operators';
@@ -18,6 +18,7 @@ import {
   CustomValidator,
   ClubService
 } from '../../_shared';
+import { Config } from '../../config';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -41,6 +42,7 @@ export class ClubEditComponent implements OnInit, OnChanges {
   formEdit: FormGroup;
   selectedDays = '';
   dayChanged = false;
+  weekDays = Config.WeekdayObjects;
 
   get docPathClub() {
     return `${CollectionPath.CLUBS}/${this.clubId}`;
@@ -96,8 +98,8 @@ export class ClubEditComponent implements OnInit, OnChanges {
       console.log('form is not valid, cannot save to database');
       return;
     }
-    const selectedDays = this.daySelector.selectedDays;
-    this.openDays.setValue(selectedDays);
+    // const selectedDays = this.daySelector.selectedDays;
+    // this.openDays.setValue(selectedDays);
     const data: IClub = this.formEdit.value;
     if (this.clubId) {
       this.updateClub(data);
@@ -143,7 +145,8 @@ export class ClubEditComponent implements OnInit, OnChanges {
       phone1: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       phone2: [''],
       mapLink: [''],
-      openDays: [''],
+      time: ['', Validators.required],
+      openDays: ['', Validators.required],
       isActive: [true, Validators.required]
     });
     this.hideEdit = false;

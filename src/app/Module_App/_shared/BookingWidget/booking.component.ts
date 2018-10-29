@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { IMetaInfo, IUser } from '../../../Module_Firebase';
-import { EventName } from '../../config';
-import { IClub, IBooking } from '../../../Module_Firebase/models';
+import { IClub, IBooking, IUser } from '../../../Module_Firebase/models';
 import { BookingService } from '../booking.service';
 import { tap, take, switchMap } from 'rxjs/operators';
-import { Router } from '@angular/router';
 import { MetaService } from '../../meta.service';
 import { UtilService } from '../../../Module_Core';
 import { ClubService } from '../club.service';
+import { AccountService } from '../account.service';
 
 @Component({
   selector: 'app-booking',
@@ -43,6 +41,7 @@ export class BookingComponent implements OnInit {
     private util: UtilService,
     private metaService: MetaService,
     private clubService: ClubService,
+    private accountService: AccountService,
     private bookingService: BookingService
   ) {}
 
@@ -97,10 +96,25 @@ export class BookingComponent implements OnInit {
         .subscribe(r => {
           if (!r || r.length === 0) {
             // add booking only if not existing
-            this.bookingService.addBooking(this.navClub._id, booking);
+            this.bookingService
+              .addBooking(this.navClub._id, booking)
+              .then(newBooking =>
+                this.addAllMemberBooking(this.navClub._id, newBooking.id)
+              );
           }
         });
     }
+  }
+
+  // automatically add members to the newly create booking
+  private addAllMemberBooking(clubId: string, bookingId: string): any {
+    this.accountService.getClubUsers(clubId).subscribe((users: IUser[]) => {
+      for (const user of users) {
+        if (user.isMember) {
+          this.bookingService.addBookingUser(clubId, bookingId, user);
+        }
+      }
+    });
   }
 
   private getComingTwoDays() {

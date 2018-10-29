@@ -38,6 +38,13 @@
   display: flex;
   .contact-info {
     padding: 0 30px 10px 30px;
+    .contact {
+      margin-bottom: 5px;
+      display: flex;
+      .label {
+        min-width: 5em;
+      }
+    }
   }
   .map-info {
   }

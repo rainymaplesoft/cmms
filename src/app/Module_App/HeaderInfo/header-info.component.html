@@ -3,13 +3,25 @@
     <div [@pullUpDownAnimate]='showContact' id="header-contact" class="dropdown-content">
       <div class="dropdown-inner">
         <h3 class="header">Contact & Location</h3>
-        <div class="contact-content flex_row_col_768">
+        <div class="contact-content flex_row_col_768" *ngIf="club">
           <div class="contact-info">
-            <div class="fourcol">12345 Taschereau,<br>
-              Brossard,<br>
-              QC, J1Y 2X2</div>
-            <div class="fourcol"><span>Phone:</span>450-111-2222<br>1-222-333-4444</div>
-            <div class="fourcol last"><span>Email:</span><a href="mailto:abc@daycare.com">contact@fitprogym.com</a></div>
+            <div class="contact">
+              <div class='label'>Address:</div>
+              <div>{{club.address}}</div>
+            </div>
+            <div class="contact">
+              <div class='label'>Phone:</div>
+              <div>{{club.phone1}}</div>
+            </div>
+            <div class="contact">
+              <div class='label'>Contact:</div>
+              <div>{{club.contactName}}</div>
+            </div>
+            <div class="contact">
+              <div class='label'>Email:</div>
+              <div><a href="mailto:abc@daycare.com">{{club.email}}</a></div>
+            </div>
+
           </div>
           <div class="map-info">
             <div class="mapouter">
@@ -42,13 +54,9 @@
       <div class="dropdown-inner">
         <h3 class="header">Schedule</h3>
         <div class="timing-content flex_row_col_768">
-          <div class="time-col flex_col">
-            <div class='th'>Thursday</div>
-            <div>8-00 pm to 10-00 pm</div>
-          </div>
-          <div class="time-col">
-            <div class='th'>Sunday</div>
-            <div>3-00 pm to 5-00 pm</div>
+          <div class="time-col flex_col" *ngIf="club">
+            <div class='th'>{{openDay.name}}</div>
+            <div>{{club.time}}</div>
           </div>
         </div>
       </div>

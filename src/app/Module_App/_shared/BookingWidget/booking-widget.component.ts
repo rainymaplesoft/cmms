@@ -69,6 +69,14 @@ export class BookingWidgetComponent implements OnInit {
         const bookedAmount =
           (usersBooked && usersBooked.length) > 0 ? usersBooked.length : 0;
         this.available = this.booking.maxPlayers - bookedAmount;
+        if (this.available < 0) {
+          this.available = 0;
+        }
+        // not available if open day is before today
+        if (new Date() > new Date(this.booking.dateName)) {
+          this.showBookingAction = false;
+          this.available = 0;
+        }
         if (this.loggedinUser) {
           this.bookingService
             .checkUserBooked(

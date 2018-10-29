@@ -161,3 +161,15 @@ mat-menu {
     margin-right: 12px;
   }
 }
+
+.login {
+  animation: pulse 3s infinite;
+}
+$border-size: 0.25em;
+$border-color: hsl(0, 90, 40);
+
+@keyframes pulse {
+  50% {
+    color: green;
+  }
+}

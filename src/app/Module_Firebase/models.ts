@@ -46,6 +46,7 @@ export interface IClub {
   mapLink?: string;
   isActive?: boolean;
   openDays?: string;
+  time?: string;
   maxPlayers?: number;
   // => collection: users
 }
