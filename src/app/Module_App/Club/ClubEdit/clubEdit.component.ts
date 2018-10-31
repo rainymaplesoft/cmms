@@ -19,6 +19,7 @@ import {
   ClubService
 } from '../../_shared';
 import { Config } from '../../config';
+import { NumberValidators } from 'src/app/Module_Core/services/validator.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -145,6 +146,8 @@ export class ClubEditComponent implements OnInit, OnChanges {
       phone1: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       phone2: [''],
       mapLink: [''],
+      priceMember: [null, [Validators.required, NumberValidators(0, 200)]],
+      priceGuest: [null, Validators.required],
       time: ['', Validators.required],
       openDays: ['', Validators.required],
       isActive: [true, Validators.required]

@@ -114,13 +114,24 @@
         <div class="row_col_sm">
           <div class="control">
             <mat-form-field>
-              <input matInput placeholder="Email" formControlName="email" autocomplete="off">
-              <mat-icon matSuffix color='primary'>email</mat-icon>
+              <input matInput placeholder="Price(Member)" formControlName="priceMember" autocomplete="off">
+              <mat-icon matSuffix color='primary'>attach_money</mat-icon>
             </mat-form-field>
-            <val-msg [invalid]='getValidate("email")'>
-              Email format is invalid
+            <val-msg [invalid]='getValidate("priceMember")'>
+              Price(Member) is invalid
             </val-msg>
           </div>
+          <div class="control">
+            <mat-form-field>
+              <input matInput placeholder="Price(Guest)" formControlName="priceGuest" autocomplete="off">
+              <mat-icon matSuffix color='primary'>attach_money</mat-icon>
+            </mat-form-field>
+            <val-msg [invalid]='getValidate("priceGuest")'>
+              Price(Member) is invalid
+            </val-msg>
+          </div>
+        </div>
+        <div class="row_col_sm">
           <div class="control">
             <mat-form-field>
               <input matInput placeholder="Max Player Amount" formControlName="maxPlayers" autocomplete="off">
@@ -130,15 +141,9 @@
               required
             </val-msg>
           </div>
-        </div>
-        <div class="row_col_sm">
           <div class="control checkbox">
             <mat-checkbox class="example-margin" formControlName="isActive">Acitve</mat-checkbox>
           </div>
-        </div>
-      </div>
-      <div class="flex_row_col">
-        <div class="row_col_sm">
         </div>
       </div>
     </div>

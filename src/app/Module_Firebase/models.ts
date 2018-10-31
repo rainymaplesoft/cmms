@@ -48,6 +48,8 @@ export interface IClub {
   openDays?: string;
   time?: string;
   maxPlayers?: number;
+  priceMember?: number;
+  priceGuest?: number;
   // => collection: users
 }
 

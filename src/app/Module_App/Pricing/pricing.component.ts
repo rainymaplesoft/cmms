@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MetaService } from '../meta.service';
+import { ClubService } from '../_shared';
 
 @Component({
   selector: 'app-pricing',
@@ -6,7 +8,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['pricing.component.scss']
 })
 export class PricingComponent implements OnInit {
-  constructor() {}
+  constructor(
+    private metaService: MetaService,
+    private clubService: ClubService
+  ) {}
 
-  ngOnInit() {}
+  priceMember = 0;
+  priceGuest = 0;
+
+  ngOnInit() {
+    const clubId = this.metaService.getUrlClubId();
+    if (!clubId) {
+      return;
+    }
+    this.clubService.getClubById(clubId).subscribe(club => {
+      this.priceMember = club.priceMember;
+      this.priceGuest = club.priceGuest;
+    });
+  }
 }
