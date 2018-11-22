@@ -37,7 +37,7 @@ export class BookingWidgetComponent implements OnInit {
   get labelAvailable() {
     return this.available && this.available > 0
       ? `Available: ${this.available}`
-      : 'Fully booked';
+      : 'Not available';
   }
 
   constructor(
@@ -68,12 +68,14 @@ export class BookingWidgetComponent implements OnInit {
         const usersBooked = c;
         const bookedAmount =
           (usersBooked && usersBooked.length) > 0 ? usersBooked.length : 0;
-        this.available = this.booking.maxPlayers - bookedAmount;
+        this.available = +this.booking.maxPlayers - bookedAmount;
         if (this.available < 0) {
           this.available = 0;
         }
         // not available if open day is before today
-        if (new Date() > new Date(this.booking.dateName)) {
+        const bookingDate = new Date(this.booking.dateName);
+        const addD = this.addDay(bookingDate, 1);
+        if (new Date() > this.addDay(bookingDate, 1)) {
           this.showBookingAction = false;
           this.available = 0;
         }
@@ -89,6 +91,12 @@ export class BookingWidgetComponent implements OnInit {
             });
         }
       });
+  }
+
+  private addDay(currentDate: Date, daysToAdd: number) {
+    const someDate = new Date();
+    someDate.setDate(currentDate.getDate() + daysToAdd);
+    return someDate;
   }
 
   onBook() {

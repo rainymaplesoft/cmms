@@ -1,33 +1,35 @@
 <div class="img-wrap"><img [src]="images[0]" /></div>
 <div class="carousel_wrap">
-  <!-- <div class="carousel_content">
-    <ngb-carousel *ngIf="images">
-      <ng-template ngbSlide>
-        <img [src]="images[0]" alt="Random first slide">
-        <div class="carousel-caption">
-          <h3></h3>
-          <p></p>
-        </div>
-      </ng-template>
-      <ng-template ngbSlide>
-        <img [src]="images[1]" alt="Random second slide">
-        <div class="carousel-caption">
-          <h3></h3>
-          <p></p>
-        </div>
-      </ng-template>
-      <ng-template ngbSlide>
-        <img [src]="images[2]" alt="Random third slide">
-        <div class="carousel-caption">
-          <h3></h3>
-          <p></p>
-        </div>
-      </ng-template>
-    </ngb-carousel>
-  </div> -->
+  <!--
+    <div class="carousel_content">
+      <ngb-carousel *ngIf="images">
+        <ng-template ngbSlide>
+          <img [src]="images[0]" alt="Random first slide">
+          <div class="carousel-caption">
+            <h3></h3>
+            <p></p>
+          </div>
+        </ng-template>
+        <ng-template ngbSlide>
+          <img [src]="images[1]" alt="Random second slide">
+          <div class="carousel-caption">
+            <h3></h3>
+            <p></p>
+          </div>
+        </ng-template>
+        <ng-template ngbSlide>
+          <img [src]="images[2]" alt="Random third slide">
+          <div class="carousel-caption">
+            <h3></h3>
+            <p></p>
+          </div>
+        </ng-template>
+      </ngb-carousel>
+    </div>
+  -->
 </div>
 <div class="page_view">
-  <div class='page_content'>
+  <div class="page_content">
     <div class="club-prompt">
       <div class="club-prompt-wrap">
         <h2 class="title-1">Clubs you might want to select</h2>
@@ -35,11 +37,11 @@
       </div>
     </div>
     <div class="club-entry">
-      <div *ngFor="let club of clubs|async" class="club-select">
-        <club-select [club]='club' *ngIf="this.club"></club-select>
+      <div *ngFor="let club of (clubs | async)" class="club-select">
+        <club-select [club]="club" *ngIf="this.club"></club-select>
       </div>
       <div class="club-plus" *ngFor="let c of clubPlus"></div>
     </div>
   </div>
 </div>
-<app-footer></app-footer>
+<section><app-footer></app-footer></section>

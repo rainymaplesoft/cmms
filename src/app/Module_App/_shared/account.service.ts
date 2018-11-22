@@ -4,7 +4,7 @@ import {
   IUser,
   CollectionPath
 } from '../../Module_Firebase';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map, take, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -34,14 +34,15 @@ export class AccountService {
     const result = this.dbService
       .getCollection(pathUsers, ['email', '==', email])
       .pipe(
-        take(1),
+        // take(1),
         map(arr => {
           if (arr && arr.length > 0) {
             return arr[0];
           } else {
             return null;
           }
-        })
+        }),
+        catchError(e => null)
       );
     return result;
   }

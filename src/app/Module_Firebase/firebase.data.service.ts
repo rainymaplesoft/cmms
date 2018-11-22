@@ -127,7 +127,7 @@ export class FirebaseDataService {
     const doc = this.db.doc<T>(docPath);
     return doc
       .set({ ...data, updatedAt: this.timestamp }, { merge: true })
-      .then(i => this.actionSucceeded(), i => this.actionFailed());
+      .then(i => null, i => this.actionFailed());
   }
 
   delete<T>(ref: string): Promise<boolean> {

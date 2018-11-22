@@ -51,21 +51,25 @@ export class SignInComponent implements OnInit {
   };
   showLogin = true;
   title = 'Sign In';
+  clubId = '';
   clubImage: string;
 
-  get clubId() {
-    return this.metaService.getUrlClubId();
-  }
-
   ngOnInit() {
-    this.clubService.getClubById(this.clubId).subscribe((club: IClub) => {
-      if (!club) {
+    this.clubId = this.metaService.getUrlClubId();
+    this.clubService.getClubById(this.clubId).subscribe(
+      (club: IClub) => {
+        if (!club) {
+          this.router.navigate([RouteName.Home]);
+          return;
+        }
+        this.club = club;
+        this.clubImage = `url(assets/img/club/club_entry_${club.clubCode}.jpg)`;
+      },
+      e => {
         this.router.navigate([RouteName.Home]);
         return;
       }
-      this.club = club;
-      this.clubImage = `url(assets/img/club/club_entry_${club.clubCode}.jpg)`;
-    });
+    );
   }
 
   onLogin() {
@@ -73,7 +77,12 @@ export class SignInComponent implements OnInit {
       .getClubUserByEmail(this.clubId, this.loginInfo.email)
       .subscribe((existingUser: IUser) => {
         const isNew = !existingUser;
-        if (existingUser && !existingUser.isActive) {
+        if (
+          existingUser &&
+          !existingUser.isActive &&
+          !existingUser.isAdmin &&
+          !existingUser.isSuperAdmin
+        ) {
           this.toastr.warning('Sorry, this email is invalid for this club');
           return;
         }
