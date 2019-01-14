@@ -10,6 +10,9 @@ import { EventService } from './Module_Core';
 import { Route, Router } from '@angular/router';
 import { EventName, Config } from './Module_App/config';
 import { IUser } from './Module_Firebase';
+import { Select } from '@ngxs/store';
+import { AppState } from './Module_App/app.store/app.state';
+import { Observable } from 'rxjs';
 
 const menuSlideAnimate =
   // trigger name for attaching this animation to an element using the [@triggerName] syntax
@@ -40,6 +43,8 @@ export class AppComponent {
   mobileMenu = Config.MobileMenu;
   isShowSettings = false;
 
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
+
   constructor(private eventService: EventService, private router: Router) {
     this.eventSubscripe();
   }
@@ -61,9 +66,11 @@ export class AppComponent {
         this.toggleMobileMenu();
       });
     // from header
-    this.eventService
-      .on<IUser>(EventName.Event_LoggedInUserChanged)
-      .subscribe(loggedInUser => this.checkShowSettings(loggedInUser));
+    // this.eventService
+    //   .on<IUser>(EventName.Event_LoggedInUserChanged)
+    this.currentUser$.subscribe(loggedInUser =>
+      this.checkShowSettings(loggedInUser)
+    );
   }
 
   checkShowSettings(loggedInUser: IUser) {

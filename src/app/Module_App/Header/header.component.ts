@@ -3,12 +3,14 @@ import { Router, NavigationStart } from '@angular/router';
 import RouteName from '../../routename';
 import { EventService, UtilService } from '../../Module_Core';
 import { IClub, IUser } from '../../Module_Firebase';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { MetaService } from '../meta.service';
 import { EventName } from '../config';
 import { filter, tap } from 'rxjs/operators';
 import { FireAuthService } from '../../Module_Firebase/firebase.auth.service';
 import { ClubService } from '../_shared/club.service';
+import { Select } from '@ngxs/store';
+import { AppState } from '../app.store/app.state';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -19,7 +21,6 @@ import { ClubService } from '../_shared/club.service';
 export class HeaderComponent implements OnInit {
   showContact = 'hide';
   showTimings = 'hide';
-  isLoggedIn = false;
   navClub: IClub;
   navClubId: string;
   loggedInUser: IUser;
@@ -37,6 +38,8 @@ export class HeaderComponent implements OnInit {
   loginBadge = '?';
   sub: Subscription;
 
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
+
   constructor(
     private router: Router,
     private eventService: EventService,
@@ -44,7 +47,7 @@ export class HeaderComponent implements OnInit {
     private metaService: MetaService,
     private clubService: ClubService,
     private authService: FireAuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.router.events
@@ -66,16 +69,15 @@ export class HeaderComponent implements OnInit {
       contactName: ''
     };
 
-    // update login status
-    this.authService.getCurrentUser().subscribe(u => {
-      this.isLoggedIn = !!u;
-      this.loggedInUser = u ? u : null;
-      // pub to mobile menu
-      this.eventService.pub<IUser>(
-        EventName.Event_LoggedInUserChanged,
-        this.loggedInUser
-      );
-    });
+    // // update login status
+    // this.authService.getCurrentUser().subscribe(u => {
+    //   this.loggedInUser = u ? u : null;
+    //   // pub to mobile menu
+    //   this.eventService.pub<IUser>(
+    //     EventName.Event_LoggedInUserChanged,
+    //     this.loggedInUser
+    //   );
+    // });
 
     if (!navClubId) {
       return;
@@ -139,14 +141,14 @@ export class HeaderComponent implements OnInit {
     this.showContact = 'hide';
   }
 
-  checkShowSettings() {
-    return (
-      this.loggedInUser &&
-      (this.loggedInUser.isSuperAdmin || this.loggedInUser.isAdmin)
-    );
-  }
+  // checkShowSettings() {
+  //   return (
+  //     this.loggedInUser &&
+  //     (this.loggedInUser.isSuperAdmin || this.loggedInUser.isAdmin)
+  //   );
+  // }
 
-  checkShowProfile() {
-    return this.isLoggedIn && this.navClubId && !this.loggedInUser.isSuperAdmin;
-  }
+  // checkShowProfile() {
+  //   return this.isLoggedIn && this.navClubId && !this.loggedInUser.isSuperAdmin;
+  // }
 }

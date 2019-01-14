@@ -1,3 +1,4 @@
+export class Test {}
 /*
 import { NgModule } from '@angular/core';
 

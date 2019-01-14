@@ -40,19 +40,20 @@ export class SignInComponent implements OnInit {
     private dbService: FirebaseDataService,
     public dialog: MatDialog,
     private util: UtilService
-  ) {}
+  ) { }
 
   club: IClub;
   loginInfo = {
     email: '',
     password: '',
-    isJoinClub: false,
-    isFollowPolicy: false
+    isJoinClub: true,
+    isFollowPolicy: true
   };
   showLogin = true;
   title = 'Sign In';
   clubId = '';
   clubImage: string;
+  subLogin: Subscription;
 
   ngOnInit() {
     this.clubId = this.metaService.getUrlClubId();
@@ -73,7 +74,7 @@ export class SignInComponent implements OnInit {
   }
 
   onLogin() {
-    this.accountService
+    this.subLogin = this.accountService
       .getClubUserByEmail(this.clubId, this.loginInfo.email)
       .subscribe((existingUser: IUser) => {
         const isNew = !existingUser;
@@ -84,6 +85,7 @@ export class SignInComponent implements OnInit {
           !existingUser.isSuperAdmin
         ) {
           this.toastr.warning('Sorry, this email is invalid for this club');
+          this.subLogin.unsubscribe();
           return;
         }
         this.authService.signOut();
@@ -130,19 +132,21 @@ export class SignInComponent implements OnInit {
     });
   }
 
-  private afterSignIn = (user: Observable<IUser>) => {
-    user.pipe(take(1)).subscribe(u => {
-      if (u) {
-        this.accountService.updateUserLoginInfo(u);
-        // navigate to club page after login successfully
-        this.router.navigate([RouteName.Club], {
-          queryParams: { clubId: this.clubId }
-        });
-      } else {
-        this.toastr.error('Email or password is incorrect for this club');
-      }
+  private afterSignIn = (user: IUser) => {
+    if (!user) {
+      this.toastr.error('Email or password is incorrect for this club');
+      this.subLogin.unsubscribe();
+      return;
+    }
+
+    this.accountService.updateUserLoginInfo(user);
+    // navigate to club page after login successfully
+    this.router.navigate([RouteName.Club], {
+      queryParams: { clubId: this.clubId }
     });
-  };
+
+    this.subLogin.unsubscribe();
+  }
 
   disableSign() {
     return (

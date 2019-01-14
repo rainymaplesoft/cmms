@@ -20,7 +20,10 @@ import { ClientComponent } from './Module_App/_Clients/client.component';
 import {
   MainWIBCComponent,
   MainLPBCComponent,
-  MainLVBCComponent
+  MainLVBCComponent,
+  MainCCBCComponent,
+  MainCDBCComponent,
+  MainCEBCComponent
 } from './Module_App/_Clients';
 import { FooterComponent } from './Module_App/Footer/footer.component';
 import {
@@ -98,13 +101,16 @@ export const AppComponents: any = [
   SignInComponent,
   ViewHeaderComponent,
   ClientComponent,
-  MainLPBCComponent,
-  MainLVBCComponent,
-  MainWIBCComponent,
   FooterComponent,
   DaySelectorComponent,
   BookingComponent,
   BookingWidgetComponent,
   BookingListComponent,
-  BookedPlaysComponent
+  BookedPlaysComponent,
+  MainLPBCComponent,
+  MainLVBCComponent,
+  MainWIBCComponent,
+  MainCCBCComponent,
+  MainCDBCComponent,
+  MainCEBCComponent
 ];

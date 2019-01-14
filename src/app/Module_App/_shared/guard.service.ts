@@ -10,10 +10,12 @@ import { FireAuthService, IUser } from '../../Module_Firebase';
 import { Observable, of } from 'rxjs';
 import { RouteName } from '../../routename';
 import { take, switchMap, map } from 'rxjs/operators';
+import { Select } from '@ngxs/store';
+import { AppState } from '../app.store/app.state';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: FireAuthService, private router: Router) {}
+  constructor(private authService: FireAuthService, private router: Router) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -34,7 +36,11 @@ export class AuthGuard implements CanActivate {
 
 @Injectable({ providedIn: 'root' })
 export class AuthMemberGuard implements CanActivate {
-  constructor(private authService: FireAuthService, private router: Router) {}
+
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
+
+  constructor(private authService: FireAuthService, private router: Router) { }
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -45,7 +51,7 @@ export class AuthMemberGuard implements CanActivate {
           this.router.navigate([RouteName.Home]);
           return of(false);
         }
-        return this.authService.getCurrentUser().pipe(
+        return this.currentUser$.pipe(
           take(1),
           map(u => {
             if (!u && !u.isMember) {
@@ -63,7 +69,8 @@ export class AuthMemberGuard implements CanActivate {
 @Injectable({ providedIn: 'root' })
 export class AuthAdminGuard implements CanActivate {
   private _firebaseUser: firebase.User;
-  constructor(private authService: FireAuthService, private router: Router) {}
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
+  constructor(private authService: FireAuthService, private router: Router) { }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -74,7 +81,7 @@ export class AuthAdminGuard implements CanActivate {
           this.router.navigate([RouteName.Home]);
           return of(false);
         }
-        return this.authService.getCurrentUser().pipe(
+        return this.currentUser$.pipe(
           take(1),
           map(u => {
             if (!u && !u.isAdmin && !u.isSuperAdmin) {
@@ -91,13 +98,8 @@ export class AuthAdminGuard implements CanActivate {
 
 @Injectable({ providedIn: 'root' })
 export class AuthSuperMemberGuard implements CanActivate {
-  private _firebaseUser: firebase.User;
-  private _loggedInUser: IUser;
-  constructor(private authService: FireAuthService, private router: Router) {
-    this.authService.authState.subscribe((u: firebase.User) => {
-      this._firebaseUser = u;
-    });
-  }
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
+  constructor(private authService: FireAuthService, private router: Router) { }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -108,7 +110,7 @@ export class AuthSuperMemberGuard implements CanActivate {
           this.router.navigate([RouteName.Home]);
           return of(false);
         }
-        return this.authService.getCurrentUser().pipe(
+        return this.currentUser$.pipe(
           take(1),
           map(u => {
             if (!u && !u.isSuperAdmin) {

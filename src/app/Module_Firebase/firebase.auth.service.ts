@@ -13,6 +13,11 @@ import { ToastrService } from '../Module_Core/services/toastr.service';
 import { StorageService } from '../Module_Core';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { Store } from '@ngxs/store';
+import {
+  SetLoginState,
+  SetCurrentUserAction
+} from '../Module_App/app.store/app.actions';
 
 @Injectable()
 export class FireAuthService {
@@ -21,9 +26,10 @@ export class FireAuthService {
   constructor(
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
+    private store: Store,
     private toastr: ToastrService,
     private storage: StorageService
-  ) {}
+  ) { }
 
   get authState() {
     return this.afAuth.authState;
@@ -52,24 +58,34 @@ export class FireAuthService {
   }
 
   signOut() {
-    this.storage.removeItem(StorageItem.CLUB_ID);
-    this.storage.removeItem(StorageItem.USER_ID);
+    this.store.dispatch(new SetLoginState(null, null, null));
+
     return this.afAuth.auth.signOut();
   }
 
-  login(clubId: string, email: string, password: string, isNew: boolean) {
+  login(clubId: string, email: string, password: string, isNew: boolean): Promise<IUser> {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
       credential => {
+        if (!credential.user) {
+          return null;
+        }
         const userId = credential.user.uid;
-        this.saveLoginStatus(clubId, userId);
         const isSuper = this.isSuper(userId);
         if (isNew && !isSuper) {
           this.addUserToClub(clubId, userId, email);
         }
-        return this.getCurrentUser();
+        this.setCurrentUser(clubId, userId, email);
+        const user: IUser = {
+          email: email,
+          _id: userId,
+          loggedInClubId: clubId,
+          isSuperAdmin: isSuper,
+          role: { superUser: isSuper }
+        };
+        return user;
       },
       e => {
-        return of(null);
+        return null;
       }
     );
   }
@@ -78,17 +94,16 @@ export class FireAuthService {
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
-  isSuper(uid) {
+  private isSuper(uid) {
     if (uid === environment.suid) {
       return true;
     }
     return false;
   }
 
-  getCurrentUser(): Observable<IUser> {
+  private setCurrentUser(clubId: string, userId: string, email: string) {
     // Get auth data, then get firestore user document || null
 
-    const userId = this.storage.getItem(StorageItem.USER_ID);
     const isSuper = this.isSuper(userId);
     if (isSuper) {
       const superUser: IUser = {
@@ -97,11 +112,10 @@ export class FireAuthService {
         isSuperAdmin: true,
         role: { superUser: true }
       };
-      return of(superUser);
+      this.setLoginState(clubId, userId, superUser);
     }
-    const clubId = this.storage.getItem(StorageItem.CLUB_ID);
-    const docPath = this.getDocPathUser(clubId, userId);
-    return this.afs
+    const docPath = this.getDocPathClubUser(clubId, userId);
+    this.afs
       .doc<IUser>(docPath)
       .snapshotChanges()
       .pipe(
@@ -110,19 +124,18 @@ export class FireAuthService {
           if (user) {
             user['loggedInClubId'] = clubId;
           }
-          return user;
+          this.setLoginState(clubId, userId, user);
         })
       );
   }
 
-  private saveLoginStatus(clubId: string, userId: string) {
-    this.storage.setItem(StorageItem.USER_ID, userId);
-    this.storage.setItem(StorageItem.CLUB_ID, clubId);
+  private setLoginState(clubId: string, userId: string, user: IUser) {
+    this.store.dispatch(new SetLoginState(userId, clubId, user));
   }
 
   private addUserToClub(clubId: string, userId: string, email: string) {
     // Sets user data to firestore on login
-    const docPath = this.getDocPathUser(clubId, userId);
+    const docPath = this.getDocPathClubUser(clubId, userId);
     const userRef: AngularFirestoreDocument<IUser> = this.afs.doc(docPath);
     const userInfo: IUser = {
       _id: userId,
@@ -153,10 +166,10 @@ export class FireAuthService {
       .then(c => this.signOut());
   }
 
-  private getDocPathUser(clubId: string, userId: string) {
+  private getDocPathClubUser(clubId: string, userId: string) {
     return `${CollectionPath.CLUBS}/${clubId}/${
       CollectionPath.USERS
-    }/${userId}`;
+      }/${userId}`;
   }
 
   get timestamp() {

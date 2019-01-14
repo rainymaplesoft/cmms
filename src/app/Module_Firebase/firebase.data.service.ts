@@ -27,7 +27,8 @@ export class FirebaseDataService {
   getCollection<T>(
     collectionPath: string,
     whereExp?: string[],
-    orderByExp?: string[]
+    orderByExp?: string[],
+    limitExp?: number
   ) {
     const collectionQuery = this.db.collection<T>(collectionPath, ref => {
       let query:
@@ -57,6 +58,9 @@ export class FirebaseDataService {
             query = query.where(whereExp[0], '<', whereExp[2]);
             break;
         }
+      }
+      if (limitExp) {
+        query = query.limit(limitExp);
       }
       return query;
     });

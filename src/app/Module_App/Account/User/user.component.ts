@@ -1,22 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UtilService } from '../../../Module_Core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Images } from '../../Images/image';
 import { IUser } from '../../../Module_Firebase/models';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MetaService } from '../../meta.service';
 import { Router } from '@angular/router';
 import RouteName from '../../../routename';
 import { take } from 'rxjs/operators';
 import { AccountService } from '../../_shared/account.service';
 import { Config } from '../../config';
+import { Select } from '@ngxs/store';
+import { AppState } from '../../app.store/app.state';
 
 @Component({
   selector: 'app-user',
   templateUrl: 'user.component.html',
   styleUrls: ['user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
   user: Observable<IUser>;
   formEdit: FormGroup;
   clubId: string;
@@ -25,6 +27,8 @@ export class UserComponent implements OnInit {
   themeImage = `url(assets/img/edit_01.jpg)`;
 
   genders = Config.Gender;
+  subUser: Subscription;
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
 
   constructor(
     private router: Router,
@@ -32,25 +36,31 @@ export class UserComponent implements OnInit {
     private metaService: MetaService,
     private accountService: AccountService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.metaService.getLoggedInUser.subscribe(u => {
-      this.userId = u._id;
-      this.clubId = u.loggedInClubId;
-      this.getRecordById();
-    });
-  }
-
-  private getRecordById() {
-    this.user = this.accountService
-      .getClubUserById(this.clubId, this.userId)
-      .pipe(take(1));
-    this.buildForm();
-    this.user.subscribe(user => {
+    // this.metaService.getLoggedInUser.subscribe(u => {
+    //   this.userId = u._id;
+    //   this.clubId = u.loggedInClubId;
+    //   this.getRecordById();
+    // });
+    this.subUser = this.currentUser$.subscribe(user => {
       this.formEdit.patchValue(user);
     });
   }
+
+  ngOnDestroy(): void {
+    this.subUser.unsubscribe();
+  }
+  // private getRecordById() {
+  //   this.user = this.accountService
+  //     .getClubUserById(this.clubId, this.userId)
+  //     .pipe(take(1));
+  //   this.buildForm();
+  //   this.user.subscribe(user => {
+  //     this.formEdit.patchValue(user);
+  //   });
+  // }
 
   onSave() {
     const data: IUser = this.formEdit.value;

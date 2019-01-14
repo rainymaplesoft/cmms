@@ -38,8 +38,14 @@ export class CustomValidator {
   }
 
   static CheckEmailExisting(db: FirebaseDataService, email: string) {
+    const randomLimit = Math.floor(Math.random() * 100) + 1; // integer range 1--100, avoid caching
     const result = db
-      .getCollection(CollectionPath.USERS, ['email', '==', email])
+      .getCollection(
+        CollectionPath.USERS,
+        ['email', '==', email],
+        null,
+        randomLimit
+      )
       .pipe(
         debounceTime(500),
         take(1),

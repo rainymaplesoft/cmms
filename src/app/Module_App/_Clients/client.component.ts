@@ -41,7 +41,11 @@ export class ClientComponent
   clubTypes = {
     LPBC: MainLPBCComponent,
     LVBC: MainLVBCComponent,
-    WIBC: MainWIBCComponent
+    WIBC: MainWIBCComponent,
+    CCBC: MainWIBCComponent,
+    CDBC: MainWIBCComponent,
+    CEBC: MainWIBCComponent,
+    CFBC: MainWIBCComponent
   };
   loggedInUser: IUser;
   url = '';

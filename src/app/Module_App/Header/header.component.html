@@ -1,48 +1,47 @@
 <div class="header-wrap">
   <div id="header" class="sticky">
-    <div id="mobile-menu-toggle" (click)='toggleMobileMenu()'>
-      <mat-icon inline='false'>menu</mat-icon>
+    <div id="mobile-menu-toggle" (click)="toggleMobileMenu()">
+      <mat-icon inline="false">menu</mat-icon>
     </div>
     <div class="header-content">
       <div class="logo">
-        {{clubName}}
+        {{ clubName }}
         <!-- <img [src]="logo" alt="" style="width: 78px;"> -->
       </div>
       <div class="main_menu">
-        <div class='menu_item' [ngClass]="{selected: r_home===r_selected}" (click)='nav(r_home)'>
-          <div class="menu_content">
-            <i class="material-icons">home</i>
-          </div>
+        <div class="menu_item" [ngClass]="{ selected: r_home === r_selected }" (click)="nav(r_home)">
+          <div class="menu_content"><i class="material-icons">home</i></div>
           <div class="menu_content">
             <div class="item_wrap">Home</div>
           </div>
         </div>
-        <div class='menu_item' *ngIf='checkShowSettings()' [matMenuTriggerFor]="menuSetting" [ngClass]="{selected: r_clubs===r_selected}">
-          <div class="menu_content">
-            <i class="material-icons">settings</i>
+        <ng-container *ngIf="(currentUser$ | async) as currentUser">
+          <div class="menu_item" *ngIf="currentUser.isSuperAdmin || currentUser.isAdmin" [matMenuTriggerFor]="menuSetting"
+            [ngClass]="{ selected: r_clubs === r_selected }">
+            <div class="menu_content"><i class="material-icons">settings</i></div>
+            <div class="menu_content">
+              <div class="item_wrap">Settings</div>
+            </div>
+            <mat-menu #menuSetting="matMenu">
+              <button mat-menu-item (click)="nav(r_clubs)">
+                <mat-icon>public</mat-icon>
+                <span>Clubs</span>
+              </button>
+              <button mat-menu-item (click)="nav(r_accounts)">
+                <mat-icon>account_circle</mat-icon>
+                <span>Members</span>
+              </button><button mat-menu-item (click)="nav(r_bookings)">
+                <mat-icon>event_availablet</mat-icon>
+                <span>Bookings</span>
+              </button>
+              <button mat-menu-item disabled>
+                <mat-icon>notifications_off</mat-icon>
+                <span>Disable alerts</span>
+              </button>
+            </mat-menu>
           </div>
-          <div class="menu_content">
-            <div class="item_wrap">Settings</div>
-          </div>
-          <mat-menu #menuSetting="matMenu">
-            <button mat-menu-item (click)='nav(r_clubs)'>
-              <mat-icon>public</mat-icon>
-              <span>Clubs</span>
-            </button>
-            <button mat-menu-item (click)='nav(r_accounts)'>
-              <mat-icon>account_circle</mat-icon>
-              <span>Members</span>
-            </button><button mat-menu-item (click)='nav(r_bookings)'>
-              <mat-icon>event_availablet</mat-icon>
-              <span>Bookings</span>
-            </button>
-            <button mat-menu-item disabled>
-              <mat-icon>notifications_off</mat-icon>
-              <span>Disable alerts</span>
-            </button>
-          </mat-menu>
-        </div>
-        <div class='menu_item' (click)='nav(r_signup)'>
+        </ng-container>
+        <div class="menu_item" (click)="nav(r_signup)">
           <div class="menu_content">
             <i class="material-icons">account_box</i>
           </div>
@@ -66,38 +65,41 @@
             <div class="item_wrap">Gallery</div>
           </div>
         </div> -->
-        <div class='menu_item'>
+        <div class="menu_item">
           <div class="menu_content">
-            <i class="material-icons">event_note</i></div>
+            <i class="material-icons">event_note</i>
+          </div>
           <div class="menu_content">
             <div class="item_wrap">Events</div>
           </div>
         </div>
       </div>
       <div class="pulldown_menu">
-        <div class='menu_item' *ngIf="navClubId">
-          <div class="icon_wrap" matTooltip="Contact & Location" (click)='onShowContact()'>
+        <div class="menu_item" *ngIf="navClubId">
+          <div class="icon_wrap" matTooltip="Contact & Location" (click)="onShowContact()">
             <i class="material-icons">location_on</i>
           </div>
         </div>
-        <div class='menu_item' *ngIf="navClubId">
-          <div class="icon_wrap" matTooltip="Schedule" (click)='onShowTimings()'>
+        <div class="menu_item" *ngIf="navClubId">
+          <div class="icon_wrap" matTooltip="Schedule" (click)="onShowTimings()">
             <i class="material-icons">access_time</i>
           </div>
         </div>
-        <div class='menu_item' *ngIf="checkShowProfile()">
-          <div class="icon_wrap" matTooltip="My Profile" (click)='nav(r_user,true)'>
-            <!-- <i class="material-icons" [matBadge]="loginBadge" matBadgeColor="warn">account_circle</i> -->
-            <i class="material-icons">account_circle</i>
+        <ng-container *ngIf="(currentUser$ | async) as currentUser">
+          <div class="menu_item" *ngIf="navClubId && !currentUser.isSuperAdmin">
+            <div class="icon_wrap" matTooltip="My Profile" (click)="nav(r_user, true)">
+              <!-- <i class="material-icons" [matBadge]="loginBadge" matBadgeColor="warn">account_circle</i> -->
+              <i class="material-icons">account_circle</i>
+            </div>
           </div>
-        </div>
-        <div class='menu_item' *ngIf="isLoggedIn">
-          <div class="icon_wrap" matTooltip="Sign Out" (click)='onSignOut()'>
+        </ng-container>
+        <div class="menu_item" *ngIf="isLoggedIn">
+          <div class="icon_wrap" matTooltip="Sign Out" (click)="onSignOut()">
             <i class="material-icons fas fa-sign-out-alt"></i>
           </div>
         </div>
-        <div class='menu_item' *ngIf="!isLoggedIn && navClubId">
-          <div class="icon_wrap login" matTooltip="Login" (click)='nav(r_signin,true)'>
+        <div class="menu_item" *ngIf="!isLoggedIn && navClubId">
+          <div class="icon_wrap login" matTooltip="Login" (click)="nav(r_signin, true)">
             <i class="material-icons fas fa-sign-in-alt"></i>
           </div>
         </div>
@@ -106,4 +108,4 @@
   </div>
 </div>
 <!-- header -->
-<header-info [showContact]='showContact' [showTimings]='showTimings' [club]='navClub'></header-info>
+<header-info [showContact]="showContact" [showTimings]="showTimings" [club]="navClub"></header-info>

@@ -22,19 +22,19 @@ export class MetaService {
     private eventService: EventService,
     private authService: FireAuthService,
     private storageService: StorageService
-  ) {}
+  ) { }
 
-  get loggedInclubId() {
-    return this.storageService.getItem(StorageItem.CLUB_ID);
-  }
+  // get loggedInclubId() {
+  //   return this.storageService.getItem(StorageItem.CLUB_ID);
+  // }
 
-  get loggedInUserId() {
-    return this.storageService.getItem(StorageItem.USER_ID);
-  }
+  // get loggedInUserId() {
+  //   return this.storageService.getItem(StorageItem.USER_ID);
+  // }
 
-  get getLoggedInUser() {
-    return this.authService.getCurrentUser().pipe(take(1));
-  }
+  // get getLoggedInUser() {
+  //   return this.authService.getCurrentUser().pipe(take(1));
+  // }
 
   signOut() {
     return this.authService.signOut().then(c => {

@@ -15,7 +15,10 @@ import { MetaService } from './Module_App/meta.service';
 import {
   MainLPBCComponent,
   MainLVBCComponent,
-  MainWIBCComponent
+  MainWIBCComponent,
+  MainCCBCComponent,
+  MainCDBCComponent,
+  MainCEBCComponent
 } from './Module_App/_Clients';
 import {
   BookingService,
@@ -41,7 +44,14 @@ import {
 
     RouterModule.forRoot(AppRoutes)
   ],
-  entryComponents: [MainLPBCComponent, MainLVBCComponent, MainWIBCComponent],
+  entryComponents: [
+    MainLPBCComponent,
+    MainLVBCComponent,
+    MainWIBCComponent,
+    MainCCBCComponent,
+    MainCDBCComponent,
+    MainCEBCComponent
+  ],
   providers: [MetaService, BookingService, ClubService, AccountService],
   bootstrap: [AppComponent]
 })

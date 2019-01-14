@@ -31,8 +31,9 @@ export class AccountService {
 
   getClubUserByEmail(clubId: string, email: string) {
     const pathUsers = this.getPathClubUsers(clubId);
+    const randomLimit = Math.floor(Math.random() * 100) + 1; // integer range 1--100, avoid caching
     const result = this.dbService
-      .getCollection(pathUsers, ['email', '==', email])
+      .getCollection(pathUsers, ['email', '==', email], null, randomLimit)
       .pipe(
         // take(1),
         map(arr => {
