@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { MainLPBCComponent } from './LPBC/main-lpbc.component';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { MainLVBCComponent } from './LVBC/main-lvbc.component';
 import { MainWIBCComponent } from './WIBC/main-wibc.component';
 import { IUser, IClub } from '../../Module_Firebase';
@@ -23,6 +23,8 @@ import { UtilService } from '../../Module_Core/services/util.service';
 import { RouteName } from '../../routename';
 import { filter } from 'rxjs/operators';
 import { ClubService } from '../_shared';
+import { Select, Store } from '@ngxs/store';
+import { AppState } from '../app.store';
 @Component({
   selector: 'app-client',
   templateUrl: 'client.component.html',
@@ -53,21 +55,28 @@ export class ClientComponent
   get showClubMain() {
     return !this.isOutletActivated;
   }
+  @Select(AppState.loggedInclubId) loggedInclubId$: Observable<string>;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private router: Router,
+    private store: Store,
     private clubService: ClubService,
     private metaService: MetaService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.url = this.router.url;
     this.clubId = this.metaService.getUrlClubId(this.url);
-    const loggedInClubId = this.metaService.loggedInclubId;
-    if (loggedInClubId && loggedInClubId !== this.clubId) {
-      this.metaService.signOut();
-    }
+    // const loggedInClubId = this.metaService.loggedInclubId;
+    // const loggedInClubId = this.store.selectSnapshot<string>((state: AppState) => state..loggedInclubId);
+
+    this.loggedInclubId$.subscribe(loggedInClubId => {
+
+      if (loggedInClubId && loggedInClubId !== this.clubId) {
+        this.metaService.signOut();
+      }
+    });
     this.chooseClubPComponent();
   }
 
@@ -113,9 +122,9 @@ export class ClientComponent
     // this.chooseClubPComponent();
   }
 
-  ngOnChanges() {}
-  ngAfterViewChecked() {}
-  ngAfterViewInit() {}
+  ngOnChanges() { }
+  ngAfterViewChecked() { }
+  ngAfterViewInit() { }
 
   ngOnDestroy() {
     if (this.cmpRef) {

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IClub, IUser, IBooking } from '../../Module_Firebase';
 import { MetaService } from '../meta.service';
-import { Observable, pipe } from 'rxjs';
+import { Observable, pipe, Subscription } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
 import {
   rotateAnimate,
@@ -12,6 +12,8 @@ import { PageEvent } from '@angular/material';
 import { BookingService, ClubService } from '../_shared';
 import { Config } from '../config';
 import { AccountService } from '../_shared/account.service';
+import { Select } from '@ngxs/store';
+import { AppState } from '../app.store';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -20,7 +22,7 @@ import { AccountService } from '../_shared/account.service';
   styleUrls: ['bookingList.component.scss'],
   animations: [rotateAnimate, pullUpDownAnimate]
 })
-export class BookingListComponent implements OnInit {
+export class BookingListComponent implements OnInit, OnDestroy {
   private _loggedInUser: IUser;
   clubId: string;
   clubs: Observable<IClub[]>;
@@ -40,6 +42,8 @@ export class BookingListComponent implements OnInit {
   }
 
   pageConfig = Config.PageConfig;
+  subUser: Subscription;
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
 
   constructor(
     private bookingService: BookingService,
@@ -47,10 +51,10 @@ export class BookingListComponent implements OnInit {
     private clubservice: ClubService,
     private metaServie: MetaService,
     private util: UtilService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.metaServie.getLoggedInUser.subscribe(u => {
+    this.subUser = this.currentUser$.subscribe(u => {
       this._loggedInUser = u;
       if (u.isAdmin) {
         this.clubId = this._loggedInUser.loggedInClubId;
@@ -64,6 +68,10 @@ export class BookingListComponent implements OnInit {
         this.clubs = this.getAllClubs();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subUser.unsubscribe();
   }
 
   getAllClubs() {

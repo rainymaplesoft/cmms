@@ -1,18 +1,27 @@
 import { Router } from '@angular/router';
 import { MetaService } from '..';
 import { IUser } from '../../Module_Firebase';
-import { OnInit } from '@angular/core';
+import { OnInit, OnDestroy } from '@angular/core';
 import RouteName from '../../routename';
-export class ClientBase implements OnInit {
+import { Subscription, Observable } from 'rxjs';
+import { Select } from '@ngxs/store';
+import { AppState } from '../app.store';
+export class ClientBase implements OnInit, OnDestroy {
   __clubId: string;
   __loggedInUser: IUser;
-  constructor(protected router: Router, protected metaService: MetaService) {}
+  subUser: Subscription;
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
+  constructor(protected router: Router, protected metaService: MetaService) { }
 
   ngOnInit() {
     this.__clubId = this.metaService.getUrlClubId();
-    this.metaService.getLoggedInUser.subscribe(u => {
+    this.subUser = this.currentUser$.subscribe(u => {
       this.__loggedInUser = u;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subUser.unsubscribe();
   }
 
   onLogin() {

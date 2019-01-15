@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges, OnDestroy } from '@angular/core';
 import { PageEvent } from '@angular/material';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { IClub } from '../../Module_Firebase';
@@ -12,6 +12,8 @@ import { Config } from '../config';
 import { UtilService } from '../../Module_Core/services/util.service';
 import { AccountService } from '../_shared';
 import { ClubService } from '../_shared/club.service';
+import { Select } from '@ngxs/store';
+import { AppState } from '../app.store';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'account-list',
@@ -19,7 +21,7 @@ import { ClubService } from '../_shared/club.service';
   styleUrls: ['accountList.component.scss'],
   animations: [rotateAnimate, pullUpDownAnimate]
 })
-export class AccountListComponent implements OnInit, OnChanges {
+export class AccountListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(AccountEditComponent)
   accountEdit: AccountEditComponent;
 
@@ -37,6 +39,9 @@ export class AccountListComponent implements OnInit, OnChanges {
   sortField = 'lastName'; // lastName/isMember
   sortDir = ''; // ''/'desc'
 
+  subUser: Subscription;
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
+
   get pageLength() {
     return this.recordCount;
   }
@@ -44,14 +49,13 @@ export class AccountListComponent implements OnInit, OnChanges {
   pageConfig = Config.PageConfig;
 
   constructor(
-    private metaServie: MetaService,
     private accountService: AccountService,
     private clubService: ClubService,
     private util: UtilService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.metaServie.getLoggedInUser.subscribe(u => {
+    this.subUser = this.currentUser$.subscribe(u => {
       this._loggedInUser = u;
       if (u.isAdmin) {
         this.clubId = this._loggedInUser.loggedInClubId;
@@ -64,7 +68,11 @@ export class AccountListComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges() {}
+  ngOnDestroy(): void {
+    this.subUser.unsubscribe();
+  }
+
+  ngOnChanges() { }
 
   getAllClubs() {
     return this.clubService.getAllClubs();
@@ -129,7 +137,7 @@ export class AccountListComponent implements OnInit, OnChanges {
     return this.selectedRecordId === row._id;
   }
 
-  clubTrack = (index, item) => {};
+  clubTrack = (index, item) => { };
 
   showList() {
     this.showListSection = true;

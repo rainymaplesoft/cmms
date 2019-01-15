@@ -44,6 +44,7 @@ export class UserComponent implements OnInit, OnDestroy {
     //   this.clubId = u.loggedInClubId;
     //   this.getRecordById();
     // });
+    this.buildForm();
     this.subUser = this.currentUser$.subscribe(user => {
       this.formEdit.patchValue(user);
     });

@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges, OnDestroy } from '@angular/core';
 import { PageEvent } from '@angular/material';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
 import { CollectionPath, IUser, IClub } from '../../Module_Firebase/models';
@@ -10,6 +10,8 @@ import { Config } from '../config';
 import { MetaService } from '../meta.service';
 import { ClubService } from '../_shared/club.service';
 import { UtilService } from '../../Module_Core/services/util.service';
+import { Select } from '@ngxs/store';
+import { AppState } from '../app.store';
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'club-list',
@@ -17,7 +19,7 @@ import { UtilService } from '../../Module_Core/services/util.service';
   styleUrls: ['clubList.component.scss'],
   animations: [rotateAnimate, pullUpDownAnimate]
 })
-export class ClubListComponent implements OnInit, OnChanges {
+export class ClubListComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild(ClubEditComponent)
   clubEdit: ClubEditComponent;
 
@@ -32,15 +34,17 @@ export class ClubListComponent implements OnInit, OnChanges {
   tableContentState = 'show'; // hide/show
 
   pageConfig = Config.PageConfig;
+  subUser: Subscription;
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
 
   constructor(
     private metaServie: MetaService,
     private clubservice: ClubService,
     private util: UtilService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.metaServie.getLoggedInUser.subscribe(u => {
+    this.subUser = this.currentUser$.subscribe(u => {
       this._loggedInUser = u;
       if (u.isAdmin) {
         this.selectedClubId = this._loggedInUser.loggedInClubId;
@@ -53,7 +57,11 @@ export class ClubListComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges() {}
+  ngOnDestroy(): void {
+    this.subUser.unsubscribe();
+  }
+
+  ngOnChanges() { }
 
   getAllClubs() {
     return this.clubservice.getAllClubs().pipe(
@@ -95,7 +103,7 @@ export class ClubListComponent implements OnInit, OnChanges {
     return this.selectedClubId === club._id;
   }
 
-  clubTrack = (index, item) => {};
+  clubTrack = (index, item) => { };
 
   showList() {
     this.showClubList = true;

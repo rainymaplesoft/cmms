@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IClub, IBooking, IUser } from '../../../Module_Firebase/models';
 import { BookingService } from '../booking.service';
 import { tap, take, switchMap } from 'rxjs/operators';
@@ -6,6 +6,9 @@ import { MetaService } from '../../meta.service';
 import { UtilService } from '../../../Module_Core';
 import { ClubService } from '../club.service';
 import { AccountService } from '../account.service';
+import { Subscription, Observable } from 'rxjs';
+import { Select } from '@ngxs/store';
+import { AppState } from '../../app.store';
 
 @Component({
   selector: 'app-booking',
@@ -32,22 +35,39 @@ import { AccountService } from '../account.service';
     `
   ]
 })
-export class BookingComponent implements OnInit {
+export class BookingComponent implements OnInit, OnDestroy {
   navClub: IClub;
   isLoggedIn: boolean;
   user: IUser;
   bookingList: IBooking[];
+  subUser: Subscription;
+  @Select(AppState.currentUser) currentUser$: Observable<IUser>;
   constructor(
     private util: UtilService,
     private metaService: MetaService,
     private clubService: ClubService,
     private accountService: AccountService,
     private bookingService: BookingService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const clubId = this.metaService.getUrlClubId();
-    this.metaService.getLoggedInUser
+
+    // this.metaService.getLoggedInUser
+    //   .pipe(
+    //     tap(u => {
+    //       this.user = u;
+    //     }),
+    //     switchMap(u => {
+    //       return this.clubService.getClubById(clubId);
+    //     })
+    //   )
+    //   .subscribe(club => {
+    //     this.navClub = club;
+    //     this.getBookingInfo();
+    //   });
+
+    this.subUser = this.currentUser$
       .pipe(
         tap(u => {
           this.user = u;
@@ -61,7 +81,9 @@ export class BookingComponent implements OnInit {
         this.getBookingInfo();
       });
   }
-
+  ngOnDestroy(): void {
+    this.subUser.unsubscribe();
+  }
   get clubId() {
     return this.navClub._id;
   }
