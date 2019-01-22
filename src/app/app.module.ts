@@ -13,18 +13,15 @@ import { AppComponent } from './app.component';
 import { ModuleFirebase } from './Module_Firebase';
 import { MetaService } from './Module_App/meta.service';
 import {
-  MainLPBCComponent,
-  MainLVBCComponent,
-  MainWIBCComponent,
-  MainCCBCComponent,
-  MainCDBCComponent,
-  MainCEBCComponent
+  MainLPBCComponent, MainLVBCComponent, MainWIBCComponent, MainCCBCComponent,
+  MainCDBCComponent, MainCEBCComponent
 } from './Module_App/_Clients';
 import {
-  BookingService,
-  ClubService,
-  AccountService
+  BookingService, ClubService, AccountService
 } from './Module_App/_shared';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { AppState } from './Module_App/app.store';
 
 @NgModule({
   declarations: AppComponents,
@@ -42,7 +39,9 @@ import {
 
     // DO NOT import any lazy-loading module here!!
 
-    RouterModule.forRoot(AppRoutes)
+    RouterModule.forRoot(AppRoutes),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsModule.forRoot([AppState])
   ],
   entryComponents: [
     MainLPBCComponent,
@@ -55,4 +54,4 @@ import {
   providers: [MetaService, BookingService, ClubService, AccountService],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

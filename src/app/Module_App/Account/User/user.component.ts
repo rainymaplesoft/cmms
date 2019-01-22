@@ -10,8 +10,8 @@ import RouteName from '../../../routename';
 import { take } from 'rxjs/operators';
 import { AccountService } from '../../_shared/account.service';
 import { Config } from '../../config';
-import { Select } from '@ngxs/store';
-import { AppState } from '../../app.store/app.state';
+import { Select, Store } from '@ngxs/store';
+import { AppState, AppStateModel } from '../../app.store/app.state';
 
 @Component({
   selector: 'app-user',
@@ -33,7 +33,7 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private utilService: UtilService,
-    private metaService: MetaService,
+    private store: Store,
     private accountService: AccountService,
     private fb: FormBuilder
   ) { }
@@ -44,6 +44,8 @@ export class UserComponent implements OnInit, OnDestroy {
     //   this.clubId = u.loggedInClubId;
     //   this.getRecordById();
     // });
+    this.clubId = this.store.selectSnapshot<string>(AppState.loggedInclubId);
+    this.userId = this.store.selectSnapshot<string>(AppState.userId);
     this.buildForm();
     this.subUser = this.currentUser$.subscribe(user => {
       this.formEdit.patchValue(user);
@@ -51,7 +53,9 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subUser.unsubscribe();
+    if (this.subUser) {
+      this.subUser.unsubscribe();
+    }
   }
   // private getRecordById() {
   //   this.user = this.accountService
@@ -75,6 +79,7 @@ export class UserComponent implements OnInit, OnDestroy {
       .updateClubUser(this.clubId, this.userId, data)
       .then((r: boolean) => {
         // this.getRecordById();
+        const a = r;
       });
   }
 

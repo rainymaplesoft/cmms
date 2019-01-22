@@ -132,17 +132,19 @@ export class SignInComponent implements OnInit {
     });
   }
 
-  private afterSignIn = (user: IUser) => {
-    if (!user) {
-      this.toastr.error('Email or password is incorrect for this club');
-      this.subLogin.unsubscribe();
-      return;
-    }
+  private afterSignIn = (user$: Observable<IUser>) => {
+    user$.subscribe(user => {
+      if (!user) {
+        this.toastr.error('Email or password is incorrect for this club');
+        this.subLogin.unsubscribe();
+        return;
+      }
 
-    this.accountService.updateUserLoginInfo(user);
-    // navigate to club page after login successfully
-    this.router.navigate([RouteName.Club], {
-      queryParams: { clubId: this.clubId }
+      // this.accountService.updateUserLoginInfo(user);
+      // navigate to club page after login successfully
+      this.router.navigate([RouteName.Club], {
+        queryParams: { clubId: this.clubId }
+      });
     });
 
     this.subLogin.unsubscribe();

@@ -1,19 +1,17 @@
 {
   "hosting": {
     "public": "dist/cmms",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
     ]
   },
-
   "functions": {
     "predeploy": [
       "npm --prefix functions run lint",
       "npm --prefix functions run build"
-    ]
+    ],
+    "source": "functions"
   }
 }

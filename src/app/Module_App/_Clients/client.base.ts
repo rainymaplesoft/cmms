@@ -21,7 +21,9 @@ export class ClientBase implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subUser.unsubscribe();
+    if (this.subUser) {
+      this.subUser.unsubscribe();
+    }
   }
 
   onLogin() {

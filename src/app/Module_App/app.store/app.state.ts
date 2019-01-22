@@ -1,6 +1,6 @@
 import { State, Select, Action, StateContext, Selector } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { SetLoginState, SetCurrentUserAction } from './app.actions';
+import { SetLoginStateAction, SetCurrentUserAction, UpdateCurrentUserAction } from './app.actions';
 import { IUser } from 'src/app/Module_Firebase';
 
 export class AppStateModel {
@@ -18,7 +18,7 @@ export class AppStateModel {
   defaults: {}
 })
 export class AppState {
-  constructor() {}
+  constructor() { }
 
   @Selector()
   static userId(state: AppStateModel) {
@@ -34,19 +34,36 @@ export class AppState {
   }
   @Selector()
   static isAdmin(state: AppStateModel) {
+    if (!state.currentUser) {
+      return false;
+    }
     return state.currentUser.isAdmin;
   }
   @Selector()
   static isSuperAdmin(state: AppStateModel) {
+    if (!state.currentUser) {
+      return false;
+    }
     return state.currentUser.isSuperAdmin;
+  }
+  @Selector()
+  static isAdminOrSuperAdmin(state: AppStateModel) {
+    if (!state.currentUser) {
+      return false;
+    }
+    return state.currentUser.isSuperAdmin || state.currentUser.isAdmin;
   }
   @Selector()
   static currentUser(state: AppStateModel) {
     return state.currentUser;
   }
+  @Selector()
+  static isLoggedIn(state: AppStateModel) {
+    return !!state.currentUser;
+  }
 
-  @Action(SetLoginState)
-  setLoginState(ctx: StateContext<AppStateModel>, payload: SetLoginState) {
+  @Action(SetLoginStateAction)
+  setLoginState(ctx: StateContext<AppStateModel>, payload: SetLoginStateAction) {
     ctx.patchState({
       userId: payload.userId,
       loggedInclubId: payload.clubId,
@@ -65,5 +82,24 @@ export class AppState {
     payload: SetCurrentUserAction
   ) {
     ctx.patchState({ currentUser: payload.user });
+  }
+
+  @Action(UpdateCurrentUserAction)
+  updateCurrentUserAction(
+    ctx: StateContext<AppStateModel>,
+    payload: UpdateCurrentUserAction
+  ) {
+    const currentUser = ctx.getState().currentUser;
+    const user = payload.user;
+    ctx.patchState({
+      currentUser: {
+        ...currentUser,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        imageUrl: user.imageUrl,
+        cellPhone: user.cellPhone,
+        gender: user.gender
+      }
+    });
   }
 }

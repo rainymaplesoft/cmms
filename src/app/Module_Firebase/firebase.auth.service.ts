@@ -11,13 +11,14 @@ import * as firebase from 'firebase';
 import { IUser, CollectionPath, IClub, StorageItem } from './models';
 import { ToastrService } from '../Module_Core/services/toastr.service';
 import { StorageService } from '../Module_Core';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Store } from '@ngxs/store';
 import {
-  SetLoginState,
+  SetLoginStateAction,
   SetCurrentUserAction
 } from '../Module_App/app.store/app.actions';
+import { promise } from 'protractor';
 
 @Injectable()
 export class FireAuthService {
@@ -57,35 +58,35 @@ export class FireAuthService {
       });
   }
 
-  signOut() {
-    this.store.dispatch(new SetLoginState(null, null, null));
+  public signOut() {
+    this.store.dispatch(new SetLoginStateAction(null, null, null));
 
     return this.afAuth.auth.signOut();
   }
 
-  login(clubId: string, email: string, password: string, isNew: boolean): Promise<IUser> {
+  public login(clubId: string, email: string, password: string, isNew: boolean): Promise<Observable<IUser>> {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(
       credential => {
         if (!credential.user) {
-          return null;
+          return of(null);
         }
         const userId = credential.user.uid;
         const isSuper = this.isSuper(userId);
-        if (isNew && !isSuper) {
+        if (isNew || isSuper) {
           this.addUserToClub(clubId, userId, email);
+          const user: IUser = {
+            email: email,
+            _id: userId,
+            isSuperAdmin: isSuper,
+            role: { superUser: isSuper }
+          };
+          this.setLoginState(clubId, userId, user);
+          return of(user);
         }
-        this.setCurrentUser(clubId, userId, email);
-        const user: IUser = {
-          email: email,
-          _id: userId,
-          loggedInClubId: clubId,
-          isSuperAdmin: isSuper,
-          role: { superUser: isSuper }
-        };
-        return user;
+        return this.getClubUser(clubId, userId, email);
       },
       e => {
-        return null;
+        return of(null);
       }
     );
   }
@@ -101,36 +102,26 @@ export class FireAuthService {
     return false;
   }
 
-  private setCurrentUser(clubId: string, userId: string, email: string) {
+  private getClubUser(clubId: string, userId: string, email: string): Observable<IUser> {
     // Get auth data, then get firestore user document || null
-
-    const isSuper = this.isSuper(userId);
-    if (isSuper) {
-      const superUser: IUser = {
-        email: 'email',
-        _id: userId,
-        isSuperAdmin: true,
-        role: { superUser: true }
-      };
-      this.setLoginState(clubId, userId, superUser);
-    }
     const docPath = this.getDocPathClubUser(clubId, userId);
-    this.afs
+    return this.afs
       .doc<IUser>(docPath)
       .snapshotChanges()
       .pipe(
+        take(1),
         map(action => {
           const user = action.payload.data() as IUser;
           if (user) {
             user['loggedInClubId'] = clubId;
           }
           this.setLoginState(clubId, userId, user);
-        })
-      );
+          return user;
+        }));
   }
 
   private setLoginState(clubId: string, userId: string, user: IUser) {
-    this.store.dispatch(new SetLoginState(userId, clubId, user));
+    this.store.dispatch(new SetLoginStateAction(userId, clubId, user));
   }
 
   private addUserToClub(clubId: string, userId: string, email: string) {

@@ -58,7 +58,9 @@ export class ClubListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subUser.unsubscribe();
+    if (this.subUser) {
+      this.subUser.unsubscribe();
+    }
   }
 
   ngOnChanges() { }

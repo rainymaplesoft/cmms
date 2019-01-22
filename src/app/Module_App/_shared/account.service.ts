@@ -6,10 +6,12 @@ import {
 } from '../../Module_Firebase';
 import { filter, map, take, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { UpdateCurrentUserAction } from '../app.store';
 
 @Injectable()
 export class AccountService {
-  constructor(private dbService: FirebaseDataService) {}
+  constructor(private dbService: FirebaseDataService, private store: Store) { }
 
   getClubUsers(clubId: string): Observable<IUser[]> {
     const pathUsers = this.getPathClubUsers(clubId);
@@ -35,7 +37,7 @@ export class AccountService {
     const result = this.dbService
       .getCollection(pathUsers, ['email', '==', email], null, randomLimit)
       .pipe(
-        // take(1),
+        take(1),
         map(arr => {
           if (arr && arr.length > 0) {
             return arr[0];
@@ -50,7 +52,12 @@ export class AccountService {
 
   updateClubUser(clubId: string, userId: string, data: any) {
     const pathClubUser = this.getPathClubUser(clubId, userId);
-    return this.dbService.updateDocument<IUser>(pathClubUser, data);
+    return this.dbService.updateDocument<IUser>(pathClubUser, data).then(
+      c => {
+        this.store.dispatch(new UpdateCurrentUserAction(data));
+        return true;
+      }
+    );
   }
 
   updateUserLoginInfo(u: IUser) {
@@ -71,6 +78,6 @@ export class AccountService {
   private getPathClubUser(clubId: string, userId: string) {
     return `${CollectionPath.CLUBS}/${clubId}/${
       CollectionPath.USERS
-    }/${userId}`;
+      }/${userId}`;
   }
 }

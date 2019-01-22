@@ -15,7 +15,7 @@
             <div class="item_wrap">Home</div>
           </div>
         </div>
-        <ng-container *ngIf="(currentUser$ | async) as currentUser">
+        <ng-container *ngIf="(currentUser$ | async) as currentUser; else needSignUp">
           <div class="menu_item" *ngIf="currentUser.isSuperAdmin || currentUser.isAdmin" [matMenuTriggerFor]="menuSetting"
             [ngClass]="{ selected: r_clubs === r_selected }">
             <div class="menu_content"><i class="material-icons">settings</i></div>
@@ -41,14 +41,16 @@
             </mat-menu>
           </div>
         </ng-container>
-        <div class="menu_item" (click)="nav(r_signup)">
-          <div class="menu_content">
-            <i class="material-icons">account_box</i>
+        <ng-template #needSignUp>
+          <div class="menu_item" (click)="nav(r_signup)">
+            <div class="menu_content">
+              <i class="material-icons">account_box</i>
+            </div>
+            <div class="menu_content">
+              <div class="item_wrap">SignUp</div>
+            </div>
           </div>
-          <div class="menu_content">
-            <div class="item_wrap">SignUp</div>
-          </div>
-        </div>
+        </ng-template>
         <!-- <div class='menu_item'>
           <div class="menu_content">
             <i class="material-icons fas fa-sign-in-alt"></i>
@@ -85,24 +87,26 @@
             <i class="material-icons">access_time</i>
           </div>
         </div>
-        <ng-container *ngIf="(currentUser$ | async) as currentUser">
+        <ng-container *ngIf="(currentUser$ | async) as currentUser; else notLoggedInYet">
           <div class="menu_item" *ngIf="navClubId && !currentUser.isSuperAdmin">
             <div class="icon_wrap" matTooltip="My Profile" (click)="nav(r_user, true)">
               <!-- <i class="material-icons" [matBadge]="loginBadge" matBadgeColor="warn">account_circle</i> -->
               <i class="material-icons">account_circle</i>
             </div>
           </div>
+          <div class="menu_item">
+            <div class="icon_wrap" matTooltip="Sign Out" (click)="onSignOut()">
+              <i class="material-icons fas fa-sign-out-alt"></i>
+            </div>
+          </div>
         </ng-container>
-        <div class="menu_item" *ngIf="isLoggedIn">
-          <div class="icon_wrap" matTooltip="Sign Out" (click)="onSignOut()">
-            <i class="material-icons fas fa-sign-out-alt"></i>
+        <ng-template #notLoggedInYet>
+          <div class="menu_item" *ngIf="navClubId">
+            <div class="icon_wrap login" matTooltip="Login" (click)="nav(r_signin, true)">
+              <i class="material-icons fas fa-sign-in-alt"></i>
+            </div>
           </div>
-        </div>
-        <div class="menu_item" *ngIf="!isLoggedIn && navClubId">
-          <div class="icon_wrap login" matTooltip="Login" (click)="nav(r_signin, true)">
-            <i class="material-icons fas fa-sign-in-alt"></i>
-          </div>
-        </div>
+        </ng-template>
       </div>
     </div>
   </div>

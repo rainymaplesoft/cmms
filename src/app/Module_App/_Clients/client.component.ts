@@ -68,15 +68,11 @@ export class ClientComponent
   ngOnInit() {
     this.url = this.router.url;
     this.clubId = this.metaService.getUrlClubId(this.url);
-    // const loggedInClubId = this.metaService.loggedInclubId;
-    // const loggedInClubId = this.store.selectSnapshot<string>((state: AppState) => state..loggedInclubId);
+    const loggedInClubId = this.store.selectSnapshot<string>(AppState.loggedInclubId);
 
-    this.loggedInclubId$.subscribe(loggedInClubId => {
-
-      if (loggedInClubId && loggedInClubId !== this.clubId) {
-        this.metaService.signOut();
-      }
-    });
+    if (loggedInClubId && loggedInClubId !== this.clubId) {
+      this.metaService.signOut();
+    }
     this.chooseClubPComponent();
   }
 

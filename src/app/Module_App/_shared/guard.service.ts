@@ -10,27 +10,35 @@ import { FireAuthService, IUser } from '../../Module_Firebase';
 import { Observable, of } from 'rxjs';
 import { RouteName } from '../../routename';
 import { take, switchMap, map } from 'rxjs/operators';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { AppState } from '../app.store/app.state';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: FireAuthService, private router: Router) { }
+
+  @Select(AppState.isLoggedIn) isLoggedIn$: Observable<boolean>;
+  constructor(private store: Store, private router: Router) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     console.log('AuthGuard#canActivate called');
-    return this.authService.authState.pipe(
-      map((u: firebase.User) => {
-        if (!u) {
-          this.router.navigate([RouteName.Home]);
-          return false;
-        }
-        return true;
-      })
-    );
+    const isLoggedIn = this.store.selectSnapshot<boolean>(AppState.isLoggedIn);
+    if (isLoggedIn) {
+      return true;
+    }
+    this.router.navigate([RouteName.Home]);
+    return false;
+    // return this.authService.authState.pipe(
+    //   map((u: firebase.User) => {
+    //     if (!u) {
+    //       this.router.navigate([RouteName.Home]);
+    //       return false;
+    //     }
+    //     return true;
+    //   })
+    // );
   }
 }
 

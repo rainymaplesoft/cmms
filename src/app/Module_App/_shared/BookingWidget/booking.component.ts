@@ -82,7 +82,9 @@ export class BookingComponent implements OnInit, OnDestroy {
       });
   }
   ngOnDestroy(): void {
-    this.subUser.unsubscribe();
+    if (this.subUser) {
+      this.subUser.unsubscribe();
+    }
   }
   get clubId() {
     return this.navClub._id;

@@ -39,6 +39,8 @@ export class HeaderComponent implements OnInit {
   sub: Subscription;
 
   @Select(AppState.currentUser) currentUser$: Observable<IUser>;
+  @Select(AppState.userId) userId$: Observable<string>;
+  @Select(AppState.isAdminOrSuperAdmin) isAdminOrSuperAdmin$: Observable<boolean>;
 
   constructor(
     private router: Router,
